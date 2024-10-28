@@ -1,8 +1,15 @@
-import { useContext } from "react";
-import { AuthContext } from "@context/AuthProvider";
+import FormularioPerfil from "./FormularioPerfil";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-export const CardPerfil = () => {
-	const { auth } = useContext(AuthContext);
+const CardPerfil = () => {
+	const navigate = useNavigate();
+
+	const handleEdit = () => {
+		navigate("/dashboard/perfil/editar");
+	};
+
 	return (
 		<div
 			className="bg-white border border-slate-200 h-auto p-4 
@@ -19,24 +26,34 @@ export const CardPerfil = () => {
 			</div>
 			<div className="self-start">
 				<b>Nombre:</b>
-				<p className="inline-block ml-3">{auth.nombre}</p>
+				<p className="inline-block ml-3"></p>
 			</div>
 			<div className="self-start">
 				<b>Apellido:</b>
-				<p className="inline-block ml-3">{auth.apellido}</p>
+				<p className="inline-block ml-3"></p>
 			</div>
 			<div className="self-start">
 				<b>Dirección:</b>
-				<p className="inline-block ml-3">{auth.direccion}</p>
+				<p className="inline-block ml-3"></p>
 			</div>
 			<div className="self-start">
 				<b>Teléfono:</b>
-				<p className="inline-block ml-3">{auth.telefono}</p>
+				<p className="inline-block ml-3"></p>
 			</div>
 			<div className="self-start">
 				<b>Email:</b>
-				<p className="inline-block ml-3">{auth.email}</p>
+				<p className="inline-block ml-3"></p>
+			</div>
+			<div>
+				<button
+					onClick={handleEdit}
+					className="bg-[#82E5B5] text-black border rounded-md p-2 hover:scale-100 duration-300 hover:bg-gray-900 hover:text-white font-serif">
+					Editar
+				</button>
 			</div>
 		</div>
 	);
 };
+
+
+export default CardPerfil;

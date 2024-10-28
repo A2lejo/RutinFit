@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
+import Nabar from "@components/Navbar";
 
 const Forgot = () => {
 	return (
 		<>
+			<Nabar />
 			<div className="flex flex-col lg:flex-row min-h-screen">
 				<div className="w-full lg:w-1/2 min-h-screen bg-white flex flex-col justify-center items-center">
 					<div className="md:w-4/5 sm:w-full mt-4 bg-white p-8 md:p-16 rounded-lg shadow-custom">
@@ -53,8 +55,8 @@ const Forgot = () => {
 				</div>
 
 				<div
-					className="w-full lg:w-1/2 min-h-screen bg-[url('/src/assets/forgot.jpg')] 
-          bg-no-repeat bg-cover bg-center flex items-center justify-center"
+					className="hidden lg:flex lg:w-1/2 min-h-screen bg-[url('/src/assets/forgot.jpg')] 
+          bg-no-repeat bg-cover bg-center items-center justify-center"
 				></div>
 			</div>
 		</>

@@ -1,9 +1,17 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Navbar from "@components/Navbar";
 import axios from "axios";
 
 const Login = () => {
+
+  const navigate = useNavigate();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    navigate("/dashboard");
+  }
   return (
     <>
+      <Navbar />
       <div className="flex flex-col lg:flex-row min-h-screen">
         <div
           className="hidden lg:flex lg:w-1/2 min-h-screen bg-[url('/src/assets/Login.jpg')] 
@@ -20,7 +28,7 @@ const Login = () => {
               ¡Empezemos con el entrenamiento!
             </small>
 
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label
                   className="mb-2 block text-sm font-semibold font-serif"
@@ -29,7 +37,7 @@ const Login = () => {
                   Correo Electrónico
                 </label>
                 <input
-                  required
+                  //required
                   id="email"
                   name="email"
                   type="email"
@@ -46,7 +54,7 @@ const Login = () => {
                   Contraseña
                 </label>
                 <input
-                  required
+                  //required
                   id="password"
                   name="password"
                   type="password"
