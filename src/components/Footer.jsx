@@ -32,7 +32,7 @@ const Footer = () => {
                 </div>
                 <hr className="border-[#82E5B5] my-2 mx-20" />
                 <div className="m-4 flex justify-between mx-8 ">
-                    <p className="text-sm ml-12">© 2021 RutinFit. Todos los derechos reservados.</p>
+                    <p className="text-sm ml-12">© 2024 RutinFit. Todos los derechos reservados.</p>
                     <p className="text-sm mr-12">by: Alejandro Campoverde</p>
                 </div>
             </div>

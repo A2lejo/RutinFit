@@ -1,15 +1,30 @@
 import React from 'react';
 import NavbarPrincipal from '../components/NavbarPrincipal';
 import Footer from '../components/Footer';
+import { FaPhoneAlt } from 'react-icons/fa';
 
 const Contactos = () => {
     return (
         <div>
             <NavbarPrincipal />
             <main>
-                <h2 className='text-[#82E5B5] py-5 px-4 sm:px-10 md:px-20 lg:px-40 text-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl'>
-                    Contáctanos
-                </h2>
+                <div className='text-center font-serif'>
+                    <h2 className='text-[#82E5B5] py-5 px-4 sm:px-10 md:px-20 lg:px-40  text-3xl sm:text-4xl md:text-5xl lg:text-6xl'>
+                        Contáctanos
+                    </h2>
+                    <div className='text-xs sm:text-sm py-5 md:text-xl max-w-lg mx-auto md:text-center bg-[#16A39C] rounded-3xl'>
+                        <p>
+                            Puedes comunicarte con nosotros a través de nuestro número de teléfono:
+                        </p>
+                        <div className="flex items-center space-x-1 py-4 px-44">
+                            <FaPhoneAlt className="text-white" />
+                            <span className="text-white">+123 456 7890</span>
+                        </div>
+                        <p>
+                            o enviarnos un correo:
+                        </p>
+                    </div>
+                </div>
                 <div className="flex flex-col md:flex-row items-center justify-center py-2 px-10 bg-white">
                     <div className="w-full md:w-1/2 p-4">
                         <h1 className="text-3xl font-bold mb-4">¡Hola!</h1>

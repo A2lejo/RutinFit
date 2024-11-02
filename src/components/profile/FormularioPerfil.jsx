@@ -11,9 +11,10 @@ const FormularioPerfil = () => {
     id: auth._id,
     nombre: auth.nombre || "",
     apellido: auth.apellido || "",
-    direccion: auth.direccion || "",
+    edad: auth.edad || "",
     telefono: auth.telefono || "",
     email: auth.email || "",
+    genero: auth.genero || ""
   });
 
   const handleChange = (e) => {
@@ -47,6 +48,11 @@ const FormularioPerfil = () => {
       {alerta.respuesta && (
         <Alertas exito={alerta.exito}> {alerta.respuesta} </Alertas>
       )}
+      <h2 className="text-3xl font-serif text-[#16A39C] text-center mb-3">
+        Editar Perfil</h2>
+        <p className="text-gray-700 mb-4">
+          Actualiza tus datos personales
+        </p>
       <div>
         <label
           htmlFor="nombre"
@@ -58,7 +64,7 @@ const FormularioPerfil = () => {
           id="nombre"
           type="text"
           className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5"
-          placeholder="nombre"
+          placeholder="Nombre"
           name="nombre"
           value={form.nombre}
           onChange={handleChange}
@@ -76,7 +82,7 @@ const FormularioPerfil = () => {
           id="apellido"
           type="text"
           className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5"
-          placeholder="apellido"
+          placeholder="Apellido"
           name="apellido"
           value={form.apellido}
           onChange={handleChange}
@@ -85,18 +91,18 @@ const FormularioPerfil = () => {
 
       <div>
         <label
-          htmlFor="direccion"
+          htmlFor="edad"
           className="text-gray-700 uppercase font-bold text-sm"
         >
-          Dirección:{" "}
+          edad:{" "}
         </label>
         <input
-          id="direccion"
+          id="edad"
           type="text"
           className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5"
-          placeholder="direccion"
-          name="direccion"
-          value={form.direccion}
+          placeholder="Edad"
+          name="edad"
+          value={form.edad}
           onChange={handleChange}
         />
       </div>
@@ -112,7 +118,7 @@ const FormularioPerfil = () => {
           id="telefono"
           type="text"
           className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5"
-          placeholder="telefono"
+          placeholder="Teléfono"
           name="telefono"
           value={form.telefono}
           onChange={handleChange}
@@ -124,24 +130,68 @@ const FormularioPerfil = () => {
           htmlFor="email"
           className="text-gray-700 uppercase font-bold text-sm"
         >
-          Email:{" "}
+          email:{" "}
         </label>
         <input
           id="email"
           type="text"
           className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5"
-          placeholder="email"
+          placeholder="Email"
           name="email"
           value={form.email}
           onChange={handleChange}
         />
       </div>
 
+      <div>
+        <label
+          htmlFor="genero"
+          className="text-gray-700 uppercase font-bold text-sm"
+        >
+          Género:
+        </label>
+        <div className="mt-2 mb-5">
+          <label className="inline-flex items-center">
+            <input
+              type="radio"
+              className="form-radio"
+              name="genero"
+              value="Masculino"
+              checked={form.genero === "Masculino"}
+              onChange={handleChange}
+            />
+            <span className="ml-2">Masculino</span>
+          </label>
+          <label className="inline-flex items-center ml-6">
+            <input
+              type="radio"
+              className="form-radio"
+              name="genero"
+              value="Femenino"
+              checked={form.genero === "Femenino"}
+              onChange={handleChange}
+            />
+            <span className="ml-2">Femenino</span>
+          </label>
+          <label className="inline-flex items-center ml-6">
+            <input
+              type="radio"
+              className="form-radio"
+              name="genero"
+              value="Otro"
+              checked={form.genero === "Otro"}
+              onChange={handleChange}
+            />
+            <span className="ml-2">Otro</span>
+          </label>
+        </div>
+      </div>
+
       <input
         type="submit"
-        className="bg-gray-800 w-full p-3 
-        text-slate-300 uppercase font-bold rounded-lg 
-        hover:bg-gray-600 cursor-pointer transition-all"
+        className="bg-[#0D9488] w-full p-3 
+        text-white uppercase font-bold rounded-lg 
+        hover:bg-[#82E5B5] hover:text-black cursor-pointer transition-all"
         value="Actualizar"
       />
     </form>

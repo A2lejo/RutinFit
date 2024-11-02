@@ -20,7 +20,7 @@ const Home = () => {
           </div>
         </section>
       </main>
-      <section className=' bg-[#82E5B5]'>
+      <section id='contact-section' className=' bg-[#82E5B5]'>
         <div className='text-left mx-10 my-10 p-4'>
           <div className="w-full md:w-1/2 p-4">
             <h2 className="text-2xl sm:text-xl py-2 font-medium md:text-5xl font-serif"> Contáctanos</h2>

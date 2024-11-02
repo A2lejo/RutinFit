@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import iconoMujer from "@assets/icono_mujer.jpeg";
 import iconoHombre from "@assets/icono_hombre.jpeg";
-import iconoRutinFit from "@assets/iconoRutinFit.png"; 
+import iconoRutinFit from "@assets/iconoRutinFit.png";
 
 const NavbarPrincipal = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // Disable scroll when menu is open
   if (menuOpen) {
     document.body.style.overflow = 'hidden';
   } else {
@@ -63,7 +62,7 @@ const NavbarPrincipal = () => {
             <li className={`mr-6 sm:mr-0 ${menuOpen ? 'mt-3' : ''}`}>
               <Link
                 to="/contacto"
-                className={`text-slate-700 px-4 py-2 rounded-full hover:bg-teal-600 hover:text-white ${menuOpen ? 'block text-left py-2 text-black hover:bg-white hover:text-[#dc7818]' : ''}`}
+                className={`text-slate-700 px-4 py-2 rounded-full hover:bg-teal-600 hover:text-white ${menuOpen ? 'block text-left py-2 text-black hover:bg-white hover:text-[#0D9488]' : ''}`}
                 onClick={() => setMenuOpen(false)}
               >
                 Contáctanos
@@ -72,7 +71,7 @@ const NavbarPrincipal = () => {
             <li className={`mr-6 sm:mr-0 ${menuOpen ? 'mt-3' : ''}`}>
               <Link
                 to="/app"
-                className={`text-slate-700 px-4 py-2 rounded-full hover:bg-teal-600 hover:text-white ${menuOpen ? 'block text-left py-2 text-black hover:bg-white hover:text-[#dc7818]' : ''}`}
+                className={`text-slate-700 px-4 py-2 rounded-full hover:bg-teal-600 hover:text-white ${menuOpen ? 'block text-left py-2 text-black hover:bg-white hover:text-[#0D9488]' : ''}`}
                 onClick={() => setMenuOpen(false)}
               >
                 App Clientes

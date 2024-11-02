@@ -34,9 +34,9 @@ const Dashboard = () => {
                         <Link
                             to="/dashboard"
                             className={`${urlActual === "/dashboard"
-                                ? "text-slate-200 bg-gray-900 rounded-md text-center scale-105"
+                                ? "text-black bg-[#16A39C] rounded-md text-center scale-105"
                                 : "text-slate-600"
-                                } px-3 py-2 text-xl block mt-2 hover:bg-gray-900`}
+                                } px-3 py-2 text-xl block mt-2 hover:bg-[#82E5B5]`}
                         >
                             Perfil
                         </Link>
@@ -46,9 +46,9 @@ const Dashboard = () => {
                         <Link
                             to="/dashboard/entrenadores"
                             className={`${urlActual === "/dashboard/entrenadores"
-                                ? "text-slate-200 bg-gray-900 rounded-md text-center scale-105"
+                                ? "text-black bg-[#16A39C] rounded-md text-center scale-105"
                                 : "text-slate-600"
-                                } px-3 py-2 text-xl block mt-2 hover:bg-gray-900`}
+                                } px-3 py-2 text-xl block mt-2 hover:bg-[#82E5B5]`}
                         >
                             Entrenadores
                         </Link>
@@ -58,22 +58,45 @@ const Dashboard = () => {
                         <Link
                             to="/dashboard/clientes"
                             className={`${urlActual === "/dashboard/clientes"
-                                ? "text-slate-100 bg-gray-900 rounded-md text-center scale-105"
+                                ? "text-black bg-[#16A39C] rounded-md text-center scale-105"
                                 : "text-slate-600"
-                                } px-3 py-2 text-xl block mt-2 hover:bg-gray-900`}
+                                } px-3 py-2 text-xl block mt-2 hover:bg-[#82E5B5]`}
                         >
                             Clientes
                         </Link>
                     </li>
 
+                    <li className="text-center">
+                        <Link
+                            to="/dashboard/rutinas"
+                            className={`${urlActual === "/dashboard/rutinas"
+                                ? "text-black bg-[#16A39C] rounded-md text-center scale-105"
+                                : "text-slate-600"
+                                } px-3 py-2 text-xl block mt-2 hover:bg-[#82E5B5]`}
+                        >
+                            Rutinas
+                        </Link>
+                    </li>
+
+                    <li className="text-center">
+                        <Link
+                            to="/dashboard/ejercicios"
+                            className={`${urlActual === "/dashboard/ejercicios"
+                                ? "text-black bg-[#16A39C] rounded-md text-center scale-105"
+                                : "text-slate-600"
+                                } px-3 py-2 text-xl block mt-2 hover:bg-[#82E5B5]`}
+                        >
+                            Ejercicios
+                        </Link>
+                    </li>
 
                     <li className="text-center">
                         <Link
                             to="/dashboard/chat"
                             className={`${urlActual === "/dashboard/chat"
-                                ? "text-slate-100 bg-gray-900 rounded-md text-center scale-105"
+                                ? "text-black bg-[#16A39C] rounded-md text-center scale-105"
                                 : "text-slate-600"
-                                } px-3 py-2 text-xl block mt-2 hover:bg-gray-900`}
+                                } px-3 py-2 text-xl block mt-2 hover:bg-[#82E5B5]`}
                         >
                             Chat
                         </Link>
@@ -107,12 +130,12 @@ const Dashboard = () => {
                     </div>
                 </div>
                 <div className="overflow-y-scroll p-8">
-                    {/* Temporalmente eliminamos la condición de autenticación */}
+                    {/* Temporalmente elimino la condición de autenticación */}
                     <Outlet />
                 </div>
                 <div className="bg-black h-12">
                     <p className="text-center text-slate-100 leading-[2.9rem] underline">
-                        Todos los derechos reservados
+                        © 2024 RutinFit. Todos los derechos reservados.
                     </p>
                 </div>
             </div>

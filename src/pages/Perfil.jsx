@@ -5,11 +5,8 @@ const Perfil = () => {
   return (
     <>
       <div>
-        <h1 className="font-serif text-4xl text-black">Perfil</h1>
-        <hr className="my-4" />
-        <p className="mb-8 font-serif">
-          Bienvenido a tu perfil
-        </p>
+        <h1 className="font-bold text-5xl text-center text-[#0D9488]">Perfil</h1>
+        <hr className="my-4 bg-[#82E5B5] w-3/4 mx-auto h-1" /> 
       </div>
 
       <div className="flex justify-around gap-x-8 flex-wrap gap-y-8 md:flex-nowrap">
