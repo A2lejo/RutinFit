@@ -1,4 +1,6 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
+import IconoEntrenador from "@assets/iconoEntrenador.png";
+import IconoUsuario from "@assets/iconoUsuario.png";
 
 const Dashboard = () => {
     const location = useLocation();
@@ -13,7 +15,7 @@ const Dashboard = () => {
                     </h2>
                 </Link>
                 <img
-                    src="https://cdn-icons-png.flaticon.com/512/2138/2138508.png"
+                    src={IconoEntrenador}
                     alt="img-client"
                     className="m-auto mt-8 p-1 border-2 border-slate-500 rounded-full"
                     width={120}
@@ -111,7 +113,7 @@ const Dashboard = () => {
                     </div>
                     <div>
                         <img
-                            src="https://cdn-icons-png.flaticon.com/512/4715/4715329.png"
+                            src={IconoUsuario}
                             alt="img-client"
                             className="border-2 border-green-600 rounded-full"
                             width={50}

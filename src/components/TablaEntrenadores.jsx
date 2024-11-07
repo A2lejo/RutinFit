@@ -35,7 +35,7 @@ const TablaEntrenadores = ({ entrenadores, handleDelete, auth }) => {
               <td className="p-2 text-center">
                 <MdInfo
                   className="h-7 w-7 text-slate-800 cursor-pointer inline-block mr-2"
-                  onClick={() => navigate(`/dashboard/entrenadores/${entrenador.id}`)}
+                  onClick={() => navigate(`/dashboard/entrenadores/visualizar/${entrenador.id}`)}
                 />
                 {auth.rol === 'admin' && (
                   <>

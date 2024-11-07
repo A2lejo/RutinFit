@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "@context/AuthProvider";
 import TablaClientes from "@components/TablaClientes";
+import FotoEntrenador from "@assets/entrenadorFoto.png";
 
 const VisualizarEntrenador = () => {
   const { id } = useParams();
@@ -16,7 +17,7 @@ const VisualizarEntrenador = () => {
     email: 'juan@example.com',
     telefono: '+123 456 7890',
     estado: 'activo',
-    foto: 'https://via.placeholder.com/150',
+    // foto: 'https://via.placeholder.com/150',
   };
 
   const clientes = [
@@ -27,7 +28,7 @@ const VisualizarEntrenador = () => {
 
   return (
     <div>
-      <h1 className="font-black text-4xl text-gray-500">Visualizar</h1>
+      <h1 className="font-black text-4xl text-[#0D9488]">Visualizar Entrenador</h1>
       {entrenador._id ? (
         <>
           <div className="m-5 flex justify-between">
@@ -73,9 +74,9 @@ const VisualizarEntrenador = () => {
             </div>
             <div>
               <img
-                src={entrenador.foto}
+                src={FotoEntrenador}
                 alt="foto"
-                className="w-40 h-40"
+                className="w-40 h-40 mr-8"
               />
             </div>
           </div>

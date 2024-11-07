@@ -33,7 +33,7 @@ const TablaClientes = ({ clientes, handleDelete, auth ={} }) => {
               <td className="p-2 text-center">
                 <MdInfo
                   className="h-7 w-7 text-slate-800 cursor-pointer inline-block mr-2"
-                  onClick={() => navigate(`/dashboard/clientes/${cliente.id}`)}
+                  onClick={() => navigate(`/dashboard/clientes/visualizar/${cliente.id}`)}
                 />
                 {(auth.rol === 'admin' || auth.rol === 'entrenador') && (
                   <>

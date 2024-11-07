@@ -15,7 +15,7 @@ const VisualizarEjercicios = () => {
 
   return (
     <div>
-      <h1 className="font-black text-4xl text-gray-500">Visualizar</h1>
+      <h1 className="font-black text-4xl text-[#0D9488]">Visualizar Ejercicio</h1>
       {ejercicio._id ? (
         <>
           <div className="m-5 flex justify-between">

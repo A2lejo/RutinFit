@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "@context/AuthProvider";
 import TablaRutinas from "@components/TablaRutinas";
+import FotoCliente from "@assets/clienteFoto.png";
 
 const VisualizarCliente = () => {
   const { id } = useParams();
@@ -15,7 +16,7 @@ const VisualizarCliente = () => {
     email: 'ana@example.com',
     telefono: '+123 456 7890',
     estado: 'activo',
-    foto: 'https://via.placeholder.com/150',
+    // foto: 'https://via.placeholder.com/150',
   };
 
   const rutinas = [
@@ -26,7 +27,7 @@ const VisualizarCliente = () => {
 
   return (
     <div>
-      <h1 className="font-black text-4xl text-gray-500">Visualizar</h1>
+      <h1 className="font-black text-4xl text-[#0D9488]">Visualizar Cliente</h1>
       {cliente._id ? (
         <>
           <div className="m-5 flex justify-between">
@@ -66,15 +67,24 @@ const VisualizarCliente = () => {
             </div>
             <div>
               <img
-                src={cliente.foto}
+                src={FotoCliente}
                 alt="foto"
-                className="w-40 h-40"
+                className="w-40 h-40 mr-8"
               />
             </div>
           </div>
           <hr className="my-4" />
-          <div className="flex justify-between items-center pb-5">
-            <p>Rutinas del cliente:{" "}</p>
+          <div>
+            <div className="flex justify-between items-center pb-5">
+              <p>Rutinas del cliente:{" "}</p>
+            </div>
+            <div>
+              <button
+                className="hover:bg-[#0D9488] hover:text-white px-4 py-2 rounded-md"
+              >
+                Agregar Rutina
+              </button> 
+            </div>
           </div>
 
           {rutinas.length === 0 ? (

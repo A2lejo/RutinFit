@@ -21,7 +21,7 @@ const VisualizarRutina = () => {
 
   return (
     <div>
-      <h1 className="font-black text-4xl text-gray-500">Visualizar</h1>
+      <h1 className="font-black text-4xl text-[#0D9488]">Visualizar Rutina</h1>
       {rutina._id ? (
         <>
           <div className="m-5 flex justify-between">

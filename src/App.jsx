@@ -20,6 +20,8 @@ import VisualizarCliente from './pages/VisualizarClientes';
 import VisualizarRutina from './pages/VisualizarRutinas';
 import VisualizarEjercicios from './pages/VisualizarEjercicios';
 
+import ActualizarEntrenador from './pages/ActualizarEntrenadores';
+
 
 function App() {
   return (
@@ -37,13 +39,14 @@ function App() {
               <Route index element={<Perfil />} />
               <Route path="perfil/editar" element={<FormularioPerfil />} />
               <Route path="entrenadores" element={<Entrenadores />} />
-              <Route path="entrenadores/:id" element={<VisualizarEntrenador />} />
+              <Route path="entrenadores/visualizar/:id" element={<VisualizarEntrenador />} />
+              <Route path="entrenadores/editar/:id" element={<ActualizarEntrenador />} />
               <Route path="clientes" element={<Clientes />} />
-              <Route path="clientes/:id" element={<VisualizarCliente />} />
+              <Route path="clientes/visualizar/:id" element={<VisualizarCliente />} />
               <Route path="rutinas" element={<Rutinas />} />
-              <Route path="rutinas/:id" element={<VisualizarRutina />} />
+              <Route path="rutinas/visualizar/:id" element={<VisualizarRutina />} />
               <Route path="ejercicios" element={<Ejercicios />} />
-              <Route path="ejercicios/:id" element={<VisualizarEjercicios />} />
+              <Route path="ejercicios/visualizar/:id" element={<VisualizarEjercicios />} />
               <Route path="chat" element={<Chat />} />
             </Route>
           </Routes>
