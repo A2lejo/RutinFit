@@ -70,30 +70,6 @@ const Dashboard = () => {
 
                     <li className="text-center">
                         <Link
-                            to="/dashboard/rutinas"
-                            className={`${urlActual === "/dashboard/rutinas"
-                                ? "text-black bg-[#16A39C] rounded-md text-center scale-105"
-                                : "text-slate-600"
-                                } px-3 py-2 text-xl block mt-2 hover:bg-[#82E5B5]`}
-                        >
-                            Rutinas
-                        </Link>
-                    </li>
-
-                    <li className="text-center">
-                        <Link
-                            to="/dashboard/ejercicios"
-                            className={`${urlActual === "/dashboard/ejercicios"
-                                ? "text-black bg-[#16A39C] rounded-md text-center scale-105"
-                                : "text-slate-600"
-                                } px-3 py-2 text-xl block mt-2 hover:bg-[#82E5B5]`}
-                        >
-                            Ejercicios
-                        </Link>
-                    </li>
-
-                    <li className="text-center">
-                        <Link
                             to="/dashboard/chat"
                             className={`${urlActual === "/dashboard/chat"
                                 ? "text-black bg-[#16A39C] rounded-md text-center scale-105"

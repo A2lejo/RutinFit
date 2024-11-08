@@ -1,29 +1,30 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "@context/AuthProvider";
 import TablaRutinas from "@components/TablaRutinas";
+import ModalAgregarRutina from "@components/modals/ModalAgregarRutina";
 import FotoCliente from "@assets/clienteFoto.png";
+import RutinasContext from "@context/RutinasProvider";
+import Alertas from "@components/Alertas";
 
 const VisualizarCliente = () => {
   const { id } = useParams();
   const { auth } = useContext(AuthContext);
-
-  // Datos quemados para el cliente y sus rutinas
-  const cliente = {
+  const { modal, handleModal, rutinas, setRutinas, alertaRutina, setDataModal, eliminarRutina } = useContext(RutinasContext);
+  const [cliente, setCliente] = useState({
     _id: id,
     nombre: 'Ana',
     apellido: 'Gómez',
     email: 'ana@example.com',
     telefono: '+123 456 7890',
     estado: 'activo',
-    // foto: 'https://via.placeholder.com/150',
-  };
+  });
 
-  const rutinas = [
-    { id: 1, nombre: 'Rutina Cardio', descripcion: 'Ejercicios de cardio para mejorar la resistencia.' },
-    { id: 2, nombre: 'Rutina Fuerza', descripcion: 'Ejercicios de fuerza para aumentar la musculatura.' },
-    { id: 3, nombre: 'Rutina Flexibilidad', descripcion: 'Ejercicios de flexibilidad para mejorar el rango de movimiento.' },
-  ];
+  useEffect(() => {
+    // Aquí puedes agregar la lógica para obtener los datos del cliente y sus rutinas desde el backend
+    // setCliente(response.data.cliente);
+    // setRutinas(response.data.rutinas);
+  }, []);
 
   return (
     <div>
@@ -74,23 +75,42 @@ const VisualizarCliente = () => {
             </div>
           </div>
           <hr className="my-4" />
-          <div>
-            <div className="flex justify-between items-center pb-5">
+          <div className="m-5 flex justify-between">
+            <div>
               <p>Rutinas del cliente:{" "}</p>
             </div>
             <div>
               <button
-                className="hover:bg-[#0D9488] hover:text-white px-4 py-2 rounded-md"
+                className="bg-[#82E5B5] hover:bg-[#0D9488] hover:text-white px-4 py-2 rounded-md"
+                onClick={() => {
+                  setDataModal({});
+                  handleModal();
+                }}
               >
                 Agregar Rutina
-              </button> 
+              </button>
             </div>
           </div>
+
+          {modal && <ModalAgregarRutina clienteId={cliente._id} />}
 
           {rutinas.length === 0 ? (
             <p>No existen registros</p>
           ) : (
-            <TablaRutinas rutinas={rutinas} />
+            <>
+              {alertaRutina.respuesta && (
+                <Alertas exito={alertaRutina.exito}>{alertaRutina.respuesta}</Alertas>
+              )}
+              <TablaRutinas
+                rutinas={rutinas}
+                handleDelete={eliminarRutina}
+                handleEdit={(rutina) => {
+                  setDataModal(rutina);
+                  handleModal();
+                }}
+                auth={auth}
+              />
+            </>
           )}
         </>
       ) : (

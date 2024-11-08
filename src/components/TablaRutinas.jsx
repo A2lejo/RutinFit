@@ -1,8 +1,12 @@
-import React from 'react';
-import { MdInfo, MdNoteAdd, MdDeleteForever } from 'react-icons/md';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext } from "react";
+import { MdDeleteForever, MdNoteAdd, MdInfo } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import RutinasContext from "@context/RutinasProvider";
+import { AuthContext } from "@context/AuthProvider";
 
-const TablaRutinas = ({ rutinas, handleDelete, auth ={} }) => {
+const TablaRutinas = ({ rutinas }) => {
+  const { eliminarRutina, handleModal, setDataModal } = useContext(RutinasContext);
+  const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
   return (
@@ -25,20 +29,19 @@ const TablaRutinas = ({ rutinas, handleDelete, auth ={} }) => {
               <td className="p-2 text-center">
                 <MdInfo
                   className="h-7 w-7 text-slate-800 cursor-pointer inline-block mr-2"
-                  onClick={() => navigate(`/dashboard/rutinas/visualizar/${rutina.id}`)}
+                  onClick={() => navigate(`/dashboard/rutinas/${rutina.id}`)}
                 />
-                {auth.rol === 'entrenador' || auth.rol === 'admin' && (
-                  <>
-                    <MdNoteAdd
-                      className="h-7 w-7 text-slate-800 cursor-pointer inline-block mr-2"
-                      onClick={() => navigate(`/dashboard/rutinas/editar/${rutina.id}`)}
-                    />
-                    <MdDeleteForever
-                      className="h-7 w-7 text-red-900 cursor-pointer inline-block"
-                      onClick={() => handleDelete(rutina.id)}
-                    />
-                  </>
-                )}
+                <MdNoteAdd
+                  className="h-7 w-7 text-slate-800 cursor-pointer inline-block mr-2"
+                  onClick={() => {
+                    setDataModal(rutina);
+                    handleModal();
+                  }}
+                />
+                <MdDeleteForever
+                  className="h-7 w-7 text-red-900 cursor-pointer inline-block"
+                  onClick={() => eliminarRutina(rutina.id)}
+                />
               </td>
             </tr>
           ))}
