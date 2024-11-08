@@ -18,6 +18,11 @@ const VisualizarCliente = () => {
     email: 'ana@example.com',
     telefono: '+123 456 7890',
     estado: 'activo',
+    genero: 'Femenino',
+    edad: 30,
+    estatura: 165,
+    peso: 60,
+    nivelActividadFisica: 'Moderado',
   });
 
   useEffect(() => {
@@ -64,6 +69,36 @@ const VisualizarCliente = () => {
                 <span className="bg-blue-100 text-green-500 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
                   {cliente.estado && "activo"}
                 </span>
+              </p>
+              <p className="text-md text-gray-00 mt-4">
+                <span className="text-gray-600 uppercase font-bold">
+                  * Género:{" "}
+                </span>
+                {cliente.genero}
+              </p>
+              <p className="text-md text-gray-00 mt-4">
+                <span className="text-gray-600 uppercase font-bold">
+                  * Edad:{" "}
+                </span>
+                {cliente.edad} años
+              </p>
+              <p className="text-md text-gray-00 mt-4">
+                <span className="text-gray-600 uppercase font-bold">
+                  * Estatura:{" "}
+                </span>
+                {cliente.estatura} cm
+              </p>
+              <p className="text-md text-gray-00 mt-4">
+                <span className="text-gray-600 uppercase font-bold">
+                  * Peso:{" "}
+                </span>
+                {cliente.peso} kg
+              </p>
+              <p className="text-md text-gray-00 mt-4">
+                <span className="text-gray-600 uppercase font-bold">
+                  * Nivel de Actividad Física:{" "}
+                </span>
+                {cliente.nivelActividadFisica}
               </p>
             </div>
             <div>

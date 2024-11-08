@@ -9,6 +9,7 @@ import Forgot from './pages/auth/Forgot';
 import Dashboard from './pages/Dashboard';
 import Perfil from './pages/Perfil';
 import FormularioPerfil from './components/profile/FormularioPerfil';
+import NotFound from './pages/NotFound';
 
 import Entrenadores from './pages/Entrenadores';
 import VisualizarEntrenador from './pages/VisualizarEntrenador';
@@ -31,7 +32,7 @@ function App() {
               <Route path="/app" element={<AppClientes />} />
               <Route path="/login" element={<Login />} />
               <Route path="/forgot" element={<Forgot />} />
-              <Route path="*" element={<h1>Not Found</h1>} />
+              <Route path="*" element={<NotFound/>} />
               <Route path="/dashboard" element={<Dashboard />}>
                 <Route index element={<Perfil />} />
                 <Route path="perfil/editar" element={<FormularioPerfil />} />
