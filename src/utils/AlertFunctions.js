@@ -15,6 +15,24 @@ export const confirmDeleteAlert = async () => {
   return result.isConfirmed;
 };
 
+export const successLoginAlert = (message) => {
+  Swal.fire({
+    icon: "success",
+    title: "Éxito",
+    text: message,
+  });
+};
+
+export const errorLoginAlert = (message) => {
+  Swal.fire({
+    icon: "error",
+    title: "Error",
+    text: message,
+  });
+};
+
+
+
 export const successAlert = (message) => {
   Swal.fire('Eliminado', message, 'success');
 };

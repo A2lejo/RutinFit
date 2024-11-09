@@ -1,32 +1,29 @@
 import React, { useState } from 'react';
-import { ConfirmAlert, confirmDeleteAlert, successAlert } from '../utils/AlertFunctions.js';
+import axios from 'axios';
+import { ConfirmAlert, confirmDeleteAlert, successAlert, errorAlert } from '../utils/AlertFunctions.js';
 import TablaEntrenadores from '../components/TablaEntrenadores';
+import { validateLetters } from '../utils/validations.js';
 
 const Entrenadores = () => {
-  const [entrenadores, setEntrenadores] = useState([
-    { id: 1, nombre: 'Juan Pérez', especialidad: 'Cardio', email: 'juan@example.com', telefono: '+123 456 7890', estado: 'activo' },
-    { id: 2, nombre: 'María López', especialidad: 'Fuerza', email: 'maria@example.com', telefono: '+123 456 7891', estado: 'activo' },
-    { id: 3, nombre: 'Carlos García', especialidad: 'Yoga', email: 'carlos@example.com', telefono: '+123 456 7892', estado: 'activo' },
-  ]);
-
-  // Estado para controlar la visibilidad del modal
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // Estado para el formulario del nuevo entrenador
   const [form, setForm] = useState({
-    nombre: '',
-    especialidad: '',
+    name: '',
+    lastname: '',
     email: '',
-    telefono: '',
+    description: '',
   });
-
-  // Estado para la búsqueda
   const [search, setSearch] = useState('');
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === 'name' || name === 'lastname') {
+      if (!validateLetters(value)) return;
+    }
+
     setForm({
       ...form,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
@@ -34,37 +31,36 @@ const Entrenadores = () => {
     setSearch(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aquí puedes agregar la lógica para agregar el entrenador
-    const newEntrenador = {
-      id: entrenadores.length + 1,
-      nombre: form.nombre,
-      especialidad: form.especialidad,
-      email: form.email,
-      telefono: form.telefono,
-      estado: 'activo',
-    };
-    setEntrenadores([...entrenadores, newEntrenador]);
-    setIsModalOpen(false);
-    ConfirmAlert('', 'El entrenador ha sido agregado.');
-  };
-
-  const handleDelete = async (id) => {
-    const confirmDelete = await confirmDeleteAlert();
-    if (confirmDelete) {
-      setEntrenadores(entrenadores.filter((entrenador) => entrenador.id !== id));
-      successAlert('El entrenador ha sido eliminado');
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/coach/register`,
+        { 
+          name: form.name, 
+          lastname: form.lastname, 
+          email: form.email, 
+          description: form.description 
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        }
+      );
+      setIsModalOpen(false);
+      ConfirmAlert('', 'El entrenador ha sido agregado.');
+      // Actualizar la tabla de entrenadores
+      window.location.reload();
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        errorAlert('El correo ya está registrado');
+      } else {
+        console.error("Error al registrar entrenador:", error);
+        errorAlert("Error al registrar entrenador. Por favor, intenta nuevamente.");
+      }
     }
   };
-
-  // Filtrar entrenadores basados en la búsqueda
-  const filteredEntrenadores = entrenadores.filter((entrenador) =>
-    entrenador.nombre.toLowerCase().includes(search.toLowerCase())
-  );
-
-  // Simulación de autenticación y rol del usuario
-  const auth = { rol: 'admin' }; // Cambia esto según el rol del usuario
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
@@ -87,16 +83,8 @@ const Entrenadores = () => {
           onChange={handleSearchChange}
         />
       </div>
-      {filteredEntrenadores.length === 0 ? (
-        <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert">
-          <p className="font-bold">No existen registros</p>
-          <p>Actualmente no hay entrenadores registrados.</p>
-        </div>
-      ) : (
-        <TablaEntrenadores entrenadores={filteredEntrenadores} handleDelete={handleDelete} auth={auth} />
-      )}
+      <TablaEntrenadores search={search} />
 
-      {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-1/2">
@@ -105,29 +93,29 @@ const Entrenadores = () => {
             </h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nombre">
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
                   Nombre
                 </label>
                 <input
-                  id="nombre"
-                  name="nombre"
+                  id="name"
+                  name="name"
                   type="text"
                   className="border-2 w-full p-2 rounded-md"
-                  value={form.nombre}
+                  value={form.name}
                   onChange={handleChange}
                   required
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="especialidad">
-                  Especialidad
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="lastname">
+                  Apellido
                 </label>
                 <input
-                  id="especialidad"
-                  name="especialidad"
+                  id="lastname"
+                  name="lastname"
                   type="text"
                   className="border-2 w-full p-2 rounded-md"
-                  value={form.especialidad}
+                  value={form.lastname}
                   onChange={handleChange}
                   required
                 />
@@ -147,15 +135,15 @@ const Entrenadores = () => {
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="telefono">
-                  Teléfono
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
+                  Descripción
                 </label>
                 <input
-                  id="telefono"
-                  name="telefono"
+                  id="description"
+                  name="description"
                   type="text"
                   className="border-2 w-full p-2 rounded-md"
-                  value={form.telefono}
+                  value={form.description}
                   onChange={handleChange}
                   required
                 />
