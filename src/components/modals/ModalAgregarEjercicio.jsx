@@ -23,7 +23,7 @@ const ModalAgregarRutina = ({ clienteId }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-1/2">
-        <h2 className="text-2xl font-bold mb-4">{dataModal?.nombre ? 'Editar Rutina' : 'Agregar Rutina'}</h2>
+        <h2 className="text-2xl font-bold mb-4">{dataModal?.nombre ? 'Editar Ejercicio' : 'Agregar Ejercicio'}</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nombre">
@@ -35,6 +35,34 @@ const ModalAgregarRutina = ({ clienteId }) => {
               type="text"
               className="border-2 w-full p-2 rounded-md"
               value={form.nombre}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="repeticiones">
+              Repeticiones
+            </label>
+            <input
+              id="repeticiones"
+              name="repeticiones"
+              type="number"
+              className="border-2 w-full p-2 rounded-md"
+              value={form.descripcion}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="series">
+              Series
+            </label>
+            <input
+              id="series"
+              name="series"
+              type="number"
+              className="border-2 w-full p-2 rounded-md"
+              value={form.descripcion}
               onChange={handleChange}
               required
             />

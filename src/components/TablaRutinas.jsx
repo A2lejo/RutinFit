@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { MdDeleteForever, MdNoteAdd, MdInfo } from "react-icons/md";
+import { MdDeleteForever, MdEdit, MdInfo } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import RutinasContext from "@context/RutinasProvider";
 import { AuthContext } from "@context/AuthProvider";
@@ -31,7 +31,7 @@ const TablaRutinas = ({ rutinas }) => {
                   className="h-7 w-7 text-slate-800 cursor-pointer inline-block mr-2"
                   onClick={() => navigate(`/dashboard/rutinas/${rutina.id}`)}
                 />
-                <MdNoteAdd
+                <MdEdit
                   className="h-7 w-7 text-slate-800 cursor-pointer inline-block mr-2"
                   onClick={() => {
                     setDataModal(rutina);

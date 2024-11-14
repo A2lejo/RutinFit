@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { ConfirmAlert, confirmDeleteAlert, successAlert, errorAlert } from '../utils/AlertFunctions.js';
+import { ConfirmAlert, errorAlert } from '../utils/AlertFunctions.js';
 import TablaEntrenadores from '../components/TablaEntrenadores';
 import { validateLetters } from '../utils/validations.js';
 

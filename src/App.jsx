@@ -18,7 +18,10 @@ import ActualizarEntrenador from './pages/ActualizarEntrenador';
 import Clientes from './pages/Clientes';
 import VisualizarCliente from './pages/VisualizarCliente';
 
+import Chat from './pages/Chat';
+
 import VisualizarRutina from './pages/VisualizarRutina';
+
 
 function App() {
   return (
@@ -42,6 +45,7 @@ function App() {
                 <Route path="clientes" element={<Clientes />} />
                 <Route path="clientes/visualizar/:id" element={<VisualizarCliente />} />
                 <Route path="rutinas/:id" element={<VisualizarRutina />} />
+                <Route path="chat" element={<Chat/>} />
               </Route>
             </Routes>
           </RutinasProvider>

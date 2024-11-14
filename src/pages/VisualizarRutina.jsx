@@ -10,7 +10,16 @@ const VisualizarRutina = () => {
   const { id } = useParams();
   const { auth } = useContext(AuthContext);
   const { modal, handleModal, rutinas, setRutinas, alertaRutina, setDataModal, eliminarEjercicio } = useContext(RutinasContext);
-  const [rutina, setRutina] = useState(null);
+  const [rutina, setRutina] = useState({
+    id: 1,
+    nombre: "Rutina de Ejemplo",
+    descripcion: "Esta es una rutina de ejemplo con datos quemados.",
+    ejercicios: [
+      { id: 1, nombre: "Sentadillas", repeticiones: 15, series: 3, descripcion: "Hacer 15 sentadillas en 3 series." },
+      { id: 2, nombre: "Flexiones", repeticiones: 20, series: 3, descripcion: "Hacer 20 flexiones en 3 series." },
+      { id: 3, nombre: "Abdominales", repeticiones: 25, series: 3, descripcion: "Hacer 25 abdominales en 3 series." },
+    ],
+  });
 
   useEffect(() => {
     const rutinaEncontrada = rutinas.find((r) => r.id === parseInt(id));

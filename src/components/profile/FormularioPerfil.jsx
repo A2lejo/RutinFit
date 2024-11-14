@@ -11,8 +11,6 @@ const FormularioPerfil = () => {
     id: auth._id,
     nombre: auth.nombre || "",
     apellido: auth.apellido || "",
-    edad: auth.edad || "",
-    telefono: auth.telefono || "",
     email: auth.email || "",
     genero: auth.genero || ""
   });
@@ -85,42 +83,6 @@ const FormularioPerfil = () => {
           placeholder="Apellido"
           name="apellido"
           value={form.apellido}
-          onChange={handleChange}
-        />
-      </div>
-
-      <div>
-        <label
-          htmlFor="edad"
-          className="text-gray-700 uppercase font-bold text-sm"
-        >
-          edad:{" "}
-        </label>
-        <input
-          id="edad"
-          type="text"
-          className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5"
-          placeholder="Edad"
-          name="edad"
-          value={form.edad}
-          onChange={handleChange}
-        />
-      </div>
-
-      <div>
-        <label
-          htmlFor="telefono"
-          className="text-gray-700 uppercase font-bold text-sm"
-        >
-          Teléfono:{" "}
-        </label>
-        <input
-          id="telefono"
-          type="text"
-          className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5"
-          placeholder="Teléfono"
-          name="telefono"
-          value={form.telefono}
           onChange={handleChange}
         />
       </div>

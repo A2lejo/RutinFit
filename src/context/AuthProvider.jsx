@@ -1,28 +1,18 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({});
 
-  const perfil = async (token) => {
+  const obtenerPerfilDesdeToken = (token) => {
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/perfil`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setAuth(response.data);
-
-      if (!response.data?._id) localStorage.removeItem("token");
+      const decodedToken = jwtDecode(token);
+      setAuth(decodedToken);
     } catch (error) {
-      console.error("Error al obtener el perfil:", error);
+      console.error("Error al decodificar el token:", error);
       localStorage.removeItem("token");
     }
   };
@@ -41,7 +31,7 @@ export const AuthProvider = ({ children }) => {
           },
         }
       );
-      perfil(token);
+      obtenerPerfilDesdeToken(token);
       return { respuesta: respuesta.data.res, exito: true };
     } catch (error) {
       return { respuesta: error.response.data.res, exito: false };
@@ -69,7 +59,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) perfil(token);
+    if (token) obtenerPerfilDesdeToken(token);
   }, []);
 
   return (

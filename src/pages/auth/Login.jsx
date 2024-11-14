@@ -100,7 +100,7 @@ const Login = () => {
                 />
                 <span
                   className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 cursor-pointer"
-                  style={{ top: '50%', transform: 'translateY(-50%)' }}
+                  style={{ top: '70%', transform: 'translateY(-50%)' }}
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? <FaEyeSlash /> : <FaEye />}

@@ -25,6 +25,27 @@ const VisualizarCliente = () => {
     nivelActividadFisica: 'Moderado',
   });
 
+  const [rutinasCliente, setRutinasCliente] = useState([
+    {
+      id: 1,
+      nombre: "Rutina de Fuerza",
+      descripcion: "Rutina enfocada en ejercicios de fuerza.",
+      ejercicios: [
+        { id: 1, nombre: "Sentadillas", repeticiones: 15, series: 3 },
+        { id: 2, nombre: "Press de banca", repeticiones: 10, series: 3 },
+      ],
+    },
+    {
+      id: 2,
+      nombre: "Rutina de Cardio",
+      descripcion: "Rutina enfocada en ejercicios cardiovasculares.",
+      ejercicios: [
+        { id: 1, nombre: "Correr", repeticiones: 0, series: 1, duracion: "30 minutos" },
+        { id: 2, nombre: "Bicicleta", repeticiones: 0, series: 1, duracion: "45 minutos" },
+      ],
+    },
+  ]);
+
   useEffect(() => {
     // Aquí puedes agregar la lógica para obtener los datos del cliente y sus rutinas desde el backend
     // setCliente(response.data.cliente);
@@ -129,7 +150,7 @@ const VisualizarCliente = () => {
 
           {modal && <ModalAgregarRutina clienteId={cliente._id} />}
 
-          {rutinas.length === 0 ? (
+          {rutinasCliente.length === 0 ? (
             <p>No existen registros</p>
           ) : (
             <>
@@ -137,7 +158,7 @@ const VisualizarCliente = () => {
                 <Alertas exito={alertaRutina.exito}>{alertaRutina.respuesta}</Alertas>
               )}
               <TablaRutinas
-                rutinas={rutinas}
+                rutinas={rutinasCliente}
                 handleDelete={eliminarRutina}
                 handleEdit={(rutina) => {
                   setDataModal(rutina);
