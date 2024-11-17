@@ -31,10 +31,17 @@ const Login = () => {
         `${import.meta.env.VITE_BACKEND_URL}/login`,
         form
       );
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", JSON.stringify({
+        name: response.data.name,
+        lastname: response.data.lastname,
+        rol: response.data.rol,
+        email: response.data.email,
+        id: response.data._id,
+      }));
       setAuth(response.data);
 
       successLoginAlert(response.data.res);
-      localStorage.setItem("token", response.data.token);
       navigate("/dashboard");
     } catch (error) {
       errorLoginAlert("Por favor, verifica tus credenciales.");

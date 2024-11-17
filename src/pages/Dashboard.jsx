@@ -9,11 +9,14 @@ const Dashboard = () => {
   const urlActual = location.pathname;
   const { auth } = useContext(AuthContext);
   const [rol, setRol] = useState("");
-  const [name, setName] = useState("");
+  const [nombre, setNombre] = useState("");
 
   useEffect(() => {
-    setRol(auth.rol);
-    setName(auth.name);
+    console.log("Auth State:", auth); // Agregar console.log para ver el estado auth
+    if (auth && auth.name) {
+      setRol(auth.rol);
+      setNombre(auth.name);
+    }
   }, [auth]);
 
   return (
@@ -34,7 +37,7 @@ const Dashboard = () => {
         <p className="text-slate-400 text-center my-4 text-sm">
           {" "}
           <span className="bg-green-600 w-3 h-3 inline-block rounded-full"></span>{" "}
-          Bienvenido - {name}
+          Bienvenido - {nombre}
           <br />
           Rol - {rol}
         </p>
@@ -42,19 +45,21 @@ const Dashboard = () => {
         <hr className="mt-5 border-slate-500" />
 
         <ul className="mt-5">
-          <li className="text-center">
-            <Link
-              to="/dashboard"
-              className={`${urlActual === "/dashboard"
-                ? "text-black bg-[#16A39C] rounded-md text-center scale-105"
-                : "text-slate-600"
-                } px-3 py-2 text-xl block mt-2 hover:bg-[#82E5B5]`}
-            >
-              Perfil
-            </Link>
-          </li>
+          {(rol === "administrador" || rol === "entrenador") && (
+            <li className="text-center">
+              <Link
+                to="/dashboard"
+                className={`${urlActual === "/dashboard"
+                  ? "text-black bg-[#16A39C] rounded-md text-center scale-105"
+                  : "text-slate-600"
+                  } px-3 py-2 text-xl block mt-2 hover:bg-[#82E5B5]`}
+              >
+                Perfil
+              </Link>
+            </li>
+          )}
 
-          {rol !== "entrenador" && (
+          {rol === "administrador" && (
             <li className="text-center">
               <Link
                 to="/dashboard/entrenadores"
@@ -68,19 +73,21 @@ const Dashboard = () => {
             </li>
           )}
 
-          <li className="text-center">
-            <Link
-              to="/dashboard/clientes"
-              className={`${urlActual === "/dashboard/clientes"
-                ? "text-black bg-[#16A39C] rounded-md text-center scale-105"
-                : "text-slate-600"
-                } px-3 py-2 text-xl block mt-2 hover:bg-[#82E5B5]`}
-            >
-              Clientes
-            </Link>
-          </li>
+          {(rol === "administrador" || rol === "entrenador") && (
+            <li className="text-center">
+              <Link
+                to="/dashboard/clientes"
+                className={`${urlActual === "/dashboard/clientes"
+                  ? "text-black bg-[#16A39C] rounded-md text-center scale-105"
+                  : "text-slate-600"
+                  } px-3 py-2 text-xl block mt-2 hover:bg-[#82E5B5]`}
+              >
+                Clientes
+              </Link>
+            </li>
+          )}
 
-          {rol !== "administrador" && (
+          {rol === "entrenador" && (
             <li className="text-center">
               <Link
                 to="/dashboard/chat"
@@ -99,7 +106,7 @@ const Dashboard = () => {
       <div className="flex-1 flex flex-col justify-between h-screen bg-gray-100">
         <div className="bg-black py-2 flex md:justify-end items-center gap-5 justify-center">
           <div className="text-md font-semibold text-slate-100">
-            Usuario - {name}
+            Usuario - {nombre}
           </div>
           <div>
             <img

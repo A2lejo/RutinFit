@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { MdInfo, MdEdit, MdDeleteForever } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Alertas from '@components/Alertas';
 import { AuthContext } from '@context/AuthProvider';
+import Alertas from '@components/Alertas';
 
-const TablaClientes = ({ entrenadorId, search }) => {
+const TablaClientes = ({ search }) => {
   const [clientes, setClientes] = useState([]);
   const navigate = useNavigate();
   const { auth } = useContext(AuthContext);
@@ -13,7 +12,7 @@ const TablaClientes = ({ entrenadorId, search }) => {
   const listarClientes = async () => {
     try {
       const respuesta = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/coach/get-clients/${entrenadorId}`,
+        `${import.meta.env.VITE_BACKEND_URL}/coach/get-clients`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -22,39 +21,18 @@ const TablaClientes = ({ entrenadorId, search }) => {
         }
       );
       console.log('respuesta:', respuesta.data);
-      setClientes(respuesta.data.clientes);
+      setClientes(respuesta.data.clientes || []); // Asegurarse de que clientes sea un array
     } catch (error) {
       console.error('Error al listar clientes:', error);
     }
   };
 
   useEffect(() => {
-    if (entrenadorId) {
-      listarClientes();
-    }
-  }, [entrenadorId]);
-
-  const handleDelete = async (id) => {
-    try {
-      if (confirm('¿Estás seguro de eliminar este cliente?')) {
-        await axios.delete(
-          `${import.meta.env.VITE_BACKEND_URL}/client/delete-client/${id}`,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          }
-        );
-        listarClientes();
-      }
-    } catch (error) {
-      console.error('Error al eliminar cliente:', error);
-    }
-  };
+    listarClientes();
+  }, []);
 
   const filteredClientes = clientes.filter((cliente) =>
-    `${cliente.nombre} ${cliente.apellido}`.toLowerCase().includes(search.toLowerCase())
+    `${cliente.name} ${cliente.lastname}`.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -77,31 +55,21 @@ const TablaClientes = ({ entrenadorId, search }) => {
             {filteredClientes.map((cliente, index) => (
               <tr className="border-b hover:bg-gray-300 text-center" key={cliente._id}>
                 <td className="p-2">{index + 1}</td>
-                <td className="p-2">{`${cliente.nombre} ${cliente.apellido}`}</td>
+                <td className="p-2">{`${cliente.name} ${cliente.lastname}`}</td>
                 <td className="p-2 hidden md:table-cell">{cliente.email}</td>
                 <td className="p-2 hidden md:table-cell">{cliente.telefono}</td>
                 <td className="p-2 hidden md:table-cell">
                   <span className="bg-blue-100 text-green-500 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
-                    {cliente.estado}
+                    {cliente.status ? 'activo' : 'inactivo'}
                   </span>
                 </td>
                 <td className="p-2 text-center">
-                  <MdInfo
-                    className="h-7 w-7 text-slate-800 cursor-pointer inline-block mr-2"
+                  <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700"
                     onClick={() => navigate(`/dashboard/clientes/visualizar/${cliente._id}`)}
-                  />
-                  {auth.rol === 'administrador' && (
-                    <>
-                      <MdEdit
-                        className="h-7 w-7 text-blue-700 cursor-pointer inline-block mr-2"
-                        onClick={() => navigate(`/dashboard/clientes/editar/${cliente._id}`)}
-                      />
-                      <MdDeleteForever
-                        className="h-7 w-7 text-red-900 cursor-pointer inline-block"
-                        onClick={() => handleDelete(cliente._id)}
-                      />
-                    </>
-                  )}
+                  >
+                    Ver
+                  </button>
                 </td>
               </tr>
             ))}

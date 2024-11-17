@@ -14,18 +14,19 @@ const CardPerfil = () => {
     genero: "",
   });
 
-  useEffect(() => {
-    if (auth) {
-      setPerfil({
-        nombre: auth.name,
-        apellido: auth.lastname,
-        edad: auth.edad,
-        telefono: auth.telefono,
-        email: auth.email,
-        genero: auth.genero,
-      });
-    }
-  }, [auth]);
+useEffect(() => {
+  console.log("Auth State in CardPerfil:", auth); 
+  if (auth && auth.name) {
+    setPerfil({
+      nombre: auth.name,
+      apellido: auth.lastname,
+      edad: auth.edad,
+      telefono: auth.telefono,
+      email: auth.email,
+      genero: auth.genero,
+    });
+  }
+}, [auth]);
 
   const handleEdit = () => {
     navigate("/dashboard/perfil/editar");
@@ -47,9 +48,21 @@ const CardPerfil = () => {
             <b>Email:</b>
             <p className="inline-block ml-3">{perfil.email}</p>
           </div>
+          {/* <div className="self-start">
+            <b>Teléfono:</b>
+            <p className="inline-block ml-3">{perfil.telefono}</p>
+          </div>
+          <div className="self-start">
+            <b>Edad:</b>
+            <p className="inline-block ml-3">{perfil.edad}</p>
+          </div>
+          <div className="self-start">
+            <b>Género:</b>
+            <p className="inline-block ml-3">{perfil.genero}</p>
+          </div> */}
         </div>
       </div>
-      {auth.rol === "administrador" && (
+      {auth.rol === "entrenador" && (
         <div>
           <button
             onClick={handleEdit}
