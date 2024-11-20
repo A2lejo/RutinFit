@@ -27,7 +27,7 @@ const Footer = () => {
                 <div className="p-6">
                     <h2 className="text-lg font-serif">Contáctanos:</h2>
                     <a href="mailto:contacto@rutinfit.com" className="text-sm text-[#82E5B5]">
-                        contacto@rutinfit.com
+                        rutinfit24@gmail.com
                     </a>
                 </div>
                 <hr className="border-[#82E5B5] my-2 mx-20" />
