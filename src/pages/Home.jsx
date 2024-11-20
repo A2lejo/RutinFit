@@ -41,7 +41,7 @@ const Home = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                   <FaEnvelope className="text-white" />
-                  <span className="text-white">contacto@rutinfit.com</span>
+                  <a href="mailto:rutinfit24@gmail.com"  className="text-white">rutinfit24@gmail.com</a>
                 </div>
                 <div className="flex items-center space-x-5">
                   <a href="https://www.facebook.com" target="_blank" rel="noreferrer">
