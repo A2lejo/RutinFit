@@ -37,6 +37,10 @@ export const successAlert = (message) => {
   Swal.fire('Eliminado', message, 'success');
 };
 
+export const successUpdateAlert = (message) => {
+  Swal.fire('Actualizado', message, 'success');
+};
+
 export const errorAlert = (message) => {
   Swal.fire('Error', message, 'error');
 };

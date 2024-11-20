@@ -24,6 +24,7 @@ const VisualizarEntrenador = () => {
           }
         );
 
+        console.log(respuesta)
         if (respuesta.data) {
           setEntrenador(respuesta.data);
         } else {
@@ -80,6 +81,7 @@ const VisualizarEntrenador = () => {
           <hr className="my-4" />
           <div className="flex justify-between items-center pb-5">
             <p>Clientes a cargo del entrenador:{" "}</p>
+            
           </div>
 
           <TablaClientes clientes={entrenador.clientes} />

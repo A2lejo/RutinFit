@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "@context/AuthProvider";
 import Alertas from "@components/Alertas";
 
@@ -7,16 +7,27 @@ const FormularioPerfil = () => {
 
   const [alerta, setAlerta] = useState({});
 
-  const [form, setform] = useState({
-    id: auth._id,
-    nombre: auth.nombre || "",
-    apellido: auth.apellido || "",
-    email: auth.email || "",
-    genero: auth.genero || ""
+  const [form, setForm] = useState({
+    id: "",
+    name: "",
+    lastname: "",
+    email: ""
   });
 
+  useEffect(() => {
+    console.log("auth en FormularioPerfil:", auth);
+    if (auth) {
+      setForm({
+        id: auth.id,
+        name: auth.name || "",
+        lastname: auth.lastname || "",
+        email: auth.email || ""
+      });
+    }
+  }, [auth]);
+
   const handleChange = (e) => {
-    setform({
+    setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
@@ -34,7 +45,9 @@ const FormularioPerfil = () => {
       }, 5000);
       return;
     }
+    console.log("datos a enviar:", form);
     const resultado = await actualizarPerfil(form);
+    console.log("resultado:", resultado);
     setAlerta(resultado);
     setTimeout(() => {
       setAlerta({});
@@ -53,36 +66,36 @@ const FormularioPerfil = () => {
         </p>
       <div>
         <label
-          htmlFor="nombre"
+          htmlFor="name"
           className="text-gray-700 uppercase font-bold text-sm"
         >
           Nombre:{" "}
         </label>
         <input
-          id="nombre"
+          id="name"
           type="text"
           className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5"
           placeholder="Nombre"
-          name="nombre"
-          value={form.nombre}
+          name="name"
+          value={form.name}
           onChange={handleChange}
         />
       </div>
 
       <div>
         <label
-          htmlFor="apellido"
+          htmlFor="lastname"
           className="text-gray-700 uppercase font-bold text-sm"
         >
           Apellido:{" "}
         </label>
         <input
-          id="apellido"
+          id="lastname"
           type="text"
           className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5"
           placeholder="Apellido"
-          name="apellido"
-          value={form.apellido}
+          name="lastname"
+          value={form.lastname}
           onChange={handleChange}
         />
       </div>
@@ -104,51 +117,7 @@ const FormularioPerfil = () => {
           onChange={handleChange}
         />
       </div>
-
-      <div>
-        <label
-          htmlFor="genero"
-          className="text-gray-700 uppercase font-bold text-sm"
-        >
-          Género:
-        </label>
-        <div className="mt-2 mb-5">
-          <label className="inline-flex items-center">
-            <input
-              type="radio"
-              className="form-radio"
-              name="genero"
-              value="Masculino"
-              checked={form.genero === "Masculino"}
-              onChange={handleChange}
-            />
-            <span className="ml-2">Masculino</span>
-          </label>
-          <label className="inline-flex items-center ml-6">
-            <input
-              type="radio"
-              className="form-radio"
-              name="genero"
-              value="Femenino"
-              checked={form.genero === "Femenino"}
-              onChange={handleChange}
-            />
-            <span className="ml-2">Femenino</span>
-          </label>
-          <label className="inline-flex items-center ml-6">
-            <input
-              type="radio"
-              className="form-radio"
-              name="genero"
-              value="Otro"
-              checked={form.genero === "Otro"}
-              onChange={handleChange}
-            />
-            <span className="ml-2">Otro</span>
-          </label>
-        </div>
-      </div>
-
+      
       <input
         type="submit"
         className="bg-[#0D9488] w-full p-3 

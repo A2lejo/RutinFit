@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ConfirmAlert, errorAlert, successAlert } from "../../utils/AlertFunctions"; // Verificar la ruta
+import { successUpdateAlert, errorAlert, successAlert, ConfirmAlert } from "../../utils/AlertFunctions"; // Verificar la ruta
 import { validateLetters } from '../../utils/validations';
+import Alertas from '../Alertas';
 
 const FormularioEntrenador = ({ modo }) => {
   const navigate = useNavigate();
@@ -71,7 +72,8 @@ const FormularioEntrenador = ({ modo }) => {
             },
           }
         );
-        successAlert('El entrenador ha sido agregado.');
+        ConfirmAlert('','El entrenador ha sido agregado.');
+        navigate('/dashboard/entrenadores');
       } else {
         await axios.put(
           `${import.meta.env.VITE_BACKEND_URL}/coach/update-coach/${id}`,
@@ -83,10 +85,9 @@ const FormularioEntrenador = ({ modo }) => {
             },
           }
         );
-        successAlert('Entrenador actualizado correctamente');
-        navigate(`/dashboard/entrenadores/visualizar/${id}`);
+        successUpdateAlert('Entrenador actualizado correctamente');
+        navigate(`/dashboard/entrenadores`);
       }
-      navigate('/dashboard/entrenadores');
     } catch (error) {
       if (modo === 'agregar' && error.response && error.response.status === 400) {
         errorAlert('El correo ya está registrado');
@@ -96,10 +97,14 @@ const FormularioEntrenador = ({ modo }) => {
     }
   };
 
+  const handleCancel = () => {
+    navigate('/dashboard/entrenadores');
+  };
+
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <h1 className="font-black text-4xl text-[#0D9488]">
-        {modo === 'agregar' ? 'Agregar Entrenador' : 'Actualizar Entrenador'}
+        {modo === 'agregar' ? 'Agregar' : 'Actualizar'}
       </h1>
       <p className="mb-8 my-4">
         {modo === 'agregar'
@@ -165,7 +170,14 @@ const FormularioEntrenador = ({ modo }) => {
             required
           />
         </div>
-        <div className="flex justify-end">
+        <div className="flex flex-col md:flex-row justify-end space-y-4 md:space-y-0 md:space-x-4">
+          <button
+            type="button"
+            className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-700"
+            onClick={handleCancel}
+          >
+            Cancelar
+          </button>
           <button
             type="submit"
             className="bg-[#0D9488] text-white px-4 py-2 rounded-md hover:bg-[#0B7A6A]"

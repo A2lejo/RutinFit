@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
       const decodedToken = jwtDecode(token);
       console.log("decodedToken:", decodedToken);
 
-      //Información del usario, ya que el back no envia 
+      // Información del usuario, ya que el back no envía 
       const user = JSON.parse(localStorage.getItem("user"));
 
       // Actualizar el estado auth con la información del token decodificado
@@ -35,7 +35,6 @@ export const AuthProvider = ({ children }) => {
         datos,
         {
           headers: {
-            method: "PUT",
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
@@ -48,6 +47,27 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const actualizarPerfil = async (datos) => {
+    const token = localStorage.getItem("token");
+    try {
+      const respuesta = await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}/coach/update-coach/${datos.id}`,
+        datos,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setAuth(respuesta.data);
+      return { respuesta: 'Perfil actualizado correctamente', exito: true };
+    } catch (error) {
+      console.error('Error al actualizar perfil:', error);
+      return { respuesta: 'Error al actualizar perfil', exito: false };
+    }
+  };
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) obtenerPerfilDesdeToken(token);
@@ -55,7 +75,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ auth, setAuth, actualizarPassword }}
+      value={{ auth, setAuth, actualizarPassword, actualizarPerfil }}
     >
       {children}
     </AuthContext.Provider>

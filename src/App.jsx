@@ -12,6 +12,7 @@ import FormularioPerfil from './components/profile/FormularioPerfil';
 import NotFound from './pages/NotFound';
 
 import Entrenadores from './pages/Entrenadores';
+import RegistrarEntrenador from './pages/RegistrarEntrenador';
 import VisualizarEntrenador from './pages/VisualizarEntrenador';
 import ActualizarEntrenador from './pages/ActualizarEntrenador';
 
@@ -40,6 +41,7 @@ function App() {
                 <Route index element={<Perfil />} />
                 <Route path="perfil/editar" element={<FormularioPerfil />} />
                 <Route path="entrenadores" element={<Entrenadores />} />
+                <Route path="entrenadores/registrar" element={<RegistrarEntrenador />} />
                 <Route path="entrenadores/visualizar/:id" element={<VisualizarEntrenador />} />
                 <Route path="entrenadores/editar/:id" element={<ActualizarEntrenador />} />
                 <Route path="clientes" element={<Clientes />} />

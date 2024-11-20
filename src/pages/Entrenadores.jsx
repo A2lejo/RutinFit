@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TablaEntrenadores from '../components/TablaEntrenadores';
-import FormularioEntrenador from '../components/profile/FormularioEntrenador'; // Verificar la ruta
 
 const Entrenadores = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
   const [search, setSearch] = useState('');
 
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
+  };
+
+  const handleAddEntrenador = () => {
+    navigate('/dashboard/entrenadores/registrar');
   };
 
   return (
@@ -15,7 +19,7 @@ const Entrenadores = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-[#0D9488]">Entrenadores Registrados</h1>
         <button
-          onClick={() => setIsModalOpen(true)}
+          onClick={handleAddEntrenador}
           className="bg-[#82E5B5] text-black px-4 py-2 rounded-md hover:bg-teal-600 hover:text-white"
         >
           <span className="md:hidden">Agregar</span>
@@ -32,20 +36,6 @@ const Entrenadores = () => {
         />
       </div>
       <TablaEntrenadores search={search} />
-
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-1/2">
-            <FormularioEntrenador modo="agregar" />
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className="bg-gray-500 text-white px-4 py-2 rounded-md mt-4 hover:bg-gray-700"
-            >
-              Cancelar
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

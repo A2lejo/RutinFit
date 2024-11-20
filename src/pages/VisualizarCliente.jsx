@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import axios from 'axios';
 import { AuthContext } from "@context/AuthProvider";
 import TablaRutinas from "@components/TablaRutinas";
 import ModalAgregarRutina from "@components/modals/ModalAgregarRutina";
@@ -11,51 +12,36 @@ const VisualizarCliente = () => {
   const { id } = useParams();
   const { auth } = useContext(AuthContext);
   const { modal, handleModal, rutinas, setRutinas, alertaRutina, setDataModal, eliminarRutina } = useContext(RutinasContext);
-  const [cliente, setCliente] = useState({
-    _id: id,
-    nombre: 'Ana',
-    apellido: 'Gómez',
-    email: 'ana@example.com',
-    telefono: '+123 456 7890',
-    estado: 'activo',
-    genero: 'Femenino',
-    edad: 30,
-    estatura: 165,
-    peso: 60,
-    nivelActividadFisica: 'Moderado',
-  });
-
-  const [rutinasCliente, setRutinasCliente] = useState([
-    {
-      id: 1,
-      nombre: "Rutina de Fuerza",
-      descripcion: "Rutina enfocada en ejercicios de fuerza.",
-      ejercicios: [
-        { id: 1, nombre: "Sentadillas", repeticiones: 15, series: 3 },
-        { id: 2, nombre: "Press de banca", repeticiones: 10, series: 3 },
-      ],
-    },
-    {
-      id: 2,
-      nombre: "Rutina de Cardio",
-      descripcion: "Rutina enfocada en ejercicios cardiovasculares.",
-      ejercicios: [
-        { id: 1, nombre: "Correr", repeticiones: 0, series: 1, duracion: "30 minutos" },
-        { id: 2, nombre: "Bicicleta", repeticiones: 0, series: 1, duracion: "45 minutos" },
-      ],
-    },
-  ]);
+  const [cliente, setCliente] = useState(null);
+  const [rutinasCliente, setRutinasCliente] = useState([]);
 
   useEffect(() => {
-    // Aquí puedes agregar la lógica para obtener los datos del cliente y sus rutinas desde el backend
-    // setCliente(response.data.cliente);
-    // setRutinas(response.data.rutinas);
-  }, []);
+    const obtenerCliente = async () => {
+      try {
+        const respuesta = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/coach/get-client/${id}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        );
+        console.log('respuesta:', respuesta.data);
+        setCliente(respuesta.data.cliente);
+        setRutinasCliente(respuesta.data.rutinas);
+      } catch (error) {
+        console.error('Error al obtener los datos del cliente:', error);
+      }
+    };
+
+    obtenerCliente();
+  }, [id]);
 
   return (
     <div>
       <h1 className="font-black text-4xl text-[#0D9488]">Visualizar Cliente</h1>
-      {cliente._id ? (
+      {cliente ? (
         <>
           <div className="m-5 flex justify-between">
             <div>
@@ -63,33 +49,19 @@ const VisualizarCliente = () => {
                 <span className="text-gray-600 uppercase font-bold">
                   * Nombre del Cliente:{" "}
                 </span>
-                {cliente.nombre}
+                {cliente.user_id.name}
               </p>
               <p className="text-md text-gray-00 mt-4">
                 <span className="text-gray-600 uppercase font-bold">
                   * Apellido del Cliente:{" "}
                 </span>
-                {cliente.apellido}
+                {cliente.user_id.lastname}
               </p>
               <p className="text-md text-gray-00 mt-4">
                 <span className="text-gray-600 uppercase font-bold">
                   * Email:{" "}
                 </span>
-                {cliente.email}
-              </p>
-              <p className="text-md text-gray-00 mt-4">
-                <span className="text-gray-600 uppercase font-bold">
-                  * Teléfono:{" "}
-                </span>
-                {cliente.telefono}
-              </p>
-              <p className="text-md text-gray-00 mt-4">
-                <span className="text-gray-600 uppercase font-bold">
-                  * Estado:{" "}
-                </span>
-                <span className="bg-blue-100 text-green-500 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
-                  {cliente.estado && "activo"}
-                </span>
+                {cliente.user_id.email}
               </p>
               <p className="text-md text-gray-00 mt-4">
                 <span className="text-gray-600 uppercase font-bold">
@@ -120,6 +92,14 @@ const VisualizarCliente = () => {
                   * Nivel de Actividad Física:{" "}
                 </span>
                 {cliente.nivelActividadFisica}
+              </p>
+              <p className="text-md text-gray-00 mt-4">
+                <span className="text-gray-600 uppercase font-bold">
+                  * Estado:{" "}
+                </span>
+                <span className="bg-blue-100 text-green-500 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+                  {cliente.estado && "activo"}
+                </span>
               </p>
             </div>
             <div>

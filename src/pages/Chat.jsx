@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { io } from "socket.io-client";
 import { AuthContext } from "@context/AuthProvider";
-import axios from "axios";
 
 const socket = io(`${import.meta.env.VITE_BACKEND_URL}`.replace("/api", ""));
 
@@ -12,49 +11,23 @@ const Chat = () => {
   const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
   const { auth } = useContext(AuthContext);
 
-  const obtenerClientes = async () => {
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/coach/get-clients`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      setClientes(response.data.clientes || []);
-    } catch (error) {
-      console.error("Error al obtener la lista de clientes:", error);
-    }
-  };
-
-  const obtenerHistorial = async (clienteId) => {
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/chats/${clienteId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      setMensajes(response.data);
-    } catch (error) {
-      console.error("Error al obtener el historial de mensajes:", error);
-    }
-  };
-
   useEffect(() => {
-    obtenerClientes();
-
-    socket.on("recibir", (mensaje) => {
+    socket.on("receive", (mensaje) => {
       if (mensaje.emisor === clienteSeleccionado || mensaje.receptor === clienteSeleccionado) {
         setMensajes((state) => [...state, mensaje]);
+      }
+
+      // Agregar cliente a la lista si no está ya
+      if (!clientes.some(cliente => cliente._id === mensaje.emisor)) {
+        setClientes((prevClientes) => [
+          ...prevClientes,
+          { _id: mensaje.emisor, name: mensaje.nombre, lastname: "" } // Ajusta según los datos disponibles
+        ]);
       }
     });
 
     return () => socket.disconnect();
-  }, [clienteSeleccionado]);
+  }, [clienteSeleccionado, clientes]);
 
   const handleMensajeChat = () => {
     if (mensaje.trim() && clienteSeleccionado) {
@@ -68,7 +41,7 @@ const Chat = () => {
       };
 
       setMensajes((prevMensajes) => [...prevMensajes, newMessage]);
-      socket.emit("enviar", newMessage);
+      socket.emit("send", newMessage);
       setMensaje("");
     }
   };
@@ -84,7 +57,7 @@ const Chat = () => {
               className={`p-2 cursor-pointer ${clienteSeleccionado === cliente._id ? "bg-blue-200" : ""}`}
               onClick={() => {
                 setClienteSeleccionado(cliente._id);
-                obtenerHistorial(cliente._id);
+                setMensajes([]); // Limpiar mensajes al seleccionar un nuevo cliente
               }}
             >
               {cliente.name} {cliente.lastname}
