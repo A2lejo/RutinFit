@@ -7,7 +7,6 @@ export const RutinasProvider = ({ children }) => {
   const [rutinas, setRutinas] = useState([]);
   const [dataModal, setDataModal] = useState(null);
   const [modal, setModal] = useState(false);
-  const [exercises, setExercises] = useState([]);
 
   const handleModal = () => {
     setModal(!modal);
@@ -101,24 +100,6 @@ export const RutinasProvider = ({ children }) => {
     }
   };
 
-  const obtenerEjercicios = async () => {
-    try {
-      const respuesta = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/exercises/details/all`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
-      console.log('Ejercicios:', respuesta.data.exercises);
-      setExercises(respuesta.data.exercises);
-    } catch (error) {
-      console.error('Error al obtener los ejercicios:', error);
-    }
-  };
-
   useEffect(() => {
     obtenerEjercicios();
   }, []);
@@ -135,8 +116,6 @@ export const RutinasProvider = ({ children }) => {
         eliminarRutina,
         obtenerRutinas,
         obtenerRutinaPorId,
-        obtenerEjercicios,
-        exercises,
         setDataModal,
       }}
     >

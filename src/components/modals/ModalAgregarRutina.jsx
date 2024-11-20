@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import RutinasContext from '@context/RutinasProvider';
 
 const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
-  const { handleModal, registrarRutina, actualizarRutina, dataModal, exercises } = useContext(RutinasContext);
+  const { handleModal, registrarRutina, actualizarRutina, dataModal } = useContext(RutinasContext);
 
   const [form, setForm] = useState({
     client_id: clienteId,
@@ -12,10 +12,7 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
     duration_days: dataModal?.duration_days ?? 0,
     day: dataModal?.day ?? days[0], // Seleccionar el primer día por defecto
     comments: dataModal?.comments ?? '',
-    exercises: [],
   });
-
-  const [search, setSearch] = useState('');
 
   useEffect(() => {
     if (!dataModal) {
@@ -27,7 +24,6 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
         duration_days: 0,
         day: days[0],
         comments: '',
-        exercises: [],
       });
     }
   }, [dataModal, clienteId, coachId, days]);
@@ -36,24 +32,12 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSearchChange = (e) => {
-    setSearch(e.target.value);
-  };
-
-  const handleExerciseSelect = (exercise) => {
-    setForm({ ...form, exercises: [...form.exercises, exercise] });
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Formulario enviado:', form); // Agregar log para verificar los datos del formulario
     dataModal ? actualizarRutina(form, dataModal._id) : registrarRutina(form);
     handleModal();
   };
-
-  const filteredExercises = exercises ? exercises.filter(exercise =>
-    exercise.name.toLowerCase().includes(search.toLowerCase())
-  ) : [];
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -118,28 +102,6 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
               value={form.comments}
               onChange={handleChange}
             />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="search">
-              Buscar Ejercicios
-            </label>
-            <input
-              id="search"
-              name="search"
-              type="text"
-              className="border-2 w-full p-2 rounded-md"
-              value={search}
-              onChange={handleSearchChange}
-            />
-          </div>
-          <div className="mb-4">
-            <ul>
-              {filteredExercises.map((exercise) => (
-                <li key={exercise._id} onClick={() => handleExerciseSelect(exercise)}>
-                  {exercise.name}
-                </li>
-              ))}
-            </ul>
           </div>
           <div className="flex justify-end">
             <button
