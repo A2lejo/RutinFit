@@ -100,10 +100,6 @@ export const RutinasProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    obtenerEjercicios();
-  }, []);
-
   return (
     <RutinasContext.Provider
       value={{
