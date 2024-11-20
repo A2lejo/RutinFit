@@ -27,12 +27,70 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const actualizarPassword = async (datos) => {
+  // const actualizarPassword = async (datos) => {
+  //   const token = localStorage.getItem("token");
+  //   try {
+  //     const respuesta = await axios.put(
+  //       `${import.meta.env.VITE_BACKEND_URL}/perfil/actualizarpassword`,
+  //       datos,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     obtenerPerfilDesdeToken(token);
+  //     return { respuesta: respuesta.data.res, exito: true };
+  //   } catch (error) {
+  //     return { respuesta: error.response.data.res, exito: false };
+  //   }
+  // };
+
+  const restorePassword = async (email) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/users/recovery-password`,
+        { email }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error al enviar el correo de recuperación:', error);
+      throw error;
+    }
+  };
+
+  const confirmTokenPassword = async (token) => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/users/confirm/${token}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error al confirmar el token:', error);
+      throw error;
+    }
+  };
+
+  const newPassword = async (token, password) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/users/new-password/${token}`,
+        { password }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error al cambiar la contraseña:', error);
+      throw error;
+    }
+  };
+
+  const updatePassword = async (oldPassword, newPassword) => {
     const token = localStorage.getItem("token");
     try {
-      const respuesta = await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/perfil/actualizarpassword`,
-        datos,
+      const response = await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}/users/update-password`,
+        { oldPassword, newPassword },
         {
           headers: {
             "Content-Type": "application/json",
@@ -41,30 +99,10 @@ export const AuthProvider = ({ children }) => {
         }
       );
       obtenerPerfilDesdeToken(token);
-      return { respuesta: respuesta.data.res, exito: true };
+      return response.data;
     } catch (error) {
-      return { respuesta: error.response.data.res, exito: false };
-    }
-  };
-
-  const actualizarPerfil = async (datos) => {
-    const token = localStorage.getItem("token");
-    try {
-      const respuesta = await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/coach/update-coach/${datos.id}`,
-        datos,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setAuth(respuesta.data);
-      return { respuesta: 'Perfil actualizado correctamente', exito: true };
-    } catch (error) {
-      console.error('Error al actualizar perfil:', error);
-      return { respuesta: 'Error al actualizar perfil', exito: false };
+      console.error('Error al actualizar la contraseña:', error);
+      throw error;
     }
   };
 
@@ -75,7 +113,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ auth, setAuth, actualizarPassword, actualizarPerfil }}
+      value={{ auth, setAuth, restorePassword, confirmTokenPassword, newPassword, updatePassword }}
     >
       {children}
     </AuthContext.Provider>

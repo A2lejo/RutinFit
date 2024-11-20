@@ -80,8 +80,8 @@ const TablaClientes = ({ search }) => {
                 <td className="p-2 hidden md:table-cell">{cliente.height} cm</td>
                 <td className="p-2 hidden md:table-cell">{cliente.weight} kg</td>
                 <td className="p-2 hidden md:table-cell">
-                  <span className="bg-blue-100 text-green-500 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
-                    {cliente.status ? 'activo' : 'inactivo'}
+                  <span className={`bg-blue-100 text-xs font-medium mr-2 px-2.5 py-0.5 rounded ${cliente.user_id.status ? 'text-green-500 dark:bg-blue-900 dark:text-blue-300' : 'text-red-500 dark:bg-red-900 dark:text-red-300'}`}>
+                    {cliente.user_id.status ? 'activo' : 'inactivo'}
                   </span>
                 </td>
                 <td className="p-2 text-center">
