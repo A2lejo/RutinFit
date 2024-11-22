@@ -9,16 +9,18 @@ const TablaRutinas = ({ rutinas }) => {
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  console.log('Rutinas:', rutinas); // Verificar los datos de las rutinas
+
   return (
     <div className="bg-white shadow-custom rounded-lg p-6">
       <table className="w-full mt-5 table-auto shadow-lg bg-white">
         <thead className="bg-gray-800 text-slate-400">
           <tr>
             <th className="p-2">N°</th>
-            <th className="p-2">Día</th>
+            <th className="p-2">Días</th>
             <th className="p-2 hidden md:table-cell">Fecha de Inicio</th>
             <th className="p-2 hidden md:table-cell">Fecha de Fin</th>
-            <th className="p-2 hidden md:table-cell">Comentarios</th>
+            <th className="p-2 hidden md:table-cell">Completada</th>
             <th className="p-2">Acciones</th>
           </tr>
         </thead>
@@ -26,10 +28,12 @@ const TablaRutinas = ({ rutinas }) => {
           {rutinas.map((rutina, index) => (
             <tr className="border-b hover:bg-gray-300 text-center" key={rutina._id}>
               <td className="p-2">{index + 1}</td>
-              <td className="p-2">{rutina.day.charAt(0).toUpperCase() + rutina.day.slice(1)}</td>
+              <td className="p-2">
+                {rutina.days.map(dayObj => dayObj.day.charAt(0).toUpperCase() + dayObj.day.slice(1)).join(', ')}
+              </td>
               <td className="p-2 hidden md:table-cell">{new Date(rutina.start_date).toLocaleDateString()}</td>
               <td className="p-2 hidden md:table-cell">{new Date(rutina.end_date).toLocaleDateString()}</td>
-              <td className="p-2 hidden md:table-cell">{rutina.comments}</td>
+              <td className="p-2 hidden md:table-cell">{rutina.completed ? "Sí" : "No"}</td>
               <td className="p-2 text-center">
                 <MdInfo
                   className="h-7 w-7 text-slate-800 cursor-pointer inline-block mr-2"
@@ -38,8 +42,8 @@ const TablaRutinas = ({ rutinas }) => {
                 <MdEdit
                   className="h-7 w-7 text-slate-800 cursor-pointer inline-block mr-2"
                   onClick={() => {
-                    setDataModal(rutina);
-                    handleModal();
+                    setDataModal(rutina); // Establecer dataModal con los datos de la rutina seleccionada
+                    handleModal(); // Abrir el modal
                   }}
                 />
                 <MdDeleteForever

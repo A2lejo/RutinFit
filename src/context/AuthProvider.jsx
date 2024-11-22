@@ -27,26 +27,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // const actualizarPassword = async (datos) => {
-  //   const token = localStorage.getItem("token");
-  //   try {
-  //     const respuesta = await axios.put(
-  //       `${import.meta.env.VITE_BACKEND_URL}/perfil/actualizarpassword`,
-  //       datos,
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-  //     obtenerPerfilDesdeToken(token);
-  //     return { respuesta: respuesta.data.res, exito: true };
-  //   } catch (error) {
-  //     return { respuesta: error.response.data.res, exito: false };
-  //   }
-  // };
-
   const restorePassword = async (email) => {
     try {
       const response = await axios.post(
@@ -121,3 +101,23 @@ export const AuthProvider = ({ children }) => {
 };
 
 export { AuthContext };
+
+  // const actualizarPassword = async (datos) => {
+  //   const token = localStorage.getItem("token");
+  //   try {
+  //     const respuesta = await axios.put(
+  //       `${import.meta.env.VITE_BACKEND_URL}/perfil/actualizarpassword`,
+  //       datos,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     obtenerPerfilDesdeToken(token);
+  //     return { respuesta: respuesta.data.res, exito: true };
+  //   } catch (error) {
+  //     return { respuesta: error.response.data.res, exito: false };
+  //   }
+  // };

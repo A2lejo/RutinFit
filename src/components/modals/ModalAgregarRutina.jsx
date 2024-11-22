@@ -2,34 +2,65 @@ import React, { useState, useContext, useEffect } from 'react';
 import RutinasContext from '@context/RutinasProvider';
 
 const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
-  const { handleModal, registrarRutina, actualizarRutina, dataModal } = useContext(RutinasContext);
+  const { handleModal, registrarRutina, actualizarRutina, dataModal, exercises } = useContext(RutinasContext);
 
   const [form, setForm] = useState({
     client_id: clienteId,
-    coach_id: coachId, 
+    coach_id: coachId,
     start_date: dataModal?.start_date ?? '',
     end_date: dataModal?.end_date ?? '',
     duration_days: dataModal?.duration_days ?? 0,
-    day: dataModal?.day ?? days[0], // Seleccionar el primer día por defecto
+    days: dataModal?.days ?? days.map(day => ({ day, exercises: [] })), // Inicializa los días con ejercicios vacíos
     comments: dataModal?.comments ?? '',
   });
 
+  const [searches, setSearches] = useState(days.map(() => '')); // Estado de búsqueda independiente para cada día
+
   useEffect(() => {
-    if (!dataModal) {
+    console.log('dataModal:', dataModal); // Verificar el contenido de dataModal
+    if (dataModal) {
+      setForm({
+        client_id: dataModal.client_id._id,
+        coach_id: dataModal.coach_id._id,
+        start_date: dataModal.start_date,
+        end_date: dataModal.end_date,
+        duration_days: dataModal.duration_days,
+        days: dataModal.days,
+        comments: dataModal.comments,
+      });
+    } else {
       setForm({
         client_id: clienteId,
         coach_id: coachId,
         start_date: '',
         end_date: '',
         duration_days: 0,
-        day: days[0],
+        days: days.map(day => ({ day, exercises: [] })), // Inicializa los días con ejercicios vacíos
         comments: '',
       });
     }
   }, [dataModal, clienteId, coachId, days]);
 
+  useEffect(() => {
+    console.log('form:', form); // Verificar el estado form después de inicializarlo
+  }, [form]);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSearchChange = (index, e) => {
+    const newSearches = [...searches];
+    newSearches[index] = e.target.value;
+    setSearches(newSearches);
+  };
+
+  const handleExerciseSelect = (dayIndex, exercise) => {
+    const newDays = [...form.days];
+    if (!newDays[dayIndex].exercises.some(e => e._id === exercise._id)) {
+      newDays[dayIndex].exercises.push(exercise);
+    }
+    setForm({ ...form, days: newDays });
   };
 
   const handleSubmit = (e) => {
@@ -72,25 +103,43 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
               required
             />
           </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="day">
-              Día
-            </label>
-            <select
-              id="day"
-              name="day"
-              className="border-2 w-full p-2 rounded-md"
-              value={form.day}
-              onChange={handleChange}
-              required
-            >
-              {days.map((day, index) => (
-                <option key={index} value={day}>
-                  {day.charAt(0).toUpperCase() + day.slice(1)}
-                </option>
-              ))}
-            </select>
-          </div>
+          {form.days.map((dayObj, index) => (
+            <div className="mb-4" key={index}>
+              <h3 className="text-lg font-bold mb-2">{dayObj.day.charAt(0).toUpperCase() + dayObj.day.slice(1)}</h3>
+              <div className="mt-2">
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={`search-${index}`}>
+                  Buscar Ejercicios
+                </label>
+                <input
+                  id={`search-${index}`}
+                  name="search"
+                  type="text"
+                  className="border-2 w-full p-2 rounded-md"
+                  value={searches[index]}
+                  onChange={(e) => handleSearchChange(index, e)}
+                />
+                <ul className="mt-2">
+                  {exercises && exercises.filter(exercise =>
+                    exercise.name.toLowerCase().includes(searches[index].toLowerCase())
+                  ).map((exercise) => (
+                    <li key={exercise._id} onClick={() => handleExerciseSelect(index, exercise)}>
+                      {exercise.name}
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-2">
+                  <h3 className="text-lg font-bold mb-2">Ejercicios Seleccionados</h3>
+                  <ul>
+                    {dayObj.exercises.map((exercise) => (
+                      <li key={exercise._id}>
+                        {exercise.name}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          ))}
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="comments">
               Comentarios

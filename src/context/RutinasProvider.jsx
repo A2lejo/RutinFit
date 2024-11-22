@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { successUpdateAlert, errorAlert, confirmDeleteAlert, ConfirmAlert, successAlert } from '@utils/AlertFunctions';
 
 const RutinasContext = createContext();
 
@@ -25,9 +26,11 @@ export const RutinasProvider = ({ children }) => {
           },
         }
       );
-      setRutinas([...rutinas, respuesta.data.rutina]);
+      setRutinas([...rutinas, respuesta.data.newRoutine]);
+      ConfirmAlert('Rutina registrada correctamente');
     } catch (error) {
       console.error('Error al registrar la rutina:', error);
+      errorAlert('Error al registrar la rutina');
     }
   };
 
@@ -44,12 +47,17 @@ export const RutinasProvider = ({ children }) => {
         }
       );
       setRutinas(rutinas.map(rutina => rutina._id === id ? respuesta.data.rutina : rutina));
+      successUpdateAlert('Rutina actualizada correctamente');
     } catch (error) {
       console.error('Error al actualizar la rutina:', error);
+      errorAlert('Error al actualizar la rutina');
     }
   };
 
   const eliminarRutina = async (id) => {
+    const confirmed = await confirmDeleteAlert();
+    if (!confirmed) return;
+
     try {
       await axios.delete(
         `${import.meta.env.VITE_BACKEND_URL}/routine/delete-routine/${id}`,
@@ -61,8 +69,10 @@ export const RutinasProvider = ({ children }) => {
         }
       );
       setRutinas(rutinas.filter(rutina => rutina._id !== id));
+      successAlert('Rutina eliminada correctamente');
     } catch (error) {
       console.error('Error al eliminar la rutina:', error);
+      errorAlert('Error al eliminar la rutina');
     }
   };
 
@@ -94,7 +104,8 @@ export const RutinasProvider = ({ children }) => {
           },
         }
       );
-      return respuesta.data.rutina;
+      console.log('Rutina obtenida:', respuesta.data.routine);
+      return respuesta.data.routine;
     } catch (error) {
       console.error('Error al obtener la rutina:', error);
     }

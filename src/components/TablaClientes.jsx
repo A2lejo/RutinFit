@@ -13,8 +13,17 @@ const TablaClientes = ({ search }) => {
 
   const listarClientes = async () => {
     try {
+      let ruta;
+      if (auth.rol === 'administrador') {
+        ruta = '/client/view-all';
+      } else {
+        ruta = '/coach/get-clients';
+      }
+
+      console.log('Ruta utilizada:', ruta);
+
       const respuesta = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/coach/get-clients`,
+        `${import.meta.env.VITE_BACKEND_URL}${ruta}`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -22,16 +31,21 @@ const TablaClientes = ({ search }) => {
           },
         }
       );
-      console.log('respuesta:', respuesta.data); 
-      setClientes(respuesta.data); 
+      console.log('Respuesta de la API:', respuesta.data);
+      setClientes(respuesta.data.clients || respuesta.data || []); // Asegurarse de que `clients` es un array
     } catch (error) {
       console.error('Error al listar clientes:', error);
     }
   };
 
   useEffect(() => {
-    listarClientes();
-  }, []);
+    if (auth && auth.id) {
+      console.log('Usuario autenticado:', auth);
+      listarClientes();
+    } else {
+      console.log('Usuario no autenticado');
+    }
+  }, [auth]);
 
   const handleDelete = async (id) => {
     const confirmDelete = await confirmDeleteAlert();
@@ -50,9 +64,12 @@ const TablaClientes = ({ search }) => {
     }
   };
 
-  const filteredClientes = clientes.filter((cliente) =>
-    `${cliente.user_id.name} ${cliente.user_id.lastname}`.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredClientes = clientes.filter((cliente) => {
+    const nombreCompleto = auth.rol === 'administrador'
+      ? `${cliente.name ?? ''} ${cliente.lastname ?? ''}`.toLowerCase()
+      : `${cliente.user_id?.name ?? ''} ${cliente.user_id?.lastname ?? ''}`.toLowerCase();
+    return nombreCompleto.includes(search.toLowerCase());
+  });
 
   return (
     <>
@@ -68,31 +85,45 @@ const TablaClientes = ({ search }) => {
               <th className="p-2 hidden md:table-cell">Altura</th>
               <th className="p-2 hidden md:table-cell">Peso</th>
               <th className="p-2 hidden md:table-cell">Estado</th>
-              <th className="p-2">Acciones</th>
+              {auth.rol === 'entrenador' && (
+                <th className="p-2">Acciones</th>
+              )}
             </tr>
           </thead>
           <tbody>
             {filteredClientes.map((cliente, index) => (
-              <tr className="border-b hover:bg-gray-300 text-center" key={cliente._id}>
+              <tr className="border-b hover:bg-gray-300 text-center" key={cliente.client_id || cliente._id}>
                 <td className="p-2">{index + 1}</td>
-                <td className="p-2">{`${cliente.user_id.name} ${cliente.user_id.lastname}`}</td>
-                <td className="p-2 hidden md:table-cell">{cliente.user_id.email}</td>
+                <td className="p-2">
+                  {auth.rol === 'administrador'
+                    ? `${cliente.name} ${cliente.lastname}`
+                    : `${cliente.user_id?.name} ${cliente.user_id?.lastname}`}
+                </td>
+                <td className="p-2 hidden md:table-cell">
+                  {auth.rol === 'administrador'
+                    ? cliente.email
+                    : cliente.user_id?.email}
+                </td>
                 <td className="p-2 hidden md:table-cell">{cliente.height} cm</td>
                 <td className="p-2 hidden md:table-cell">{cliente.weight} kg</td>
                 <td className="p-2 hidden md:table-cell">
-                  <span className={`bg-blue-100 text-xs font-medium mr-2 px-2.5 py-0.5 rounded ${cliente.user_id.status ? 'text-green-500 dark:bg-blue-900 dark:text-blue-300' : 'text-red-500 dark:bg-red-900 dark:text-red-300'}`}>
-                    {cliente.user_id.status ? 'activo' : 'inactivo'}
+                  <span className={`bg-blue-100 text-xs font-medium mr-2 px-2.5 py-0.5 rounded ${auth.rol === 'administrador' ? (cliente.status ? 'text-green-500 dark:bg-blue-900 dark:text-blue-300' : 'text-red-500 dark:bg-red-900 dark:text-red-300') : (cliente.user_id?.status ? 'text-green-500 dark:bg-blue-900 dark:text-blue-300' : 'text-red-500 dark:bg-red-900 dark:text-red-300')}`}>
+                    {auth.rol === 'administrador'
+                      ? (cliente.status ? 'activo' : 'inactivo')
+                      : (cliente.user_id?.status ? 'activo' : 'inactivo')}
                   </span>
                 </td>
                 <td className="p-2 text-center">
-                  <MdInfo
-                    className="h-7 w-7 text-slate-800 cursor-pointer inline-block mr-2"
-                    onClick={() => navigate(`/dashboard/clientes/visualizar/${cliente._id}`)}
-                  />
+                  {auth.rol === 'entrenador' && (
+                    <MdInfo
+                      className="h-7 w-7 text-slate-800 cursor-pointer inline-block mr-2"
+                      onClick={() => navigate(`/dashboard/clientes/visualizar/${cliente.client_id || cliente._id}`)}
+                    />
+                  )}
                   {auth.rol === 'entrenador' && (
                     <MdDeleteForever
                       className="h-7 w-7 text-red-900 cursor-pointer inline-block"
-                      onClick={() => handleDelete(cliente._id)}
+                      onClick={() => handleDelete(cliente.client_id || cliente._id)}
                     />
                   )}
                 </td>

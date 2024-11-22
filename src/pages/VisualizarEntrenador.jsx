@@ -2,7 +2,6 @@ import { useState, useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "@context/AuthProvider";
-import TablaClientes from "@components/TablaClientes";
 import FotoEntrenador from "@assets/entrenadorFoto.png";
 
 const VisualizarEntrenador = () => {
@@ -10,6 +9,7 @@ const VisualizarEntrenador = () => {
   const { auth } = useContext(AuthContext);
 
   const [entrenador, setEntrenador] = useState(null);
+  const [clientes, setClientes] = useState([]);
 
   useEffect(() => {
     const consultarEntrenador = async () => {
@@ -24,7 +24,7 @@ const VisualizarEntrenador = () => {
           }
         );
 
-        console.log(respuesta)
+        console.log(respuesta.data);
         if (respuesta.data) {
           setEntrenador(respuesta.data);
         } else {
@@ -35,7 +35,31 @@ const VisualizarEntrenador = () => {
       }
     };
 
+    const obtenerClientes = async () => {
+      try {
+        const respuesta = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/coach/get-clients/${id}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+
+        console.log(respuesta.data);
+        if (respuesta.data) {
+          setClientes(respuesta.data.clients);
+        } else {
+          console.error("No se encontraron clientes");
+        }
+      } catch (error) {
+        console.error("Error al obtener los clientes:", error);
+      }
+    };
+
     consultarEntrenador();
+    obtenerClientes();
   }, [id]);
 
   return (
@@ -81,10 +105,41 @@ const VisualizarEntrenador = () => {
           <hr className="my-4" />
           <div className="flex justify-between items-center pb-5">
             <p>Clientes a cargo del entrenador:{" "}</p>
-            
           </div>
-
-          <TablaClientes clientes={entrenador.clientes} />
+          <div>
+            {clientes.length > 0 ? (
+              <table className="w-full mt-5 table-auto shadow-lg bg-white">
+                <thead className="bg-gray-800 text-slate-400">
+                  <tr>
+                    <th className="p-2">N°</th>
+                    <th className="p-2">Nombre Completo</th>
+                    <th className="p-2 hidden md:table-cell">Email</th>
+                    <th className="p-2 hidden md:table-cell">Altura</th>
+                    <th className="p-2 hidden md:table-cell">Peso</th>
+                    <th className="p-2 hidden md:table-cell">Estado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {clientes.map((cliente, index) => (
+                    <tr className="border-b hover:bg-gray-300 text-center" key={cliente._id}>
+                      <td className="p-2">{index + 1}</td>
+                      <td className="p-2">{`${cliente.user_id.name} ${cliente.user_id.lastname}`}</td>
+                      <td className="p-2 hidden md:table-cell">{cliente.user_id.email}</td>
+                      <td className="p-2 hidden md:table-cell">{cliente.height} cm</td>
+                      <td className="p-2 hidden md:table-cell">{cliente.weight} kg</td>
+                      <td className="p-2 hidden md:table-cell">
+                        <span className={`bg-blue-100 text-xs font-medium mr-2 px-2.5 py-0.5 rounded ${cliente.user_id.status ? 'text-green-500 dark:bg-blue-900 dark:text-blue-300' : 'text-red-500 dark:bg-red-900 dark:text-red-300'}`}>
+                          {cliente.user_id.status ? 'activo' : 'inactivo'}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p>No hay clientes asignados a este entrenador.</p>
+            )}
+          </div>
         </>
       ) : (
         <p>No se encontró el entrenador</p>

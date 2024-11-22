@@ -1,32 +1,29 @@
 import { useState, useContext, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "@context/AuthProvider";
-import TablaEjercicios from "@components/TablaEjercicios";
-import ModalAgregarEjercicio from "@components/modals/ModalAgregarEjercicio";
 import RutinasContext from "@context/RutinasProvider";
 import Alertas from "@components/Alertas";
+import { MdInfo } from "react-icons/md";
 
 const VisualizarRutina = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { auth } = useContext(AuthContext);
-  const { modal, handleModal, rutinas, setRutinas, alertaRutina, setDataModal, eliminarEjercicio } = useContext(RutinasContext);
-  const [rutina, setRutina] = useState({
-    id: 1,
-    nombre: "Rutina de Ejemplo",
-    descripcion: "Esta es una rutina de ejemplo con datos quemados.",
-    ejercicios: [
-      { id: 1, nombre: "Sentadillas", repeticiones: 15, series: 3, descripcion: "Hacer 15 sentadillas en 3 series." },
-      { id: 2, nombre: "Flexiones", repeticiones: 20, series: 3, descripcion: "Hacer 20 flexiones en 3 series." },
-      { id: 3, nombre: "Abdominales", repeticiones: 25, series: 3, descripcion: "Hacer 25 abdominales en 3 series." },
-    ],
-  });
+  const { obtenerRutinaPorId } = useContext(RutinasContext);
+  const [rutina, setRutina] = useState(null);
 
   useEffect(() => {
-    const rutinaEncontrada = rutinas.find((r) => r.id === parseInt(id));
-    if (rutinaEncontrada) {
-      setRutina({ ...rutinaEncontrada, ejercicios: rutinaEncontrada.ejercicios || [] });
-    }
-  }, [id, rutinas]);
+    const fetchRutina = async () => {
+      try {
+        const rutinaObtenida = await obtenerRutinaPorId(id);
+        setRutina(rutinaObtenida);
+      } catch (error) {
+        console.error('Error al obtener la rutina:', error);
+      }
+    };
+
+    fetchRutina();
+  }, [id, obtenerRutinaPorId]);
 
   return (
     <div>
@@ -42,51 +39,63 @@ const VisualizarRutina = () => {
             </p>
             <p className="text-md text-gray-00 mt-4">
               <span className="text-gray-600 uppercase font-bold">
-                * Descripción:{" "}
+                * Fecha de Asignación:{" "}
               </span>
-              {rutina.descripcion}
+              {new Date(rutina.assignment_date).toLocaleDateString()}
+            </p>
+            <p className="text-md text-gray-00 mt-4">
+              <span className="text-gray-600 uppercase font-bold">
+                * Fecha de Inicio:{" "}
+              </span>
+              {new Date(rutina.start_date).toLocaleDateString()}
+            </p>
+            <p className="text-md text-gray-00 mt-4">
+              <span className="text-gray-600 uppercase font-bold">
+                * Fecha de Fin:{" "}
+              </span>
+              {new Date(rutina.end_date).toLocaleDateString()}
+            </p>
+            <p className="text-md text-gray-00 mt-4">
+              <span className="text-gray-600 uppercase font-bold">
+                * Comentarios:{" "}
+              </span>
+              {rutina.comments}
+            </p>
+            <p className="text-md text-gray-00 mt-4">
+              <span className="text-gray-600 uppercase font-bold">
+                * Completada:{" "}
+              </span>
+              {rutina.completed ? "Sí" : "No"}
             </p>
           </div>
           <hr className="my-4" />
-          <div className="m-5 flex justify-between">
-            <div>
-              <p>Ejercicios de la rutina:{" "}</p>
-            </div>
-            <div>
-              <button
-                className="bg-[#82E5B5] hover:bg-[#0D9488] hover:text-white px-4 py-2 rounded-md"
-                onClick={() => {
-                  setDataModal({});
-                  handleModal();
-                }}
-              >
-                Agregar Ejercicio
-              </button>
-            </div>
+          <div className="m-5">
+            <p>Días de la rutina:{" "}</p>
+            {rutina.days.length === 0 ? (
+              <Alertas exito={false}>No hay días agregados aún.</Alertas>
+            ) : (
+              rutina.days.map((dayObj, index) => (
+                <div key={index} className="mb-4">
+                  <h3 className="text-lg font-bold mb-2">{dayObj.day.charAt(0).toUpperCase() + dayObj.day.slice(1)}</h3>
+                  {dayObj.exercises.length === 0 ? (
+                    <Alertas exito={false}>No hay ejercicios agregados para este día.</Alertas>
+                  ) : (
+                    <ul>
+                      {dayObj.exercises.map((exercise, idx) => (
+                        <li key={idx} className="ml-4 list-disc flex items-center">
+                          {exercise.name}
+                          <MdInfo
+                            className="h-5 w-5 text-slate-800 cursor-pointer ml-2"
+                            onClick={() => navigate(`/dashboard/ejercicios/${exercise._id}`)}
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))
+            )}
           </div>
-
-          {modal && <ModalAgregarEjercicio rutinaId={rutina.id} />}
-
-          {rutina.ejercicios.length === 0 ? (
-            <Alertas exito={false}>No hay ejercicios agregados aún.</Alertas>
-          ) : (
-            <>
-              {alertaRutina.respuesta && (
-                <Alertas exito={alertaRutina.exito}>{alertaRutina.respuesta}</Alertas>
-              )}
-              <TablaEjercicios
-                ejercicios={rutina.ejercicios}
-                handleDelete={(ejercicioId) => {
-                  eliminarEjercicio(rutina.id, ejercicioId);
-                }}
-                handleEdit={(ejercicio) => {
-                  setDataModal(ejercicio);
-                  handleModal();
-                }}
-                auth={auth}
-              />
-            </>
-          )}
         </>
       ) : (
         <p>No se encontró la rutina</p>

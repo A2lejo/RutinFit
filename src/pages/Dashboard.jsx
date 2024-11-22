@@ -122,7 +122,11 @@ const Dashboard = () => {
               to="/"
               className=" text-white mr-3 text-md block hover:bg-red-900 text-center
                         bg-red-800 px-4 py-1 rounded-lg"
-              onClick={() => localStorage.removeItem("token")}
+              onClick={() => {
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                setAuth({});
+              }}
             >
               Salir
             </Link>

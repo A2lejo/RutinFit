@@ -12,7 +12,7 @@ import Alertas from "@components/Alertas";
 const VisualizarCliente = () => {
   const { id } = useParams();
   const { auth } = useContext(AuthContext);
-  const { modal, handleModal, rutinas, setRutinas, alertaRutina, setDataModal, eliminarRutina } = useContext(RutinasContext);
+  const { modal, handleModal, alertaRutina = {}, setDataModal, eliminarRutina } = useContext(RutinasContext);
   const [cliente, setCliente] = useState(null);
   const [rutinasCliente, setRutinasCliente] = useState([]);
   const [modalHistorial, setModalHistorial] = useState(false);
@@ -36,7 +36,19 @@ const VisualizarCliente = () => {
         );
         console.log('respuesta:', respuesta.data);
         setCliente(respuesta.data.client);
-        setRutinasCliente(respuesta.data.client.rutinas || []); // Asegurarse de que 'rutinas' sea un array
+
+        // Obtener las rutinas del cliente
+        const rutinasRespuesta = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/routine/view-routines/${id}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log('rutinas:', rutinasRespuesta.data.routines);
+        setRutinasCliente(rutinasRespuesta.data.routines || []); // Asegurarse de que 'routines' sea un array
       } catch (error) {
         console.error('Error al obtener los datos del cliente:', error);
       }

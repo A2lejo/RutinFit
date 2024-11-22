@@ -5,6 +5,7 @@ import axios from "axios";
 import { successLoginAlert, errorLoginAlert } from "../../utils/AlertFunctions";
 import { AuthContext } from "@context/AuthProvider";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
   const { setAuth } = useContext(AuthContext);
@@ -39,7 +40,10 @@ const Login = () => {
         email: response.data.email,
         id: response.data._id,
       }));
-      setAuth(response.data);
+      setAuth({
+        ...jwtDecode(response.data.token),
+        ...response.data
+      });
 
       successLoginAlert(response.data.res);
       navigate("/dashboard");
