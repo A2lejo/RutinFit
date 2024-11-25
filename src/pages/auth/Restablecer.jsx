@@ -1,16 +1,11 @@
-import logoDog from "@assets/dog-hand.webp";
 import { Link } from "react-router-dom";
-import Alertas from "@components/Alertas";
 
-export const Reestablecer = () => {
+const Reestablecer = () => {
 	return (
 		<div className="flex flex-col items-center justify-center">
-			{alerta.respuesta && (
-				<Alertas exito={alerta.exito}>{alerta.respuesta}</Alertas>
-			)}
 			<img
 				className="object-cover h-80 w-80 rounded-full border-4 border-solid border-slate-600 mt-4"
-				src={logoDog}
+				src=""
 				alt="image description"
 			/>
 
@@ -28,3 +23,6 @@ export const Reestablecer = () => {
 		</div>
 	);
 };
+
+
+export default Reestablecer;	

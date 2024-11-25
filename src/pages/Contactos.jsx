@@ -1,9 +1,58 @@
-import React from 'react';
+import React, { useState } from 'react';
 import NavbarPrincipal from '../components/NavbarPrincipal';
 import Footer from '../components/Footer';
 import { FaPhoneAlt } from 'react-icons/fa';
+import axios from 'axios';
 
 const Contactos = () => {
+    const [formData, setFormData] = useState({
+        nombre: '',
+        correo: '',
+        usuario: 'Sí',
+        asunto: '',
+        mensaje: '',
+    });
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.id]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post('https://api.sendgrid.com/v3/mail/send', {
+                personalizations: [
+                    {
+                        to: [{ email: 'rutinfit24@gmail.com' }],
+                        subject: `Nuevo mensaje de ${formData.nombre}: ${formData.asunto}`,
+                    },
+                ],
+                from: { email: formData.correo },
+                content: [
+                    {
+                        type: 'text/plain',
+                        value: `
+                            Nombre: ${formData.nombre}
+                            Correo: ${formData.correo}
+                            ¿Es usuario?: ${formData.usuario}
+                            Mensaje: ${formData.mensaje}
+                        `,
+                    },
+                ],
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${process.env.REACT_APP_SENDGRID_API_KEY}`,
+                },
+            });
+            console.log('Correo enviado:', response.data);
+            alert('Correo enviado correctamente');
+        } catch (error) {
+            console.error('Error al enviar el correo:', error);
+            alert('Error al enviar el correo');
+        }
+    };
+
     return (
         <div>
             <NavbarPrincipal />
@@ -33,7 +82,7 @@ const Contactos = () => {
                         </p>
                     </div>
                     <div className="w-full md:w-1/2 p-4">
-                        <form className="bg-white shadow-custom rounded px-8 pt-6 pb-8 mb-4">
+                        <form className="bg-white shadow-custom rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nombre">
                                     Nombre
@@ -43,6 +92,8 @@ const Contactos = () => {
                                     id="nombre"
                                     type="text"
                                     placeholder="Nombre"
+                                    value={formData.nombre}
+                                    onChange={handleChange}
                                 />
                             </div>
                             <div className="mb-4">
@@ -54,6 +105,8 @@ const Contactos = () => {
                                     id="correo"
                                     type="email"
                                     placeholder="Correo"
+                                    value={formData.correo}
+                                    onChange={handleChange}
                                 />
                             </div>
                             <div className="mb-4">
@@ -64,6 +117,8 @@ const Contactos = () => {
                                     <select
                                         className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                                         id="usuario"
+                                        value={formData.usuario}
+                                        onChange={handleChange}
                                     >
                                         <option>Sí</option>
                                         <option>No</option>
@@ -84,6 +139,8 @@ const Contactos = () => {
                                     id="asunto"
                                     type="text"
                                     placeholder="Asunto"
+                                    value={formData.asunto}
+                                    onChange={handleChange}
                                 />
                             </div>
                             <div className="mb-6">
@@ -95,12 +152,14 @@ const Contactos = () => {
                                     id="mensaje"
                                     placeholder="Escribe tu mensaje aquí..."
                                     rows="4"
+                                    value={formData.mensaje}
+                                    onChange={handleChange}
                                 ></textarea>
                             </div>
                             <div className="flex items-center justify-between">
                                 <button
                                     className="bg-[#82E5B5] hover:bg-teal-600 text-black hover:text-white font-bold py-4 px-6 rounded focus:outline-none focus:shadow-outline"
-                                    type="button"
+                                    type="submit"
                                 >
                                     Enviar
                                 </button>

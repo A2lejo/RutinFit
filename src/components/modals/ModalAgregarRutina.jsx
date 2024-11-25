@@ -1,20 +1,33 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import RutinasContext from '@context/RutinasProvider';
 
 const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
-  const { handleModal, registrarRutina, actualizarRutina, dataModal, exercises } = useContext(RutinasContext);
+  const { handleModal, registrarRutina, actualizarRutina, dataModal, obtenerEjercicios, filteredExercises, setFilteredExercises, obtenerRutinas, obtenerRutinaPorId } = useContext(RutinasContext);
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
 
   const [form, setForm] = useState({
     client_id: clienteId,
     coach_id: coachId,
-    start_date: dataModal?.start_date ?? '',
-    end_date: dataModal?.end_date ?? '',
+    nameRoutine: dataModal?.nameRoutine ?? '', // Add nameRoutine field
+    start_date: dataModal ? formatDate(dataModal.start_date) : '',
+    end_date: dataModal ? formatDate(dataModal.end_date) : '',
     duration_days: dataModal?.duration_days ?? 0,
     days: dataModal?.days ?? days.map(day => ({ day, exercises: [] })), // Inicializa los días con ejercicios vacíos
     comments: dataModal?.comments ?? '',
   });
 
   const [searches, setSearches] = useState(days.map(() => '')); // Estado de búsqueda independiente para cada día
+  const [suggestions, setSuggestions] = useState([]); // Estado para las sugerencias de autocompletado
 
   useEffect(() => {
     console.log('dataModal:', dataModal); // Verificar el contenido de dataModal
@@ -22,8 +35,9 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
       setForm({
         client_id: dataModal.client_id._id,
         coach_id: dataModal.coach_id._id,
-        start_date: dataModal.start_date,
-        end_date: dataModal.end_date,
+        nameRoutine: dataModal.nameRoutine, // Add nameRoutine field
+        start_date: formatDate(dataModal.start_date),
+        end_date: formatDate(dataModal.end_date),
         duration_days: dataModal.duration_days,
         days: dataModal.days,
         comments: dataModal.comments,
@@ -32,6 +46,7 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
       setForm({
         client_id: clienteId,
         coach_id: coachId,
+        nameRoutine: '', // Add nameRoutine field
         start_date: '',
         end_date: '',
         duration_days: 0,
@@ -49,10 +64,17 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSearchChange = (index, e) => {
+  const handleSearchChange = async (index, e) => {
     const newSearches = [...searches];
     newSearches[index] = e.target.value;
     setSearches(newSearches);
+    const searchQuery = e.target.value;
+    if (searchQuery) {
+      await obtenerEjercicios(searchQuery);
+      setSuggestions(filteredExercises);
+    } else {
+      setSuggestions([]);
+    }
   };
 
   const handleExerciseSelect = (dayIndex, exercise) => {
@@ -61,12 +83,24 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
       newDays[dayIndex].exercises.push(exercise);
     }
     setForm({ ...form, days: newDays });
+    setSuggestions([]); // Clear suggestions after selecting an exercise
   };
 
-  const handleSubmit = (e) => {
+  const handleExerciseRemove = (dayIndex, exerciseId) => {
+    const newDays = [...form.days];
+    newDays[dayIndex].exercises = newDays[dayIndex].exercises.filter(e => e._id !== exerciseId);
+    setForm({ ...form, days: newDays });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Formulario enviado:', form); // Agregar log para verificar los datos del formulario
-    dataModal ? actualizarRutina(form, dataModal._id) : registrarRutina(form);
+    if (dataModal) {
+      await actualizarRutina(form, dataModal._id);
+    } else {
+      await registrarRutina(form);
+    }
+    await obtenerRutinas(); // Refresh the routines
     handleModal();
   };
 
@@ -75,6 +109,20 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
       <div className="bg-white p-6 rounded-lg shadow-lg w-1/2 max-h-full overflow-y-auto">
         <h2 className="text-2xl font-bold mb-4">{dataModal ? 'Editar Rutina' : 'Agregar Rutina'}</h2>
         <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nameRoutine">
+              Nombre de la Rutina
+            </label>
+            <input
+              id="nameRoutine"
+              name="nameRoutine"
+              type="text"
+              className="border-2 w-full p-2 rounded-md"
+              value={form.nameRoutine}
+              onChange={handleChange}
+              required
+            />
+          </div>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="start_date">
               Fecha de Inicio
@@ -117,22 +165,28 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
                   className="border-2 w-full p-2 rounded-md"
                   value={searches[index]}
                   onChange={(e) => handleSearchChange(index, e)}
+                  placeholder="Escribe para buscar..."
                 />
-                <ul className="mt-2">
-                  {exercises && exercises.filter(exercise =>
-                    exercise.name.toLowerCase().includes(searches[index].toLowerCase())
-                  ).map((exercise) => (
-                    <li key={exercise._id} onClick={() => handleExerciseSelect(index, exercise)}>
-                      {exercise.name}
-                    </li>
-                  ))}
-                </ul>
+                {suggestions.length > 0 && (
+                  <ul className="mt-2 border border-gray-300 rounded-md max-h-40 overflow-y-auto">
+                    {suggestions.map((exercise) => (
+                      <li
+                        key={exercise._id}
+                        className="p-2 cursor-pointer hover:bg-gray-200"
+                        onClick={() => handleExerciseSelect(index, exercise)}
+                      >
+                        {exercise.name}
+                      </li>
+                    ))}
+                  </ul>
+                )}
                 <div className="mt-2">
                   <h3 className="text-lg font-bold mb-2">Ejercicios Seleccionados</h3>
                   <ul>
                     {dayObj.exercises.map((exercise) => (
-                      <li key={exercise._id}>
+                      <li key={exercise._id} className="flex items-center">
                         {exercise.name}
+                        <button onClick={() => handleExerciseRemove(index, exercise._id)} className="ml-2 text-red-500">X</button>
                       </li>
                     ))}
                   </ul>

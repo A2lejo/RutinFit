@@ -8,6 +8,7 @@ export const RutinasProvider = ({ children }) => {
   const [rutinas, setRutinas] = useState([]);
   const [dataModal, setDataModal] = useState(null);
   const [modal, setModal] = useState(false);
+  const [filteredExercises, setFilteredExercises] = useState([]);
 
   const handleModal = () => {
     setModal(!modal);
@@ -26,8 +27,8 @@ export const RutinasProvider = ({ children }) => {
           },
         }
       );
-      setRutinas([...rutinas, respuesta.data.newRoutine]);
-      ConfirmAlert('Rutina registrada correctamente');
+      ConfirmAlert('', 'Rutina registrada correctamente');
+      await obtenerRutinas(); // Refresh the routines
     } catch (error) {
       console.error('Error al registrar la rutina:', error);
       errorAlert('Error al registrar la rutina');
@@ -46,8 +47,8 @@ export const RutinasProvider = ({ children }) => {
           },
         }
       );
-      setRutinas(rutinas.map(rutina => rutina._id === id ? respuesta.data.rutina : rutina));
       successUpdateAlert('Rutina actualizada correctamente');
+      await obtenerRutinas(); // Refresh the routines
     } catch (error) {
       console.error('Error al actualizar la rutina:', error);
       errorAlert('Error al actualizar la rutina');
@@ -68,8 +69,8 @@ export const RutinasProvider = ({ children }) => {
           },
         }
       );
-      setRutinas(rutinas.filter(rutina => rutina._id !== id));
       successAlert('Rutina eliminada correctamente');
+      await obtenerRutinas(); // Refresh the routines
     } catch (error) {
       console.error('Error al eliminar la rutina:', error);
       errorAlert('Error al eliminar la rutina');
@@ -90,6 +91,7 @@ export const RutinasProvider = ({ children }) => {
       setRutinas(respuesta.data.rutinas);
     } catch (error) {
       console.error('Error al obtener las rutinas:', error);
+      errorAlert('Error al obtener las rutinas');
     }
   };
 
@@ -108,8 +110,59 @@ export const RutinasProvider = ({ children }) => {
       return respuesta.data.routine;
     } catch (error) {
       console.error('Error al obtener la rutina:', error);
+      errorAlert('Error al obtener la rutina');
     }
   };
+
+  const obtenerEjercicios = async (searchQuery = '') => {
+    try {
+      const respuesta = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/view-exercises`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      const exercises = respuesta.data || []; // Asegúrate de que exercises es un array
+      setFilteredExercises(
+        exercises.filter(exercise =>
+          exercise.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      );
+      return exercises;
+    } catch (error) {
+      console.error('Error al obtener los ejercicios:', error);
+      errorAlert('Error al obtener los ejercicios');
+    }
+  };
+
+  const obtenerEjercicioPorId = async (id) => {
+    try {
+      console.log('ID del ejercicio en obtenerEjercicioPorId:', id); // Verificar el ID del ejercicio
+      const respuesta = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/view-exercises/${id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          }
+        }
+      );
+      return respuesta.data;
+    } catch (error) {
+      console.error('Error al obtener el ejercicio:', error);
+      errorAlert('Error al obtener el ejercicio');
+    }
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      obtenerRutinas();
+    }
+  }, []);
 
   return (
     <RutinasContext.Provider
@@ -124,6 +177,10 @@ export const RutinasProvider = ({ children }) => {
         obtenerRutinas,
         obtenerRutinaPorId,
         setDataModal,
+        obtenerEjercicios,
+        obtenerEjercicioPorId,
+        filteredExercises,
+        setFilteredExercises,
       }}
     >
       {children}

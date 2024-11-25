@@ -10,6 +10,7 @@ import Dashboard from './pages/Dashboard';
 import Perfil from './pages/Perfil';
 import FormularioPerfil from './components/profile/FormularioPerfil';
 import NotFound from './pages/NotFound';
+import Restablecer from './pages/auth/Restablecer';
 
 import Entrenadores from './pages/Entrenadores';
 import RegistrarEntrenador from './pages/RegistrarEntrenador';
@@ -22,6 +23,8 @@ import VisualizarCliente from './pages/VisualizarCliente';
 import Chat from './pages/Chat';
 
 import VisualizarRutina from './pages/VisualizarRutina';
+
+import VisualizarEjercicios from './pages/VisualizarEjercicios';
 
 
 function App() {
@@ -36,6 +39,7 @@ function App() {
               <Route path="/app" element={<AppClientes />} />
               <Route path="/login" element={<Login />} />
               <Route path="/forgot" element={<Forgot />} />
+              <Route path="/recovery/:token" element={<Restablecer />} />
               <Route path="*" element={<NotFound/>} />
               <Route path="/dashboard" element={<Dashboard />}>
                 <Route index element={<Perfil />} />
@@ -47,6 +51,7 @@ function App() {
                 <Route path="clientes" element={<Clientes />} />
                 <Route path="clientes/visualizar/:id" element={<VisualizarCliente />} />
                 <Route path="rutinas/:id" element={<VisualizarRutina />} />
+                <Route path="ejercicios/:id" element={<VisualizarEjercicios />} />
                 <Route path="chat" element={<Chat/>} />
               </Route>
             </Routes>

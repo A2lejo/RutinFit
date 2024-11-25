@@ -35,7 +35,7 @@ const VisualizarRutina = () => {
               <span className="text-gray-600 uppercase font-bold">
                 * Nombre de la Rutina:{" "}
               </span>
-              {rutina.nombre}
+              {rutina.nameRoutine}
             </p>
             <p className="text-md text-gray-00 mt-4">
               <span className="text-gray-600 uppercase font-bold">
@@ -81,12 +81,15 @@ const VisualizarRutina = () => {
                     <Alertas exito={false}>No hay ejercicios agregados para este día.</Alertas>
                   ) : (
                     <ul>
-                      {dayObj.exercises.map((exercise, idx) => (
-                        <li key={idx} className="ml-4 list-disc flex items-center">
+                      {dayObj.exercises.map((exercise) => (
+                        <li key={exercise._id} className="ml-4 list-disc flex items-center">
                           {exercise.name}
                           <MdInfo
                             className="h-5 w-5 text-slate-800 cursor-pointer ml-2"
-                            onClick={() => navigate(`/dashboard/ejercicios/${exercise._id}`)}
+                            onClick={() => {
+                              console.log('Navigating to exercise ID:', exercise._id); // Verificar el ID del ejercicio
+                              navigate(`/dashboard/ejercicios/${exercise._id}`);
+                            }}
                           />
                         </li>
                       ))}

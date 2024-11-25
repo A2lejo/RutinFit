@@ -17,7 +17,7 @@ const TablaRutinas = ({ rutinas }) => {
         <thead className="bg-gray-800 text-slate-400">
           <tr>
             <th className="p-2">N°</th>
-            <th className="p-2">Días</th>
+            <th className="p-2">Nombre de la Rutina</th>
             <th className="p-2 hidden md:table-cell">Fecha de Inicio</th>
             <th className="p-2 hidden md:table-cell">Fecha de Fin</th>
             <th className="p-2 hidden md:table-cell">Completada</th>
@@ -28,9 +28,7 @@ const TablaRutinas = ({ rutinas }) => {
           {rutinas.map((rutina, index) => (
             <tr className="border-b hover:bg-gray-300 text-center" key={rutina._id}>
               <td className="p-2">{index + 1}</td>
-              <td className="p-2">
-                {rutina.days.map(dayObj => dayObj.day.charAt(0).toUpperCase() + dayObj.day.slice(1)).join(', ')}
-              </td>
+              <td className="p-2">{rutina.nameRoutine}</td>
               <td className="p-2 hidden md:table-cell">{new Date(rutina.start_date).toLocaleDateString()}</td>
               <td className="p-2 hidden md:table-cell">{new Date(rutina.end_date).toLocaleDateString()}</td>
               <td className="p-2 hidden md:table-cell">{rutina.completed ? "Sí" : "No"}</td>

@@ -27,6 +27,24 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const checkTokenExpiration = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const currentTime = Date.now() / 1000; // Convertir a segundos
+
+      if (decodedToken.exp < currentTime) {
+        // El token ha expirado
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        setAuth({});
+        console.log('Token expirado, eliminado del localStorage');
+      } else {
+        obtenerPerfilDesdeToken(token);
+      }
+    }
+  };
+
   const restorePassword = async (email) => {
     try {
       const response = await axios.post(
@@ -87,8 +105,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) obtenerPerfilDesdeToken(token);
+    checkTokenExpiration();
   }, []);
 
   return (
