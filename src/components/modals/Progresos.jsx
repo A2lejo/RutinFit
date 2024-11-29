@@ -9,6 +9,7 @@ const ModalHistorialProgresos = ({ clienteId, handleClose }) => {
 
   useEffect(() => {
     const obtenerProgresos = async () => {
+      console.log('clienteId:', clienteId);
       try {
         const respuesta = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/progress/client/${clienteId}`,
@@ -47,7 +48,7 @@ const ModalHistorialProgresos = ({ clienteId, handleClose }) => {
           ) : error ? (
             <p>{error}</p>
           ) : progresos.length === 0 ? (
-            <p>No hay registros de progresos</p>
+            <p>El cliente aún no registra sus progresos</p>
           ) : (
             <ul>
               {progresos.map((progreso, index) => (

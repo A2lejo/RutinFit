@@ -104,13 +104,35 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const actualizarPerfil = async (form) => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}/coach/update-coach/${form.id}`,
+        form,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setAuth(response.data);
+      return { respuesta: 'Perfil actualizado correctamente', exito: true };
+    } catch (error) {
+      console.error('Error al actualizar el perfil:', error);
+      return { respuesta: 'Error al actualizar el perfil', exito: false };
+    }
+  };
+
+
   useEffect(() => {
     checkTokenExpiration();
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{ auth, setAuth, restorePassword, confirmTokenPassword, newPassword, updatePassword }}
+      value={{ auth, setAuth, restorePassword, confirmTokenPassword, newPassword, updatePassword, actualizarPerfil }}
     >
       {children}
     </AuthContext.Provider>
@@ -119,22 +141,22 @@ export const AuthProvider = ({ children }) => {
 
 export { AuthContext };
 
-  // const actualizarPassword = async (datos) => {
-  //   const token = localStorage.getItem("token");
-  //   try {
-  //     const respuesta = await axios.put(
-  //       `${import.meta.env.VITE_BACKEND_URL}/perfil/actualizarpassword`,
-  //       datos,
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-  //     obtenerPerfilDesdeToken(token);
-  //     return { respuesta: respuesta.data.res, exito: true };
-  //   } catch (error) {
-  //     return { respuesta: error.response.data.res, exito: false };
-  //   }
-  // };
+// const actualizarPassword = async (datos) => {
+//   const token = localStorage.getItem("token");
+//   try {
+//     const respuesta = await axios.put(
+//       `${import.meta.env.VITE_BACKEND_URL}/perfil/actualizarpassword`,
+//       datos,
+//       {
+//         headers: {
+//           "Content-Type": "application/json",
+//           Authorization: `Bearer ${token}`,
+//         },
+//       }
+//     );
+//     obtenerPerfilDesdeToken(token);
+//     return { respuesta: respuesta.data.res, exito: true };
+//   } catch (error) {
+//     return { respuesta: error.response.data.res, exito: false };
+//   }
+// };

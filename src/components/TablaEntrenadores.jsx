@@ -84,7 +84,7 @@ const TablaEntrenadores = ({ search }) => {
                 <td className="p-2 hidden md:table-cell">{entrenador.description}</td>
                 <td className="p-2 hidden md:table-cell">
                   <span className="bg-blue-100 text-green-500 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
-                    {entrenador.status ? 'activo' : 'inactivo'}
+                    {entrenador.user_id.status ? 'activo' : 'inactivo'}
                   </span>
                 </td>
                 <td className="p-2 text-center">

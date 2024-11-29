@@ -8,10 +8,7 @@ const CardPerfil = () => {
   const [perfil, setPerfil] = useState({
     nombre: "",
     apellido: "",
-    edad: "",
-    telefono: "",
     email: "",
-    genero: "",
   });
 
 useEffect(() => {
@@ -20,10 +17,7 @@ useEffect(() => {
     setPerfil({
       nombre: auth.name,
       apellido: auth.lastname,
-      edad: auth.edad,
-      telefono: auth.telefono,
       email: auth.email,
-      genero: auth.genero,
     });
   }
 }, [auth]);
@@ -48,18 +42,6 @@ useEffect(() => {
             <b>Email:</b>
             <p className="inline-block ml-3">{perfil.email}</p>
           </div>
-          {/* <div className="self-start">
-            <b>Teléfono:</b>
-            <p className="inline-block ml-3">{perfil.telefono}</p>
-          </div>
-          <div className="self-start">
-            <b>Edad:</b>
-            <p className="inline-block ml-3">{perfil.edad}</p>
-          </div>
-          <div className="self-start">
-            <b>Género:</b>
-            <p className="inline-block ml-3">{perfil.genero}</p>
-          </div> */}
         </div>
       </div>
       {auth.rol === "entrenador" && (

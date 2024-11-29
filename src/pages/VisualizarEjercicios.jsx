@@ -1,9 +1,11 @@
 import { useState, useContext, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { FaArrowLeft } from "react-icons/fa";
 import RutinasContext from "@context/RutinasProvider";
 
 const VisualizarEjercicios = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { obtenerEjercicioPorId } = useContext(RutinasContext);
   const [ejercicio, setEjercicio] = useState(null);
 
@@ -12,6 +14,7 @@ const VisualizarEjercicios = () => {
     const fetchEjercicio = async () => {
       try {
         const ejercicioObtenido = await obtenerEjercicioPorId(id);
+        console.log('Ejercicio obtenido:', ejercicioObtenido); // Verificar los datos del ejercicio
         setEjercicio(ejercicioObtenido);
       } catch (error) {
         console.error('Error al obtener el ejercicio:', error);
@@ -22,11 +25,20 @@ const VisualizarEjercicios = () => {
   }, [id, obtenerEjercicioPorId]);
 
   return (
-    <div>
-      <h1 className="font-black text-4xl text-[#0D9488]">Visualizar Ejercicio</h1>
+    <div className="p-4">
+      <div className="flex justify-between items-center">
+        <h1 className="font-black text-4xl text-[#0D9488]">Visualizar Ejercicio</h1>
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition duration-300"
+        >
+          <FaArrowLeft className="mr-2" />
+          Regresar
+        </button>
+      </div>
       {ejercicio ? (
         <>
-          <div className="m-5 flex justify-between">
+          <div className="m-5 flex flex-col md:flex-row justify-between">
             <div>
               <p className="text-md text-gray-00 mt-4">
                 <span className="text-gray-600 uppercase font-bold">
@@ -36,15 +48,21 @@ const VisualizarEjercicios = () => {
               </p>
               <p className="text-md text-gray-00 mt-4">
                 <span className="text-gray-600 uppercase font-bold">
-                  * Descripción:{" "}
+                  * Parte del cuerpo:{" "}
                 </span>
-                {ejercicio.description}
+                {ejercicio.bodyPart}
               </p>
               <p className="text-md text-gray-00 mt-4">
                 <span className="text-gray-600 uppercase font-bold">
-                  * Categoría:{" "}
+                  * Musculo:{" "}
                 </span>
-                {ejercicio.category}
+                {ejercicio.target}
+              </p>
+              <p className="text-md text-gray-00 mt-4">
+                <span className="text-gray-600 uppercase font-bold">
+                  * Musculo Secundario:{" "}
+                </span>
+                {ejercicio.secondaryMuscles.join(", ")}
               </p>
               <p className="text-md text-gray-00 mt-4">
                 <span className="text-gray-600 uppercase font-bold">
@@ -52,13 +70,7 @@ const VisualizarEjercicios = () => {
                 </span>
                 {ejercicio.equipment}
               </p>
-              <p className="text-md text-gray-00 mt-4">
-                <span className="text-gray-600 uppercase font-bold">
-                  * Nivel:{" "}
-                </span>
-                {ejercicio.level}
-              </p>
-              <p className="text-md text-gray-00 mt-4">
+              <div className="text-md text-gray-00 mt-4">
                 <span className="text-gray-600 uppercase font-bold">
                   * Instrucciones:{" "}
                 </span>
@@ -67,17 +79,13 @@ const VisualizarEjercicios = () => {
                     <li key={index}>{instruction}</li>
                   ))}
                 </ul>
-              </p>
-              {/* <p className="text-md text-gray-00 mt-4">
+              </div>
+              <div className="text-md text-gray-00 mt-4">
                 <span className="text-gray-600 uppercase font-bold">
-                  * Imagenes:{" "}
+                  * Ejemplo:{" "}
                 </span>
-                <div>
-                  {ejercicio.images.map((image, index) => (
-                    <img key={index} src={image} alt={`Ejercicio ${index}`} className="w-32 h-32" />
-                  ))}
-                </div>
-              </p> */}
+                <img src={ejercicio.gifUrl} alt={`Ejercicio ${ejercicio.name}`} className="w-32 h-32" />
+              </div>
             </div>
           </div>
         </>

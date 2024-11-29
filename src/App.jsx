@@ -11,6 +11,7 @@ import Perfil from './pages/Perfil';
 import FormularioPerfil from './components/profile/FormularioPerfil';
 import NotFound from './pages/NotFound';
 import Restablecer from './pages/auth/Restablecer';
+import NuevoPassword from './pages/auth/NuevoPassword';
 
 import Entrenadores from './pages/Entrenadores';
 import RegistrarEntrenador from './pages/RegistrarEntrenador';
@@ -40,6 +41,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/forgot" element={<Forgot />} />
               <Route path="/recovery/:token" element={<Restablecer />} />
+              <Route path="/nuevo-password/:token" element={<NuevoPassword />} />
               <Route path="*" element={<NotFound/>} />
               <Route path="/dashboard" element={<Dashboard />}>
                 <Route index element={<Perfil />} />

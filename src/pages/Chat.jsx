@@ -3,8 +3,6 @@ import axios from "axios";
 import { io } from "socket.io-client";
 import { AuthContext } from "@context/AuthProvider";
 
-const socket = io(`${import.meta.env.VITE_BACKEND_URL}`.replace("/api", ""));
-
 const Chat = () => {
   const [mensaje, setMensaje] = useState("");
   const [mensajes, setMensajes] = useState([]);
@@ -30,37 +28,63 @@ const Chat = () => {
     }
   };
 
-  
+  const obtenerMensajes = async () => {
+    try {
+      const respuesta = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/chats/${clienteSeleccionado}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      console.log('Mensajes:', respuesta.data);
+      setMensajes(respuesta.data);
+    } catch (error) {
+      console.error('Error al obtener mensajes:', error);
+    }
+  }
+
+  useEffect(() => {
+    if (clienteSeleccionado) {
+      obtenerMensajes();
+    }
+  }, [clienteSeleccionado]);
 
   useEffect(() => {
     listarClientes();
+  }, []);
+
+  useEffect(() => {
+    const socket = io(`${import.meta.env.VITE_BACKEND_URL}`.replace("/api/v1", ""), {
+      transports: ['websocket'],
+    });
+
+    socket.on("connect", () => {
+      console.log('Conectado al servidor WebSocket');
+    });
 
     socket.on("receive", (mensaje) => {
-      if (mensaje.emisor === clienteSeleccionado || mensaje.receptor === clienteSeleccionado) {
-        setMensajes((state) => [...state, mensaje]);
-      }
+      setMensajes((state) => [...state, mensaje]);
+    });
 
-      // Agregar cliente a la lista si no está ya
-      if (!clientes.some(cliente => cliente._id === mensaje.emisor)) {
-        setClientes((prevClientes) => [
-          ...prevClientes,
-          { _id: mensaje.emisor, user_id: { name: mensaje.nombre, lastname: "" } } // Ajusta según los datos disponibles
-        ]);
-      }
+    socket.on("disconnect", () => {
+      console.log('Desconectado del servidor WebSocket');
     });
 
     return () => socket.disconnect();
-  }, [clienteSeleccionado]);
+  }, []);
 
   const handleMensajeChat = () => {
     if (mensaje.trim() && clienteSeleccionado) {
       const newMessage = {
-        mensaje,
-        emisor: auth._id,
-        receptor: clienteSeleccionado,
-        nombre: auth.nombre,
+        message: mensaje,
+        transmitter: auth._id, // Asegúrate de que el nombre del campo sea correcto
+        receiver: clienteSeleccionado,
+        name: auth.nombre,
         rol: auth.rol,
-        createdAt: Date.now(),
+        createdAt: Date.now()
       };
 
       setMensajes((prevMensajes) => [...prevMensajes, newMessage]);
@@ -99,13 +123,13 @@ const Chat = () => {
         <div className="flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch">
           <div className="chat-message">
             {mensajes.map(
-              ({ mensaje, emisor, nombre, rol, createdAt }, index) =>
-                emisor === auth._id ? (
+              ({ message, transmitter, createdAt, name, rol }, index) =>
+                transmitter === auth._id ? (
                   <div key={index} className="flex items-end justify-end my-2">
                     <div className="flex flex-col items-end">
-                      <span className="text-xs mr-2.5">{nombre}</span>
+                      <span className="text-xs mr-2.5">{name}</span>
                       <span className="px-4 py-2 rounded-lg inline-block rounded-br-none bg-gray-700 text-white text-xs max-w-xs mx-2 break-words">
-                        {mensaje}
+                        {message}
                       </span>
                       <span className="text-xs mr-2.5 mt-1 text-neutral-500">
                         {new Date(createdAt).toLocaleString()}
@@ -125,9 +149,9 @@ const Chat = () => {
                   <div className="flex items-end my-2" key={index}>
                     <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start">
                       <div className="flex flex-col items-start">
-                        <span className="text-xs ml-1">{nombre}</span>
+                        <span className="text-xs ml-1">{name}</span>
                         <span className="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-blue-300 text-gray-600">
-                          {mensaje}
+                          {message}
                         </span>
                         <span className="text-xs ml-1 mt-1 text-neutral-500">
                           {new Date(createdAt).toLocaleString()}
