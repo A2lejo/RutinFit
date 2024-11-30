@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, Outlet, useLocation, Navigate } from "react-router-dom";
 import { AuthContext } from "@context/AuthProvider";
-import IconoEntrenador from "@assets/iconoEntrenador.png";
-import IconoUsuario from "@assets/iconoUsuario.png";
+import IconoEntrenador from "@assets/IconoEntrenador.png";
+import IconoUsuario from "@assets/IconoUsuario.png";
 
 const Dashboard = () => {
   const location = useLocation();
