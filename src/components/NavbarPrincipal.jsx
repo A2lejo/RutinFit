@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import iconoMujer from "@assets/icono_mujer.jpeg";
 import iconoHombre from "@assets/icono_hombre.jpeg";
@@ -7,11 +7,18 @@ import iconoRutinFit from "@assets/iconoRutinFit.png";
 const NavbarPrincipal = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  if (menuOpen) {
-    document.body.style.overflow = 'hidden';
-  } else {
-    document.body.style.overflow = 'auto';
-  }
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+
+    // Cleanup function to reset the overflow style when the component unmounts
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [menuOpen]);
 
   return (
     <nav className="w-full p-4 sm:p-6 mb-10 flex justify-between items-center shadow-lg bg-white z-50 relative">
@@ -62,7 +69,7 @@ const NavbarPrincipal = () => {
             <li className={`mr-6 sm:mr-0 ${menuOpen ? 'mt-3' : ''}`}>
               <Link
                 to="/contacto"
-                className={`text-slate-700 px-4 py-2 rounded-full hover:bg-teal-600 hover:text-white ${menuOpen ? 'block text-left py-2 text-black hover:bg-white hover:text-[#0D9488]' : ''}`}
+                className={`text-slate-700 px-4 py-2 rounded-full hover:bg-teal-600 ${menuOpen ? 'block text-left py-2 text-black hover:bg-white hover:text-[#0D9488]' : 'hover:text-white'}`}
                 onClick={() => setMenuOpen(false)}
               >
                 Contáctanos
@@ -71,7 +78,7 @@ const NavbarPrincipal = () => {
             <li className={`mr-6 sm:mr-0 ${menuOpen ? 'mt-3' : ''}`}>
               <Link
                 to="/app"
-                className={`text-slate-700 px-4 py-2 rounded-full hover:bg-teal-600 hover:text-white ${menuOpen ? 'block text-left py-2 text-black hover:bg-white hover:text-[#0D9488]' : ''}`}
+                className={`text-slate-700 px-4 py-2 rounded-full hover:bg-teal-600 ${menuOpen ? 'block text-left py-2 text-black hover:bg-white hover:text-[#0D9488]' : 'hover:text-white'}`}
                 onClick={() => setMenuOpen(false)}
               >
                 App Clientes

@@ -16,6 +16,7 @@ const VisualizarCliente = () => {
   const [cliente, setCliente] = useState(null);
   const [rutinasCliente, setRutinasCliente] = useState([]);
   const [modalHistorial, setModalHistorial] = useState(false);
+  const [mensajeRutina, setMensajeRutina] = useState('');
 
   useEffect(() => {
     const obtenerCliente = async () => {
@@ -50,7 +51,7 @@ const VisualizarCliente = () => {
         console.log('rutinas:', rutinasRespuesta.data.routines);
         setRutinasCliente(rutinasRespuesta.data.routines || []); // Asegurarse de que 'routines' sea un array
       } catch (error) {
-        console.error('Error al obtener los datos del cliente:', error);
+        setMensajeRutina('EL cliente aun no tiene rutinas asignadas');
       }
     };
 

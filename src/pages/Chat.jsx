@@ -3,6 +3,9 @@ import axios from "axios";
 import { io } from "socket.io-client";
 import { AuthContext } from "@context/AuthProvider";
 
+
+const socket = io(`${import.meta.env.VITE_BACKEND_URL}`.replace("/api/v1", ""));
+
 const Chat = () => {
   const [mensaje, setMensaje] = useState("");
   const [mensajes, setMensajes] = useState([]);
@@ -23,7 +26,7 @@ const Chat = () => {
       );
       console.log('Clientes:', respuesta.data);
       setClientes(respuesta.data);
-    } catch (error) {
+    } catch (error) { 
       console.error('Error al listar clientes:', error);
     }
   };
@@ -31,7 +34,7 @@ const Chat = () => {
   const obtenerMensajes = async () => {
     try {
       const respuesta = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/chats/${clienteSeleccionado}`,
+        `${import.meta.env.VITE_BACKEND_URL}/chats/${clienteSeleccionado}/${clientes[0].coach_id}`, 
         {
           headers: {
             'Content-Type': 'application/json',
@@ -56,21 +59,11 @@ const Chat = () => {
     listarClientes();
   }, []);
 
-  useEffect(() => {
-    const socket = io(`${import.meta.env.VITE_BACKEND_URL}`.replace("/api/v1", ""), {
-      transports: ['websocket'],
-    });
 
-    socket.on("connect", () => {
-      console.log('Conectado al servidor WebSocket');
-    });
+  useEffect(() => {
 
     socket.on("receive", (mensaje) => {
       setMensajes((state) => [...state, mensaje]);
-    });
-
-    socket.on("disconnect", () => {
-      console.log('Desconectado del servidor WebSocket');
     });
 
     return () => socket.disconnect();
@@ -79,13 +72,15 @@ const Chat = () => {
   const handleMensajeChat = () => {
     if (mensaje.trim() && clienteSeleccionado) {
       const newMessage = {
+        client_id: clienteSeleccionado,
+        coach_id: clientes[0].coach_id, // Asegúrate de que el nombre del campo sea correcto
         message: mensaje,
-        transmitter: auth._id, // Asegúrate de que el nombre del campo sea correcto
+        transmitter: clientes[0].coach_id, // Asegúrate de que el nombre del campo sea correcto
         receiver: clienteSeleccionado,
-        name: auth.nombre,
+        name: JSON.parse(localStorage.getItem('user')).name,
         rol: auth.rol,
         createdAt: Date.now()
-      };
+      };  
 
       setMensajes((prevMensajes) => [...prevMensajes, newMessage]);
       socket.emit("send", newMessage);
@@ -124,7 +119,7 @@ const Chat = () => {
           <div className="chat-message">
             {mensajes.map(
               ({ message, transmitter, createdAt, name, rol }, index) =>
-                transmitter === auth._id ? (
+                transmitter === clientes[0].coach_id ? (
                   <div key={index} className="flex items-end justify-end my-2">
                     <div className="flex flex-col items-end">
                       <span className="text-xs mr-2.5">{name}</span>
@@ -161,8 +156,8 @@ const Chat = () => {
                     <img
                       src={
                         rol === "entrenador"
-                          ? "https://cdn-icons-png.flaticon.com/512/2934/2934749.png"
-                          : "https://cdn-icons-png.flaticon.com/512/2105/2105138.png"
+                          ? "https://cdn-icons-png.flaticon.com/128/11837/11837612.png"
+                          : "https://cdn-icons-png.flaticon.com/128/11053/11053973.png"
                       }
                       alt="Profile"
                       className="w-14 h-14 rounded-full order-1"

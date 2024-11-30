@@ -45,6 +45,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+
   const restorePassword = async (email) => {
     try {
       const response = await axios.post(
@@ -108,7 +109,7 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/coach/update-coach/${form.id}`,
+        `${import.meta.env.VITE_BACKEND_URL}/coach/update-profile/`,
         form,
         {
           headers: {
@@ -136,27 +137,8 @@ export const AuthProvider = ({ children }) => {
     >
       {children}
     </AuthContext.Provider>
-  );
-};
+    );
+  };
 
 export { AuthContext };
 
-// const actualizarPassword = async (datos) => {
-//   const token = localStorage.getItem("token");
-//   try {
-//     const respuesta = await axios.put(
-//       `${import.meta.env.VITE_BACKEND_URL}/perfil/actualizarpassword`,
-//       datos,
-//       {
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: `Bearer ${token}`,
-//         },
-//       }
-//     );
-//     obtenerPerfilDesdeToken(token);
-//     return { respuesta: respuesta.data.res, exito: true };
-//   } catch (error) {
-//     return { respuesta: error.response.data.res, exito: false };
-//   }
-// };
