@@ -1,27 +1,29 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "@context/AuthProvider";
+import { infoAlert, successUpdateAlert, errorAlert } from "@utils/AlertFunctions";
 import Alertas from "@components/Alertas";
 
 const FormularioPerfil = () => {
-  const { auth, actualizarPerfil } = useContext(AuthContext);
-
-  const [alerta, setAlerta] = useState({});
+  const { auth, actualizarPerfil, obtenerPerfilEntrenador } = useContext(AuthContext);
 
   const [form, setForm] = useState({
-    id: "",
     name: "",
     lastname: "",
-    email: ""
+    email: "",
+    description: ""
   });
 
   useEffect(() => {
-    console.log("auth en FormularioPerfil:", auth);
+    obtenerPerfilEntrenador(); // Llama a la función para obtener el perfil del entrenador
+  }, []);
+
+  useEffect(() => {
     if (auth) {
       setForm({
-        id: auth.id,
         name: auth.name || "",
         lastname: auth.lastname || "",
-        email: auth.email || ""
+        email: auth.email || "",
+        description: auth.description || ""
       });
     }
   }, [auth]);
@@ -36,34 +38,25 @@ const FormularioPerfil = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (Object.values(form).includes("")) {
-      setAlerta({
-        respuesta: "Todos los campos deben ser ingresados",
-        exito: false,
-      });
-      setTimeout(() => {
-        setAlerta({});
-      }, 5000);
+      infoAlert("Todos los campos deben ser ingresados");
       return;
     }
-    console.log("datos a enviar:", form);
     const resultado = await actualizarPerfil(form);
-    console.log("resultado:", resultado);
-    setAlerta(resultado);
-    setTimeout(() => {
-      setAlerta({});
-    }, 5000);
+    if (resultado.exito) {
+      successUpdateAlert(resultado.respuesta);
+    } else {
+      errorAlert(resultado.respuesta);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      {alerta.respuesta && (
-        <Alertas exito={alerta.exito}> {alerta.respuesta} </Alertas>
-      )}
       <h2 className="text-3xl font-serif text-[#16A39C] text-center mb-3">
-        Editar Perfil</h2>
-        <p className="text-gray-700 mb-4">
-          Actualiza tus datos personales
-        </p>
+        Editar Perfil
+      </h2>
+      <p className="text-gray-700 mb-4">
+        Actualiza tus datos personales
+      </p>
       <div>
         <label
           htmlFor="name"
@@ -105,7 +98,7 @@ const FormularioPerfil = () => {
           htmlFor="email"
           className="text-gray-700 uppercase font-bold text-sm"
         >
-          email:{" "}
+          Email:{" "}
         </label>
         <input
           id="email"
@@ -115,9 +108,27 @@ const FormularioPerfil = () => {
           name="email"
           value={form.email}
           onChange={handleChange}
+          readOnly // Añadir este atributo para que el campo de email no se pueda cambiar
         />
       </div>
-      
+
+      <div>
+        <label
+          htmlFor="description"
+          className="text-gray-700 uppercase font-bold text-sm"
+        >
+          Descripción:{" "}
+        </label>
+        <textarea
+          id="description"
+          className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5"
+          placeholder="Descripción"
+          name="description"
+          value={form.description}
+          onChange={handleChange}
+        />
+      </div>
+
       <input
         type="submit"
         className="bg-[#0D9488] w-full p-3 

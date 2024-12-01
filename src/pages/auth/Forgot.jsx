@@ -3,18 +3,19 @@ import { Link } from "react-router-dom";
 import Navbar from "@components/Navbar";
 import { AuthContext } from "@context/AuthProvider";
 import iconoForgogt from "@assets/iconoForgot.jpg";
+import { successEmail, errorAlert } from "@utils/AlertFunctions.js";
+
 const Forgot = () => {
   const { restorePassword } = useContext(AuthContext);
   const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await restorePassword(email);
-      setMessage('Correo de recuperación enviado. Por favor, revisa tu bandeja de entrada.');
+      successEmail('Correo de recuperación enviado. Por favor, revisa tu bandeja de entrada.');
     } catch (error) {
-      setMessage('Error al enviar el correo de recuperación. Por favor, intenta nuevamente.');
+      errorAlert('Error al enviar el correo de recuperación. Por favor, revisa que tu correo sea el indicado e intentalo nuevamente.');
     }
   };
 
@@ -57,8 +58,6 @@ const Forgot = () => {
                 </button>
               </div>
             </form>
-
-            {message && <p className="text-center text-red-500">{message}</p>}
 
             <div className="mt-5 text-xs border-b-2 py-4 "></div>
 

@@ -18,24 +18,23 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
   const [form, setForm] = useState({
     client_id: clienteId,
     coach_id: coachId,
-    nameRoutine: dataModal?.nameRoutine ?? '', // Add nameRoutine field
+    nameRoutine: dataModal?.nameRoutine ?? '',
     start_date: dataModal ? formatDate(dataModal.start_date) : '',
     end_date: dataModal ? formatDate(dataModal.end_date) : '',
     duration_days: dataModal?.duration_days ?? 0,
-    days: dataModal?.days ?? days.map(day => ({ day, exercises: [] })), // Inicializa los días con ejercicios vacíos
+    days: dataModal?.days ?? days.map(day => ({ day, exercises: [] })),
     comments: dataModal?.comments ?? '',
   });
 
-  const [searches, setSearches] = useState(days.map(() => '')); // Estado de búsqueda independiente para cada día
-  const [suggestions, setSuggestions] = useState([]); // Estado para las sugerencias de autocompletado
+  const [searches, setSearches] = useState(days.map(() => ''));
+  const [suggestions, setSuggestions] = useState(days.map(() => []));
 
   useEffect(() => {
-    console.log('dataModal:', dataModal); // Verificar el contenido de dataModal
     if (dataModal) {
       setForm({
         client_id: dataModal.client_id._id,
         coach_id: dataModal.coach_id._id,
-        nameRoutine: dataModal.nameRoutine, // Add nameRoutine field
+        nameRoutine: dataModal.nameRoutine,
         start_date: formatDate(dataModal.start_date),
         end_date: formatDate(dataModal.end_date),
         duration_days: dataModal.duration_days,
@@ -46,19 +45,15 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
       setForm({
         client_id: clienteId,
         coach_id: coachId,
-        nameRoutine: '', // Add nameRoutine field
+        nameRoutine: '',
         start_date: '',
         end_date: '',
         duration_days: 0,
-        days: days.map(day => ({ day, exercises: [] })), // Inicializa los días con ejercicios vacíos
+        days: days.map(day => ({ day, exercises: [] })),
         comments: '',
       });
     }
   }, [dataModal, clienteId, coachId, days]);
-
-  useEffect(() => {
-    console.log('form:', form); // Verificar el estado form después de inicializarlo
-  }, [form]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -71,9 +66,13 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
     const searchQuery = e.target.value;
     if (searchQuery) {
       await obtenerEjercicios(searchQuery);
-      setSuggestions(filteredExercises);
+      const newSuggestions = [...suggestions];
+      newSuggestions[index] = filteredExercises;
+      setSuggestions(newSuggestions);
     } else {
-      setSuggestions([]);
+      const newSuggestions = [...suggestions];
+      newSuggestions[index] = [];
+      setSuggestions(newSuggestions);
     }
   };
 
@@ -83,7 +82,9 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
       newDays[dayIndex].exercises.push(exercise);
     }
     setForm({ ...form, days: newDays });
-    setSuggestions([]); // Clear suggestions after selecting an exercise
+    const newSuggestions = [...suggestions];
+    newSuggestions[dayIndex] = [];
+    setSuggestions(newSuggestions);
   };
 
   const handleExerciseRemove = (dayIndex, exerciseId) => {
@@ -94,13 +95,12 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Formulario enviado:', form); // Agregar log para verificar los datos del formulario
     if (dataModal) {
       await actualizarRutina(form, dataModal._id);
     } else {
       await registrarRutina(form);
     }
-    await obtenerRutinas(); // Refresh the routines
+    await obtenerRutinas();
     handleModal();
   };
 
@@ -167,9 +167,9 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
                   onChange={(e) => handleSearchChange(index, e)}
                   placeholder="Escribe para buscar..."
                 />
-                {suggestions.length > 0 && (
+                {suggestions[index].length > 0 && (
                   <ul className="mt-2 border border-gray-300 rounded-md max-h-40 overflow-y-auto">
-                    {suggestions.map((exercise) => (
+                    {suggestions[index].map((exercise) => (
                       <li
                         key={exercise._id}
                         className="p-2 cursor-pointer hover:bg-gray-200"

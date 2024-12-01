@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
       // Actualizar el estado auth con la información del token decodificado
       setAuth({
         ...decodedToken,
-        ...user
+        ...user,
       });
     } catch (error) {
       console.error("Error al decodificar el token:", error);
@@ -44,7 +44,6 @@ export const AuthProvider = ({ children }) => {
       }
     }
   };
-
 
   const restorePassword = async (email) => {
     try {
@@ -108,24 +107,44 @@ export const AuthProvider = ({ children }) => {
   const actualizarPerfil = async (form) => {
     const token = localStorage.getItem("token");
     try {
-      const response = await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/coach/update-profile/`,
-        form,
+        const response = await axios.put(
+            `${import.meta.env.VITE_BACKEND_URL}/coach/update-profile`,
+            form,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+        const updatedUser = response.data.updatedUser;
+        localStorage.setItem("user", JSON.stringify(updatedUser)); // Guarda el usuario actualizado en el localStorage
+        setAuth(updatedUser);
+        return { respuesta: 'Perfil actualizado correctamente', exito: true };
+    } catch (error) {
+        console.error('Error al actualizar el perfil:', error);
+        return { respuesta: 'Error al actualizar el perfil', exito: false };
+    }
+  };
+
+  const obtenerPerfilEntrenador = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/coach/view-profile`,
         {
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      setAuth(response.data);
-      return { respuesta: 'Perfil actualizado correctamente', exito: true };
+      const coachProfile = response.data.coach;
+      localStorage.setItem("user", JSON.stringify(coachProfile)); // Guarda el perfil del entrenador en el localStorage
+      setAuth(coachProfile);
     } catch (error) {
-      console.error('Error al actualizar el perfil:', error);
-      return { respuesta: 'Error al actualizar el perfil', exito: false };
+      console.error('Error al obtener el perfil del entrenador:', error);
     }
   };
-
 
   useEffect(() => {
     checkTokenExpiration();
@@ -133,12 +152,11 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ auth, setAuth, restorePassword, confirmTokenPassword, newPassword, updatePassword, actualizarPerfil }}
+      value={{ auth, setAuth, restorePassword, confirmTokenPassword, newPassword, updatePassword, actualizarPerfil, obtenerPerfilEntrenador }}
     >
       {children}
     </AuthContext.Provider>
-    );
-  };
+  );
+};
 
 export { AuthContext };
-

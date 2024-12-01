@@ -31,7 +31,9 @@ export const errorLoginAlert = (message) => {
   });
 };
 
-
+export const successEmail = (message) => {
+  Swal.fire('Enviado', message, 'success');
+}
 
 export const successAlert = (message) => {
   Swal.fire('Eliminado', message, 'success');

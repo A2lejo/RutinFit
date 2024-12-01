@@ -57,16 +57,16 @@ const Contactos = () => {
             <NavbarPrincipal />
             <main>
                 <div className='text-center font-serif'>
-                    <h2 className='text-[#82E5B5] py-5 px-4 sm:px-10 md:px-20 lg:px-40  text-3xl sm:text-4xl md:text-5xl lg:text-6xl'>
+                    <h2 className='text-[#82E5B5] py-5 px-4 sm:px-10 md:px-20 lg:px-40 text-3xl sm:text-4xl md:text-5xl lg:text-6xl'>
                         Contáctanos
                     </h2>
                     <div className='text-xs sm:text-sm py-5 md:text-xl max-w-lg mx-auto md:text-center bg-[#16A39C] rounded-3xl'>
                         <p>
                             Puedes comunicarte con nosotros a través de nuestro número de teléfono:
                         </p>
-                        <div className="flex items-center space-x-1 py-4 px-44">
+                        <div className="flex items-center justify-center space-x-1 py-4">
                             <FaPhoneAlt className="text-white" />
-                            <span className="text-white">+123 456 7890</span>
+                            <span className="text-white whitespace-nowrap">+123 456 7890</span>
                         </div>
                         <p>
                             o enviarnos un correo:
