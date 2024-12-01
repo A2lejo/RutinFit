@@ -8,7 +8,7 @@ const Contactos = () => {
     const [formData, setFormData] = useState({
         nombre: '',
         correo: '',
-        usuario: 'Sí',
+        usuario: '',
         asunto: '',
         mensaje: '',
     });
@@ -19,37 +19,36 @@ const Contactos = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!formData.nombre || !formData.correo || !formData.asunto || !formData.mensaje) {
+            alert('Por favor, completa todos los campos.');
+            return;
+        }
         try {
-            const response = await axios.post('https://api.sendgrid.com/v3/mail/send', {
-                personalizations: [
-                    {
-                        to: [{ email: 'rutinfit24@gmail.com' }],
-                        subject: `Nuevo mensaje de ${formData.nombre}: ${formData.asunto}`,
-                    },
-                ],
-                from: { email: formData.correo },
-                content: [
-                    {
-                        type: 'text/plain',
-                        value: `
-                            Nombre: ${formData.nombre}
-                            Correo: ${formData.correo}
-                            ¿Es usuario?: ${formData.usuario}
-                            Mensaje: ${formData.mensaje}
-                        `,
-                    },
-                ],
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${process.env.REACT_APP_SENDGRID_API_KEY}`,
+            const response = await axios.post(
+                'https://api.sendinblue.com/v3/smtp/email',
+                {
+                    sender: { email: formData.correo, name: formData.nombre },
+                    to: [{ email: 'rutinfit24@gmail.com' }],
+                    subject: formData.asunto,
+                    htmlContent: `
+                        <p><strong>Nombre:</strong> ${formData.nombre}</p>
+                        <p><strong>Correo:</strong> ${formData.correo}</p>
+                        <p><strong>¿Es usuario?:</strong> ${formData.usuario}</p>
+                        <p><strong>Mensaje:</strong> ${formData.mensaje}</p>
+                    `,
                 },
-            });
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'api-key': import.meta.env.VITE_SENDINBLUE_API_KEY,
+                    },
+                }
+            );
             console.log('Correo enviado:', response.data);
             alert('Correo enviado correctamente');
         } catch (error) {
-            console.error('Error al enviar el correo:', error);
-            alert('Error al enviar el correo');
+            console.error('Error al enviar el correo:', error.response ? error.response.data : error.message);
+            alert('Error al enviar el correo: ' + (error.response ? error.response.data : error.message));
         }
     };
 

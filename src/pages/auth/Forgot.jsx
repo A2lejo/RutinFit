@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@components/Navbar";
 import { AuthContext } from "@context/AuthProvider";
-
+import iconoForgogt from "@assets/iconoForgot.jpg";
 const Forgot = () => {
   const { restorePassword } = useContext(AuthContext);
   const [email, setEmail] = useState('');
@@ -24,7 +24,7 @@ const Forgot = () => {
       <div className="flex flex-col lg:flex-row min-h-screen">
         <div className="w-full lg:w-1/2 min-h-screen bg-white flex flex-col justify-center items-center">
           <div className="md:w-4/5 sm:w-full mt-4 bg-white p-8 md:p-16 rounded-lg shadow-custom">
-            <img src="/src/assets/iconoForgot.jpg" alt="logo" className="w-20 h-20 m-auto mb-5" />
+            <img src={iconoForgogt} alt="logo" className="w-20 h-20 m-auto mb-5" />
             <h1 className="text-3xl font-semibold mb-2 text-center uppercase text-gray-500 font-serif">
               Recupera tu contraseña
             </h1>

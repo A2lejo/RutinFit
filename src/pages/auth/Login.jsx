@@ -6,6 +6,7 @@ import { successLoginAlert, errorLoginAlert } from "../../utils/AlertFunctions";
 import { AuthContext } from "@context/AuthProvider";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { jwtDecode } from "jwt-decode";
+import iconoLogin from "@assets/iconoLogin.png";
 
 const Login = () => {
   const { setAuth } = useContext(AuthContext);
@@ -64,7 +65,7 @@ const Login = () => {
 
         <div className="w-full lg:w-1/2 min-h-screen bg-white flex justify-center items-center">
           <div className="md:w-4/5 sm:w-full bg-white p-8 md:p-16 rounded-lg shadow-custom">
-            <img src="/src/assets/iconoLogin.png" alt="logo" className="w-20 h-20 m-auto mb-5" />
+            <img src={iconoLogin} alt="logo" className="w-20 h-20 m-auto mb-5" />
             <h1 className="text-3xl font-semibold mb-2 text-center uppercase text-gray-500 font-serif">
               BIENVENIDO
             </h1>

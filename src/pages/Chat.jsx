@@ -116,7 +116,7 @@ const Chat = () => {
       </div>
       <div className="flex-1 flex flex-col justify-between p-4">
         <div className="flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch">
-          <div className="chat-message overflow-y-auto h-[30rem]">
+          <div className="chat-message overflow-y-auto h-[29rem]">
             {mensajes.map(
               ({ message, transmitter, createdAt, name, rol }, index) =>
                 transmitter === clientes[0].coach_id ? (
