@@ -15,7 +15,7 @@ const Navbar = () => {
           className=""
         />
         <Link to="/" className="text-2xl sm:text-4xl font-italianno">
-          Rutin<span className="text-[#82E5B5]">Fit</span>
+          Rutin<span className="text-[#0D8894]">Fit</span>
         </Link>
         <img
           src={iconoHombre}
