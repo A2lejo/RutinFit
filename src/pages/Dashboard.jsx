@@ -3,9 +3,11 @@ import { Link, Outlet, useLocation, Navigate } from "react-router-dom";
 import { AuthContext } from "@context/AuthProvider";
 import IconoEntrenador from "@assets/IconoEntrenador.png";
 import IconoUsuario from "@assets/IconoUsuario.png";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const urlActual = location.pathname;
   const { auth } = useContext(AuthContext);
   const [rol, setRol] = useState("");
@@ -18,6 +20,16 @@ const Dashboard = () => {
       setNombre(auth.name);
     }
   }, [auth]);
+
+  useEffect(() => {
+    const logout = (event) => {
+      if (event.key === "logout") {
+        navigate("/login");
+      }
+    };
+    window.addEventListener("storage", logout);
+    return () => { window.removeEventListener("storage", logout); };
+  }, [navigate]);
 
   return (
     <div className="md:flex md:min-h-screen">
@@ -126,6 +138,7 @@ const Dashboard = () => {
                 localStorage.removeItem("token");
                 localStorage.removeItem("user");
                 setAuth({});
+                localStorage.setItem("logout", Date.now());
               }}
             >
               Salir

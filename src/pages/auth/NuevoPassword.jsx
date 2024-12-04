@@ -5,6 +5,7 @@ import Alertas from "@components/Alertas";
 import { useParams } from "react-router-dom";
 import logoPassword from "@assets/chatUsuario.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { successUpdateAlert, errorAlert } from "@utils/AlertFunctions";
 
 const NuevoPassword = () => {
   const { token } = useParams();
@@ -28,17 +29,17 @@ const NuevoPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (form.password !== form.confirmPassword) {
-      setAlerta({ respuesta: "Las contraseñas no coinciden", exito: false });
+      errorAlert("Las contraseñas no coinciden");
       return;
     }
     try {
       const url = `${import.meta.env.VITE_BACKEND_URL}/users/new-password/${token}`;
       const respuesta = await axios.post(url, { password: form.password, confirmPassword: form.confirmPassword });
       setForm({ password: "", confirmPassword: "" });
-      setAlerta({ respuesta: respuesta.data.res, exito: true });
+      successUpdateAlert(respuesta.data.res);
       setTimeout(() => {
         navigate("/login");
-      }, 5000);
+      }, 3000);
     } catch (error) {
       setAlerta({ respuesta: error.response.data.res, exito: false });
     }
