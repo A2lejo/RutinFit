@@ -2,11 +2,9 @@ import React, { useContext } from "react";
 import { MdDeleteForever, MdEdit, MdInfo } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import RutinasContext from "@context/RutinasProvider";
-import { AuthContext } from "@context/AuthProvider";
 
 const TablaRutinas = ({ rutinas }) => {
   const { eliminarRutina, handleModal, setDataModal } = useContext(RutinasContext);
-  const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
   console.log('Rutinas:', rutinas); // Verificar los datos de las rutinas
@@ -26,7 +24,7 @@ const TablaRutinas = ({ rutinas }) => {
         </thead>
         <tbody>
           {rutinas.map((rutina, index) => (
-            <tr className="border-b hover:bg-gray-300 text-center" key={rutina._id}>
+            <tr className="border-b hover:bg-gray-300 text-center" key={index}>
               <td className="p-2">{index + 1}</td>
               <td className="p-2">{rutina.nameRoutine}</td>
               <td className="p-2 hidden md:table-cell">{new Date(rutina.start_date).toLocaleDateString()}</td>

@@ -32,7 +32,7 @@ const TablaClientes = ({ search }) => {
         }
       );
       console.log('Respuesta de la API:', respuesta.data);
-      setClientes(respuesta.data.clients || respuesta.data || []); // Asegurarse de que `clients` es un array
+      setClientes(respuesta.data.clients || respuesta.data || []);
     } catch (error) {
       console.error('Error al listar clientes:', error);
     }

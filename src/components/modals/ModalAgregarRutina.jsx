@@ -3,9 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import RutinasContext from '@context/RutinasProvider';
 
 const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
-  const { handleModal, registrarRutina, actualizarRutina, dataModal, obtenerEjercicios, filteredExercises, setFilteredExercises, obtenerRutinas, obtenerRutinaPorId } = useContext(RutinasContext);
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const { handleModal, registrarRutina, actualizarRutina, dataModal, obtenerEjercicios, filteredExercises, setFilteredExercises, rutinas, setRutinas } = useContext(RutinasContext);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -99,8 +97,8 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
       await actualizarRutina(form, dataModal._id);
     } else {
       await registrarRutina(form);
+      setRutinas([...rutinas, form]);
     }
-    await obtenerRutinas();
     handleModal();
   };
 

@@ -129,7 +129,7 @@ export const AuthProvider = ({ children }) => {
       );
       const updatedUser = response.data.updatedUser;
       localStorage.setItem("user", JSON.stringify(updatedUser)); // Guarda el usuario actualizado en el localStorage
-      setAuth(updatedUser);
+      setAuth({...updatedUser, ...jwtDecode(token)}); // Actualiza el estado auth con el usuario actualizado
       return { respuesta: 'Perfil actualizado correctamente', exito: true };
     } catch (error) {
       console.error('Error al actualizar el perfil:', error);
@@ -150,7 +150,7 @@ export const AuthProvider = ({ children }) => {
       );
       const coachProfile = response.data.coach;
       localStorage.setItem("user", JSON.stringify(coachProfile));
-      setAuth(coachProfile);
+      setAuth({...coachProfile, ...jwtDecode(token)});
     } catch (error) {
       console.error('Error al obtener el perfil del entrenador:', error);
     }

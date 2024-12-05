@@ -12,9 +12,8 @@ import Alertas from "@components/Alertas";
 const VisualizarCliente = () => {
   const { id } = useParams();
   const { auth } = useContext(AuthContext);
-  const { modal, handleModal, alertaRutina = {}, setDataModal, eliminarRutina } = useContext(RutinasContext);
+  const { modal, handleModal, alertaRutina = {}, setDataModal, eliminarRutina, rutinas, setRutinas } = useContext(RutinasContext);
   const [cliente, setCliente] = useState(null);
-  const [rutinasCliente, setRutinasCliente] = useState([]);
   const [modalHistorial, setModalHistorial] = useState(false);
   const [mensajeRutina, setMensajeRutina] = useState('');
 
@@ -49,7 +48,7 @@ const VisualizarCliente = () => {
           }
         );
         console.log('rutinas:', rutinasRespuesta.data.routines);
-        setRutinasCliente(rutinasRespuesta.data.routines || []); // Asegurarse de que 'routines' sea un array
+        setRutinas(rutinasRespuesta.data.routines || []); // Asegurarse de que 'routines' sea un array
       } catch (error) {
         setMensajeRutina('EL cliente aun no tiene rutinas asignadas');
       }
@@ -179,7 +178,7 @@ const VisualizarCliente = () => {
             />
           )}
 
-          {rutinasCliente.length === 0 ? (
+          {rutinas.length === 0 ? (
             <p>No existen registros</p>
           ) : (
             <>
@@ -187,7 +186,7 @@ const VisualizarCliente = () => {
                 <Alertas exito={alertaRutina.exito}>{alertaRutina.respuesta}</Alertas>
               )}
               <TablaRutinas
-                rutinas={rutinasCliente}
+                rutinas={rutinas}
                 handleDelete={eliminarRutina}
                 handleEdit={(rutina) => {
                   setDataModal(rutina);

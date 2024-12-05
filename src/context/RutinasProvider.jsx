@@ -16,7 +16,6 @@ export const RutinasProvider = ({ children }) => {
 
   const registrarRutina = async (form) => {
     try {
-      console.log('Datos enviados:', form); // Agregar log para verificar los datos enviados
       const respuesta = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/routine/create-routine`,
         form,
@@ -28,7 +27,7 @@ export const RutinasProvider = ({ children }) => {
         }
       );
       ConfirmAlert('', 'Rutina registrada correctamente');
-      await obtenerRutinas(); // Refresh the routines
+      setRutinas([...rutinas, respuesta.data.rutina]);
     } catch (error) {
       console.error('Error al registrar la rutina:', error);
       errorAlert('Error al registrar la rutina');
@@ -48,7 +47,12 @@ export const RutinasProvider = ({ children }) => {
         }
       );
       successUpdateAlert('Rutina actualizada correctamente');
-      await obtenerRutinas(); // Refresh the routines
+
+      const rutinasActualizadas = rutinas.map((rutina) =>
+        rutina._id === id ? respuesta.data.rutina : rutina
+      );
+      setRutinas(rutinasActualizadas);
+
     } catch (error) {
       console.error('Error al actualizar la rutina:', error);
       errorAlert('Error al actualizar la rutina');
@@ -70,28 +74,13 @@ export const RutinasProvider = ({ children }) => {
         }
       );
       successAlert('Rutina eliminada correctamente');
-      await obtenerRutinas(); // Refresh the routines
+      const rutinasActualizadas = rutinas.filter((rutina) => {
+        return rutina._id !== id;
+      }) 
+      setRutinas(rutinasActualizadas);
     } catch (error) {
       console.error('Error al eliminar la rutina:', error);
       errorAlert('Error al eliminar la rutina');
-    }
-  };
-
-  const obtenerRutinas = async () => {
-    try {
-      const respuesta = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/routine/view-routines`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
-      setRutinas(respuesta.data.rutinas);
-    } catch (error) {
-      console.error('Error al obtener las rutinas:', error);
-      errorRutina('Error al obtener las rutinas');
     }
   };
 
@@ -157,13 +146,6 @@ export const RutinasProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      obtenerRutinas();
-    }
-  }, []);
-
   return (
     <RutinasContext.Provider
       value={{
@@ -174,13 +156,13 @@ export const RutinasProvider = ({ children }) => {
         registrarRutina,
         actualizarRutina,
         eliminarRutina,
-        obtenerRutinas,
         obtenerRutinaPorId,
         setDataModal,
         obtenerEjercicios,
         obtenerEjercicioPorId,
         filteredExercises,
         setFilteredExercises,
+        setRutinas
       }}
     >
       {children}

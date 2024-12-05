@@ -1,9 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "@context/AuthProvider";
 import { infoAlert, successUpdateAlert, errorAlert } from "@utils/AlertFunctions";
+import { useNavigate } from "react-router-dom";
 
 const FormularioPerfil = () => {
   const { auth, actualizarPerfil, obtenerPerfilEntrenador } = useContext(AuthContext);
+
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     name: "",
@@ -43,6 +46,7 @@ const FormularioPerfil = () => {
     const resultado = await actualizarPerfil(form);
     if (resultado.exito) {
       successUpdateAlert(resultado.respuesta);
+      navigate("/dashboard");
     } else {
       errorAlert(resultado.respuesta);
     }
