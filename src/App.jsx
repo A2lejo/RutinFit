@@ -28,43 +28,58 @@ import VisualizarRutina from './pages/VisualizarRutina';
 
 import VisualizarEjercicios from './pages/VisualizarEjercicios';
 
+import { PrivateRouteWithRole } from './routes/PrivateRouteWithRole';
+
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <AuthProvider>
-          <RutinasProvider>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/contacto" element={<Contacto />} />
-              <Route path="/app" element={<AppClientes />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/forgot" element={<Forgot />} />
-              <Route path="/recovery/:token" element={<Restablecer />} />
-              <Route path="/nuevo-password/:token" element={<NuevoPassword />} />
-              <Route path="*" element={<NotFound />} />
-              <Route path="/dashboard" element={<Dashboard />}>
-                <Route index element={<Perfil />} />
-                <Route path="perfil/editar" element={<FormularioPerfil />} />
-                <Route element={<ProtectedRoute allowedRoles={['administrador']} />}>
-                  <Route path="entrenadores" element={<Entrenadores />} />
-                  <Route path="entrenadores/registrar" element={<RegistrarEntrenador />} />
-                  <Route path="entrenadores/visualizar/:id" element={<VisualizarEntrenador />} />
-                  <Route path="entrenadores/editar/:id" element={<ActualizarEntrenador />} />
-                </Route>
-                <Route element={<ProtectedRoute allowedRoles={['administrador', 'entrenador']} />}>
-                  <Route path="clientes" element={<Clientes />} />
-                  <Route element={<ProtectedRoute allowedRoles={['entrenador']} />}>
-                    <Route path="clientes/visualizar/:id" element={<VisualizarCliente />} />
-                    <Route path="rutinas/:id" element={<VisualizarRutina />} />
-                    <Route path="ejercicios/:id" element={<VisualizarEjercicios />} />
-                    <Route path="chat" element={<Chat />} />
-                  </Route>
-                </Route>
-              </Route>
-            </Routes>
-          </RutinasProvider>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/contacto" element={<Contacto />} />
+            <Route path="/app" element={<AppClientes />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/forgot" element={<Forgot />} />
+            <Route path="/recovery/:token" element={<Restablecer />} />
+            <Route path="/nuevo-password/:token" element={<NuevoPassword />} />
+            <Route path="*" element={<NotFound />} />
+            <Route path="/dashboard/*" element={
+              <RutinasProvider>
+                <ProtectedRoute>
+                  <Routes>
+                    <Route element={<Dashboard />} >
+                      <Route index element={<Perfil />} />
+                      <Route path="perfil/editar" element={<FormularioPerfil />} />
+
+                      <Route path='/entrenadores/*' element={<PrivateRouteWithRole role='administrador'>
+                        <Routes>
+                          <Route path="/" element={<Entrenadores />} />
+                          <Route path="/registrar" element={<RegistrarEntrenador />} />
+                          <Route path="/visualizar/:id" element={<VisualizarEntrenador />} />
+                          <Route path="/editar/:id" element={<ActualizarEntrenador />} />
+                        </Routes>
+                      </PrivateRouteWithRole>}></Route>
+
+                      <Route path="clientes" element={<Clientes />} />
+
+                      <Route path='/*' element={<PrivateRouteWithRole role='entrenador'>
+                        <Routes>
+                          <Route path="clientes/visualizar/:id" element={<VisualizarCliente />} />
+                          <Route path="rutinas/:id" element={<VisualizarRutina />} />
+                          <Route path="ejercicios/:id" element={<VisualizarEjercicios />} />
+                          <Route path="chat" element={<Chat />} />
+                        </Routes>
+                      </PrivateRouteWithRole>} ></Route>
+
+                    </Route>
+                  </Routes>
+                </ProtectedRoute>
+              </RutinasProvider>
+            }>
+            </Route>
+          </Routes>
         </AuthProvider>
       </BrowserRouter>
     </>

@@ -1,4 +1,7 @@
 import Swal from 'sweetalert2';
+import { AuthContext } from "@context/AuthProvider";
+import { useContext } from "react";
+
 
 export const confirmDeleteAlert = async () => {
   const result = await Swal.fire({
@@ -55,7 +58,14 @@ export const warningAlert = (message) => {
   Swal.fire('Advertencia', message, 'warning');
 };
 
-
 export const ConfirmAlert = async (title, message, icon) => {
   const result = await Swal.fire('Agredado', message, 'success');
 };
+
+export const errorRutina = (message) => {
+  const { auth } = useContext(AuthContext);
+  if(auth && auth.name) {
+    Swal.fire('Error', message, 'error');
+  }
+}
+

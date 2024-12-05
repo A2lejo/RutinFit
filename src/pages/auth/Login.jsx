@@ -34,18 +34,11 @@ const Login = () => {
         form
       );
       localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", JSON.stringify({
-        name: response.data.name,
-        lastname: response.data.lastname,
-        rol: response.data.rol,
-        email: response.data.email,
-        id: response.data._id,
-      }));
+      localStorage.setItem("user", JSON.stringify(response.data));
       setAuth({
         ...jwtDecode(response.data.token),
         ...response.data
       });
-
       successLoginAlert(response.data.res);
       navigate("/dashboard");
     } catch (error) {

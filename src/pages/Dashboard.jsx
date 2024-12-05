@@ -9,27 +9,18 @@ const Dashboard = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const urlActual = location.pathname;
-  const { auth } = useContext(AuthContext);
+  const { auth, logout } = useContext(AuthContext);
   const [rol, setRol] = useState("");
   const [nombre, setNombre] = useState("");
 
   useEffect(() => {
     console.log("Auth State:", auth); // Agregar console.log para ver el estado auth
-    if (auth && auth.name) {
+    if (auth) {
       setRol(auth.rol);
       setNombre(auth.name);
     }
   }, [auth]);
 
-  useEffect(() => {
-    const logout = (event) => {
-      if (event.key === "logout") {
-        navigate("/login");
-      }
-    };
-    window.addEventListener("storage", logout);
-    return () => { window.removeEventListener("storage", logout); };
-  }, [navigate]);
 
   return (
     <div className="md:flex md:min-h-screen">
@@ -81,7 +72,7 @@ const Dashboard = () => {
                   } px-3 py-2 text-xl block mt-2 hover:bg-[#82E5B5]`}
               >
                 Entrenadores
-              </Link>
+              </Link> 
             </li>
           )}
 
@@ -134,19 +125,14 @@ const Dashboard = () => {
               to="/"
               className=" text-white mr-3 text-md block hover:bg-red-900 text-center
                         bg-red-800 px-4 py-1 rounded-lg"
-              onClick={() => {
-                localStorage.removeItem("token");
-                localStorage.removeItem("user");
-                setAuth({});
-                localStorage.setItem("logout", Date.now());
-              }}
+              onClick={() => logout()}
             >
               Salir
             </Link>
           </div>
         </div>
         <div className="overflow-y-scroll p-8">
-          {auth ? <Outlet /> : <Navigate to="/login" />}
+          <Outlet />
         </div>
         <div className="bg-black h-12">
           <p className="text-center text-slate-100 leading-[2.9rem] underline">

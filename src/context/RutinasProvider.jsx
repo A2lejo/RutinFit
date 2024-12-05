@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
-import { successUpdateAlert, errorAlert, confirmDeleteAlert, ConfirmAlert, successAlert } from '@utils/AlertFunctions';
+import { successUpdateAlert, errorAlert, errorRutina, confirmDeleteAlert, ConfirmAlert, successAlert } from '@utils/AlertFunctions';
 
 const RutinasContext = createContext();
 
@@ -91,7 +91,7 @@ export const RutinasProvider = ({ children }) => {
       setRutinas(respuesta.data.rutinas);
     } catch (error) {
       console.error('Error al obtener las rutinas:', error);
-      errorAlert('Error al obtener las rutinas');
+      errorRutina('Error al obtener las rutinas');
     }
   };
 

@@ -1,11 +1,32 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode"; // Importar jwt-decode correctamente
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({});
+  const navigate = useNavigate();
+
+  const perfil = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/user/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+      const decodedToken = jwtDecode(token);
+      setAuth({...decodedToken, ...response.data });
+    } catch (error) {
+      console.error('Error al obtener el perfil:', error);
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      setAuth({});
+      navigate("/login");
+    }
+  };
 
   const obtenerPerfilDesdeToken = (token) => {
     try {
@@ -27,23 +48,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const checkTokenExpiration = () => {
-    const token = localStorage.getItem("token");
+  useEffect(() => {
+    const token = localStorage.getItem('token');
     if (token) {
-      const decodedToken = jwtDecode(token);
-      const currentTime = Date.now() / 1000; // Convertir a segundos
-
-      if (decodedToken.exp < currentTime) {
-        // El token ha expirado
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        setAuth({});
-        console.log('Token expirado, eliminado del localStorage');
-      } else {
-        obtenerPerfilDesdeToken(token);
-      }
+      perfil();      
     }
-  };
+  }, []);
 
   const restorePassword = async (email) => {
     try {
@@ -107,23 +117,23 @@ export const AuthProvider = ({ children }) => {
   const actualizarPerfil = async (form) => {
     const token = localStorage.getItem("token");
     try {
-        const response = await axios.put(
-            `${import.meta.env.VITE_BACKEND_URL}/coach/update-profile`,
-            form,
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
-        const updatedUser = response.data.updatedUser;
-        localStorage.setItem("user", JSON.stringify(updatedUser)); // Guarda el usuario actualizado en el localStorage
-        setAuth(updatedUser);
-        return { respuesta: 'Perfil actualizado correctamente', exito: true };
+      const response = await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}/coach/update-profile`,
+        form,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const updatedUser = response.data.updatedUser;
+      localStorage.setItem("user", JSON.stringify(updatedUser)); // Guarda el usuario actualizado en el localStorage
+      setAuth(updatedUser);
+      return { respuesta: 'Perfil actualizado correctamente', exito: true };
     } catch (error) {
-        console.error('Error al actualizar el perfil:', error);
-        return { respuesta: 'Error al actualizar el perfil', exito: false };
+      console.error('Error al actualizar el perfil:', error);
+      return { respuesta: 'Error al actualizar el perfil', exito: false };
     }
   };
 
@@ -139,20 +149,36 @@ export const AuthProvider = ({ children }) => {
         }
       );
       const coachProfile = response.data.coach;
-      localStorage.setItem("user", JSON.stringify(coachProfile)); // Guarda el perfil del entrenador en el localStorage
+      localStorage.setItem("user", JSON.stringify(coachProfile));
       setAuth(coachProfile);
     } catch (error) {
       console.error('Error al obtener el perfil del entrenador:', error);
     }
   };
 
-  useEffect(() => {
-    checkTokenExpiration();
-  }, []);
+  const logout = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/logout`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.data.res) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        setAuth({});
+      }
+      console.log(response.data)
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
+  }
 
   return (
     <AuthContext.Provider
-      value={{ auth, setAuth, restorePassword, confirmTokenPassword, newPassword, updatePassword, actualizarPerfil, obtenerPerfilEntrenador }}
+      value={{ auth, setAuth, restorePassword, confirmTokenPassword, newPassword, updatePassword, actualizarPerfil, obtenerPerfilEntrenador, logout }}
     >
       {children}
     </AuthContext.Provider>

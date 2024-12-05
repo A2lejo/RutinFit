@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "@context/AuthProvider";
 import { infoAlert, successUpdateAlert, errorAlert } from "@utils/AlertFunctions";
-import Alertas from "@components/Alertas";
 
 const FormularioPerfil = () => {
   const { auth, actualizarPerfil, obtenerPerfilEntrenador } = useContext(AuthContext);
