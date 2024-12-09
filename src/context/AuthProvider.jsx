@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode"; // Importar jwt-decode correctamente
+import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
@@ -31,7 +31,6 @@ export const AuthProvider = ({ children }) => {
   const obtenerPerfilDesdeToken = (token) => {
     try {
       const decodedToken = jwtDecode(token);
-      console.log("decodedToken:", decodedToken);
 
       // Información del usuario, ya que el back no envía 
       const user = JSON.parse(localStorage.getItem("user"));
@@ -170,7 +169,6 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem("user");
         setAuth({});
       }
-      console.log(response.data)
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
     }

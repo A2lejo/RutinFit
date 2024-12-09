@@ -24,7 +24,6 @@ const Chat = () => {
           },
         }
       );
-      console.log('Clientes:', respuesta.data);
       setClientes(respuesta.data);
     } catch (error) { 
       console.error('Error al listar clientes:', error);
@@ -42,7 +41,6 @@ const Chat = () => {
           },
         }
       );
-      console.log('Mensajes:', respuesta.data);
       setMensajes(respuesta.data);
     } catch (error) {
       console.error('Error al obtener mensajes:', error);
@@ -73,9 +71,9 @@ const Chat = () => {
     if (mensaje.trim() && clienteSeleccionado) {
       const newMessage = {
         client_id: clienteSeleccionado,
-        coach_id: clientes[0].coach_id, // Asegúrate de que el nombre del campo sea correcto
+        coach_id: clientes[0].coach_id, 
         message: mensaje,
-        transmitter: clientes[0].coach_id, // Asegúrate de que el nombre del campo sea correcto
+        transmitter: clientes[0].coach_id, 
         receiver: clienteSeleccionado,
         name: JSON.parse(localStorage.getItem('user')).name,
         rol: auth.rol,
@@ -97,14 +95,13 @@ const Chat = () => {
             <li>No hay clientes disponibles</li>
           ) : (
             clientes.map((cliente) => {
-              console.log('Cliente:', cliente); // Verifica los datos del cliente
               return (
                 <li
                   key={cliente._id}
                   className={`p-2 cursor-pointer border-2 border-[#0D8894] mb-1 rounded-md ${clienteSeleccionado === cliente._id ? "bg-blue-200" : ""}`}
                   onClick={() => {
                     setClienteSeleccionado(cliente._id);
-                    setMensajes([]); // Limpiar mensajes al seleccionar un nuevo cliente
+                    setMensajes([]); 
                   }}
                 >
                   {cliente.user_id.name} {cliente.user_id.lastname}

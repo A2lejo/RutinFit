@@ -7,8 +7,6 @@ const TablaRutinas = ({ rutinas }) => {
   const { eliminarRutina, handleModal, setDataModal } = useContext(RutinasContext);
   const navigate = useNavigate();
 
-  console.log('Rutinas:', rutinas); // Verificar los datos de las rutinas
-
   return (
     <div className="bg-white shadow-custom rounded-lg p-6">
       <table className="w-full mt-5 table-auto shadow-lg bg-white">
@@ -38,8 +36,8 @@ const TablaRutinas = ({ rutinas }) => {
                 <MdEdit
                   className="h-7 w-7 text-slate-800 cursor-pointer inline-block mr-2"
                   onClick={() => {
-                    setDataModal(rutina); // Establecer dataModal con los datos de la rutina seleccionada
-                    handleModal(); // Abrir el modal
+                    setDataModal(rutina); 
+                    handleModal(); 
                   }}
                 />
                 <MdDeleteForever

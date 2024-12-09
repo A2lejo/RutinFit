@@ -9,7 +9,6 @@ const ModalHistorialProgresos = ({ clienteId, handleClose }) => {
 
   useEffect(() => {
     const obtenerProgresos = async () => {
-      console.log('clienteId:', clienteId);
       try {
         const respuesta = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/progress/client/${clienteId}`,
@@ -20,11 +19,10 @@ const ModalHistorialProgresos = ({ clienteId, handleClose }) => {
             },
           }
         );
-        console.log('respuesta:', respuesta.data);
         setProgresos(respuesta.data.progress);
         setLoading(false);
       } catch (error) {
-        console.error('Error al obtener los progresos:', error);
+        error('Error al obtener los progresos:', error);
         setError('Error al obtener los progresos');
         setLoading(false);
       }

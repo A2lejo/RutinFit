@@ -34,7 +34,6 @@ const VisualizarCliente = () => {
             },
           }
         );
-        console.log('respuesta:', respuesta.data);
         setCliente(respuesta.data.client);
 
         // Obtener las rutinas del cliente
@@ -47,7 +46,6 @@ const VisualizarCliente = () => {
             },
           }
         );
-        console.log('rutinas:', rutinasRespuesta.data.routines);
         setRutinas(rutinasRespuesta.data.routines || []); // Asegurarse de que 'routines' sea un array
       } catch (error) {
         setMensajeRutina('EL cliente aun no tiene rutinas asignadas');

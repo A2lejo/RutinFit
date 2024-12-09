@@ -14,7 +14,6 @@ const NavbarPrincipal = () => {
       document.body.style.overflow = 'auto';
     }
 
-    // Cleanup function to reset the overflow style when the component unmounts
     return () => {
       document.body.style.overflow = 'auto';
     };

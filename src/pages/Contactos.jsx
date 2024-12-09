@@ -24,6 +24,7 @@ const Contactos = () => {
             return;
         }
         try {
+            console.log('Enviando correo con los siguientes datos:', formData);
             const response = await axios.post(
                 'https://api.sendinblue.com/v3/smtp/email',
                 {

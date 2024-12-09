@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TablaEntrenadores from '../components/TablaEntrenadores';
+import { validateLetters } from '@utils/validations';
 
 const Entrenadores = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
 
   const handleSearchChange = (e) => {
-    setSearch(e.target.value);
+    const { value } = e.target;
+    if (validateLetters(value)) {
+      setSearch(value);
+    }
   };
 
   const handleAddEntrenador = () => {

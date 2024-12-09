@@ -24,7 +24,6 @@ const VisualizarEntrenador = () => {
           }
         );
 
-        console.log(respuesta.data);
         if (respuesta.data) {
           setEntrenador(respuesta.data);
         } else {
@@ -47,7 +46,6 @@ const VisualizarEntrenador = () => {
           }
         );
 
-        console.log(respuesta.data);
         if (respuesta.data) {
           setClientes(respuesta.data.clients);
         } else {

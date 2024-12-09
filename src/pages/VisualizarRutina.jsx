@@ -1,6 +1,5 @@
 import { useState, useContext, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { AuthContext } from "@context/AuthProvider";
 import RutinasContext from "@context/RutinasProvider";
 import Alertas from "@components/Alertas";
 import { MdInfo } from "react-icons/md";
@@ -8,7 +7,6 @@ import { MdInfo } from "react-icons/md";
 const VisualizarRutina = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { auth } = useContext(AuthContext);
   const { obtenerRutinaPorId } = useContext(RutinasContext);
   const [rutina, setRutina] = useState(null);
 
@@ -87,7 +85,6 @@ const VisualizarRutina = () => {
                           <MdInfo
                             className="h-5 w-5 text-slate-800 cursor-pointer ml-2"
                             onClick={() => {
-                              console.log('Navigating to exercise ID:', exercise._id); // Verificar el ID del ejercicio
                               navigate(`/dashboard/ejercicios/${exercise._id}`);
                             }}
                           />

@@ -95,7 +95,6 @@ export const RutinasProvider = ({ children }) => {
           },
         }
       );
-      console.log('Rutina obtenida:', respuesta.data.routine);
       return respuesta.data.routine;
     } catch (error) {
       console.error('Error al obtener la rutina:', error);
@@ -129,7 +128,6 @@ export const RutinasProvider = ({ children }) => {
 
   const obtenerEjercicioPorId = async (id) => {
     try {
-      console.log('ID del ejercicio en obtenerEjercicioPorId:', id); // Verificar el ID del ejercicio
       const respuesta = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/view-exercises/${id}`,
         {

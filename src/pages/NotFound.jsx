@@ -9,7 +9,7 @@ const NotFound = () => {
         className="object-cover h-80 w-80 rounded-full border-4 border-solid border-slate-600"
         src={NotFoundImage}
         alt="Page Not Found"
-        style={{ objectPosition: "center top" }} // Ajustar la posición de la imagen
+        style={{ objectPosition: "center top" }}
       />
       <div className="flex flex-col items-center justify-center">
         <p className="text-3xl md:text-4xl lg:text-5xl text-gray-800 mt-12">

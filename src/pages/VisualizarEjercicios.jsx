@@ -10,11 +10,9 @@ const VisualizarEjercicios = () => {
   const [ejercicio, setEjercicio] = useState(null);
 
   useEffect(() => {
-    console.log('ID del ejercicio:', id); 
     const fetchEjercicio = async () => {
       try {
         const ejercicioObtenido = await obtenerEjercicioPorId(id);
-        console.log('Ejercicio obtenido:', ejercicioObtenido);
         setEjercicio(ejercicioObtenido);
       } catch (error) {
         console.error('Error al obtener el ejercicio:', error);

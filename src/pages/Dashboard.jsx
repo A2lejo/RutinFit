@@ -3,18 +3,15 @@ import { Link, Outlet, useLocation, Navigate } from "react-router-dom";
 import { AuthContext } from "@context/AuthProvider";
 import IconoEntrenador from "@assets/IconoEntrenador.png";
 import IconoUsuario from "@assets/IconoUsuario.png";
-import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const urlActual = location.pathname;
   const { auth, logout } = useContext(AuthContext);
   const [rol, setRol] = useState("");
   const [nombre, setNombre] = useState("");
 
   useEffect(() => {
-    console.log("Auth State:", auth); // Agregar console.log para ver el estado auth
     if (auth) {
       setRol(auth.rol);
       setNombre(auth.name);

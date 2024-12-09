@@ -12,7 +12,6 @@ const CardPerfil = () => {
   });
 
 useEffect(() => {
-  console.log("Auth State in CardPerfil:", auth); 
   if (auth && auth.name) {
     setPerfil({
       nombre: auth.name,

@@ -16,7 +16,7 @@ const FormularioPerfil = () => {
   });
 
   useEffect(() => {
-    obtenerPerfilEntrenador(); // Llama a la función para obtener el perfil del entrenador
+    obtenerPerfilEntrenador();
   }, []);
 
   useEffect(() => {

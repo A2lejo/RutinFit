@@ -1,14 +1,18 @@
 import React, { useState, useContext } from 'react';
-import { confirmDeleteAlert, successAlert } from '../utils/AlertFunctions.js';
 import TablaClientes from '../components/TablaClientes';
 import { AuthContext } from '@context/AuthProvider';
+import { validateLetters } from '@utils/validations';
 
 const Clientes = () => {
   const [search, setSearch] = useState('');
   const { auth } = useContext(AuthContext);
 
+
   const handleSearchChange = (e) => {
-    setSearch(e.target.value);
+    const { value } = e.target
+    if (validateLetters(value)) {
+      setSearch(value);
+    }
   };
 
   return (

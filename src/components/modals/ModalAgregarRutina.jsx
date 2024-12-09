@@ -1,9 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import RutinasContext from '@context/RutinasProvider';
 
 const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
-  const { handleModal, registrarRutina, actualizarRutina, dataModal, obtenerEjercicios, filteredExercises, setFilteredExercises, rutinas, setRutinas } = useContext(RutinasContext);
+  const { handleModal, registrarRutina, actualizarRutina, dataModal, obtenerEjercicios, filteredExercises, rutinas, setRutinas } = useContext(RutinasContext);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -14,7 +13,7 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
   };
 
   const [form, setForm] = useState({
-    client_id: clienteId,
+    client_id: clienteId, 
     coach_id: coachId,
     nameRoutine: dataModal?.nameRoutine ?? '',
     start_date: dataModal ? formatDate(dataModal.start_date) : '',

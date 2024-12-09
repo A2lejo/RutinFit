@@ -20,7 +20,6 @@ const TablaClientes = ({ search }) => {
         ruta = '/coach/get-clients';
       }
 
-      console.log('Ruta utilizada:', ruta);
 
       const respuesta = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}${ruta}`,
@@ -31,7 +30,6 @@ const TablaClientes = ({ search }) => {
           },
         }
       );
-      console.log('Respuesta de la API:', respuesta.data);
       setClientes(respuesta.data.clients || respuesta.data || []);
     } catch (error) {
       console.error('Error al listar clientes:', error);
@@ -40,7 +38,6 @@ const TablaClientes = ({ search }) => {
 
   useEffect(() => {
     if (auth && auth.id) {
-      console.log('Usuario autenticado:', auth);
       listarClientes();
     } else {
       console.log('Usuario no autenticado');
@@ -58,7 +55,7 @@ const TablaClientes = ({ search }) => {
         },
       });
       successAlert('El cliente ha sido eliminado.');
-      listarClientes(); // Refresh the list after deletion
+      listarClientes(); 
     } catch (error) {
       console.error('Error al eliminar cliente:', error);
     }
