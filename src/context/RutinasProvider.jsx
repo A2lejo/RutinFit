@@ -1,6 +1,6 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState } from 'react';
 import axios from 'axios';
-import { successUpdateAlert, errorAlert, errorRutina, confirmDeleteAlert, ConfirmAlert, successAlert } from '@utils/AlertFunctions';
+import { successUpdateAlert, errorAlert, confirmDeleteAlert, ConfirmAlert, successAlert } from '@utils/AlertFunctions';
 
 const RutinasContext = createContext();
 
@@ -33,6 +33,8 @@ export const RutinasProvider = ({ children }) => {
       errorAlert('Error al registrar la rutina');
     }
   };
+
+  
 
   const actualizarRutina = async (form, id) => {
     try {
@@ -143,6 +145,7 @@ export const RutinasProvider = ({ children }) => {
       errorAlert('Error al obtener el ejercicio');
     }
   };
+
 
   return (
     <RutinasContext.Provider

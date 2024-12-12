@@ -26,24 +26,8 @@ const Contactos = () => {
         try {
             console.log('Enviando correo con los siguientes datos:', formData);
             const response = await axios.post(
-                'https://api.sendinblue.com/v3/smtp/email',
-                {
-                    sender: { email: formData.correo, name: formData.nombre },
-                    to: [{ email: 'rutinfit24@gmail.com' }],
-                    subject: formData.asunto,
-                    htmlContent: `
-                        <p><strong>Nombre:</strong> ${formData.nombre}</p>
-                        <p><strong>Correo:</strong> ${formData.correo}</p>
-                        <p><strong>¿Es usuario?:</strong> ${formData.usuario}</p>
-                        <p><strong>Mensaje:</strong> ${formData.mensaje}</p>
-                    `,
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'api-key': import.meta.env.VITE_SENDINBLUE_API_KEY,
-                    },
-                }
+                `${import.meta.env.VITE_BACKEND_URL}/send-email`,
+                formData,
             );
             console.log('Correo enviado:', response.data);
             alert('Correo enviado correctamente');
@@ -163,7 +147,7 @@ const Contactos = () => {
                                 >
                                     Enviar
                                 </button>
-                            </div>
+                            </div>  
                         </form>
                     </div>
                 </div>

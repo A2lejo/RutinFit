@@ -50,6 +50,8 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
         comments: '',
       });
     }
+    console.log(form);
+
   }, [dataModal, clienteId, coachId, days]);
 
   const handleChange = (e) => {

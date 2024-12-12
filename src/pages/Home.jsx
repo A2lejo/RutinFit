@@ -20,11 +20,31 @@ const Home = () => {
           </div>
         </section>
       </main>
+      <section className='text-left mx-10 my-10'>
+        <h2 className="text-3xl sm:text-5xl py-2 font-medium md:text-6xl font-serif"> ¿Por qué elegirnos?</h2>
+        <div className="flex flex-col md:flex-row items-center">
+          <div className="w-full md:w-1/3 p-4 bg-[#0D9588] rounded-lg m-2">
+            <p className="text-sm sm:text-md py-5 leading-8 md:text-xl max-w-lg mx-auto md:mx-0 text-white text-justify">
+              En Rutin Fit, te ofrecemos un entrenamiento personalizado, adaptado a tus necesidades y objetivos. Nuestros profesionales te guiarán, para que puedas alcanzar tus metas sin necesidad de tener que contar con un entrenador presencial. ¡No esperes más y comienza a entrenar con nosotros!
+            </p>
+          </div>
+          <div className="w-full md:w-1/3 p-4 bg-[#0D9588] rounded-lg m-2 flex justify-center">
+            <p className='text-sm sm:text-md py-5 leading-8 md:text-xl max-w-lg mx-auto md:mx-0 text-white text-justify'>
+              ¡Únete a nosotros! Puedes ser parte de este equipo. Si tienes experiencia como entrenador comunicate con nosotros, de esta manera ayudarás a que personas que lo necesitan puedan mejorar su condición física, con tu ayuda ellos podrán alcanzar metas de manera más sencilla.
+            </p>
+          </div>
+          <div className="w-full md:w-1/3 p-4 bg-[#0D9588] rounded-lg m-2 flex justify-center">
+            <p className='text-sm sm:text-md py-5 leading-8 md:text-xl max-w-lg mx-auto md:mx-0 text-white text-justify'>
+              Si eres uno de nuestros nuevos clientes. ¡Bienvenido! Tienes a tu disposición varios entrenadores los cuales cuentan con experiencia para poder ayudarte a cumplir tus objetivos, así que descarga la aplicación la cual está diseñada específicamente para los clientes y empecemos con tu entrenamiento.
+            </p>
+          </div>
+        </div>
+      </section>
       <section id='contact-section' className=' bg-[#82E5B5]'>
         <div className='text-left mx-10 my-10 p-4'>
           <div className="w-full md:w-1/2 p-4">
             <h2 className="text-2xl sm:text-xl py-2 font-medium md:text-5xl font-serif"> Contáctanos</h2>
-            <p className="text-xs sm:text-sm py-5 leading-8 md:text-xl max-w-lg mx-auto md:mx-0">
+            <p className="text-xs sm:text-sm py-5 leading-8 md:text-xl max-w-lg mx-auto md:mx-0 text-justify">
               Quieres mejorar tu rendimiento físico, pero no sabes por dónde empezar. ¡No te preocupes! En Rutin Fit, te ofrecemos la mejor solución para que puedas entrenar de forma segura y efectiva. Contacta con nosotros y comienza a disfrutar de los beneficios de un entrenamiento personalizado.
             </p>
           </div>
@@ -41,7 +61,7 @@ const Home = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                   <FaEnvelope className="text-white" />
-                  <a href="mailto:rutinfit24@gmail.com"  className="text-white">rutinfit24@gmail.com</a>
+                  <a href="mailto:rutinfit24@gmail.com" className="text-white">rutinfit24@gmail.com</a>
                 </div>
                 <div className="flex items-center space-x-5">
                   <a href="https://www.facebook.com" target="_blank" rel="noreferrer">
@@ -66,7 +86,7 @@ const Home = () => {
         <div className="flex flex-col md:flex-row items-center">
           <div className="w-full md:w-1/2">
             <h2 className="text-3xl sm:text-5xl py-2 font-medium md:text-6xl font-serif"> App de Rutin<span className="text-[#82E5B5]">Fit</span></h2>
-            <p className="text-sm sm:text-md py-5 leading-8 md:text-xl max-w-lg mx-auto md:mx-0">
+            <p className="text-sm sm:text-md py-5 leading-8 md:text-xl max-w-lg mx-auto md:mx-0 text-justify">
               No importa si ya tienes experiencia o si recién estás comenzando a practicar actividad física, una cosa es segura: ¡al descargar gratis la aplicación Rutin Fit, obtienes el mejor aliado para tu rutina de entrenamiento!
             </p>
             <div className="flex justify-center md:justify-start pb-4">
