@@ -21,6 +21,7 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
     duration_days: dataModal?.duration_days ?? 0,
     days: dataModal?.days ?? days.map(day => ({ day, exercises: [] })),
     comments: dataModal?.comments ?? '',
+    _id: dataModal?._id ?? null,
   });
 
   const [searches, setSearches] = useState(days.map(() => ''));
@@ -37,7 +38,9 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
         duration_days: dataModal.duration_days,
         days: dataModal.days,
         comments: dataModal.comments,
+        _id: dataModal._id,
       });
+      console.log("Id de la rutina: ", dataModal._id);
     } else {
       setForm({
         client_id: clienteId,
@@ -48,9 +51,10 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
         duration_days: 0,
         days: days.map(day => ({ day, exercises: [] })),
         comments: '',
+        _id: null,
       });
     }
-    console.log(form);
+    console.log(form);  
 
   }, [dataModal, clienteId, coachId, days]);
 
@@ -95,6 +99,7 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (dataModal) {
+      console.log("Id de la rutina actualizar: ", dataModal._id);
       await actualizarRutina(form, dataModal._id);
     } else {
       await registrarRutina(form);
@@ -116,7 +121,7 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
               id="nameRoutine"
               name="nameRoutine"
               type="text"
-              className="border-2 w-full p-2 rounded-md"
+              className="border-2 w-full p-2 rounded-md" 
               value={form.nameRoutine}
               onChange={handleChange}
               required

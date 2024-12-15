@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect} from 'react';
 import axios from 'axios';
 import { successUpdateAlert, errorAlert, confirmDeleteAlert, ConfirmAlert, successAlert } from '@utils/AlertFunctions';
 
@@ -37,7 +37,9 @@ export const RutinasProvider = ({ children }) => {
   
 
   const actualizarRutina = async (form, id) => {
+
     try {
+      console.log("id de la rutina: ", id); 
       const respuesta = await axios.put(
         `${import.meta.env.VITE_BACKEND_URL}/routine/update-routine/${id}`,
         form,
@@ -48,10 +50,12 @@ export const RutinasProvider = ({ children }) => {
           },
         }
       );
+
+      console.log(respuesta.data);
       successUpdateAlert('Rutina actualizada correctamente');
 
       const rutinasActualizadas = rutinas.map((rutina) =>
-        rutina._id === id ? respuesta.data.rutina : rutina
+        rutina._id === id ? respuesta.data.updatedRputine : rutina
       );
       setRutinas(rutinasActualizadas);
 
@@ -99,7 +103,7 @@ export const RutinasProvider = ({ children }) => {
       );
       return respuesta.data.routine;
     } catch (error) {
-      console.error('Error al obtener la rutina:', error);
+      console.error('Error al actualizar la rutina:', error.response ? error.response.data : error.message);
       errorAlert('Error al obtener la rutina');
     }
   };

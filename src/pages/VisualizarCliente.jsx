@@ -48,7 +48,7 @@ const VisualizarCliente = () => {
         );
         setRutinas(rutinasRespuesta.data.routines || []); // Asegurarse de que 'routines' sea un array
       } catch (error) {
-        setMensajeRutina('EL cliente aun no tiene rutinas asignadas');
+        setMensajeRutina('El cliente aún no tiene rutinas asignadas');
       }
     };
 
