@@ -28,6 +28,7 @@ export const RutinasProvider = ({ children }) => {
       );
       ConfirmAlert('', 'Rutina registrada correctamente');
       setRutinas([...rutinas, respuesta.data.rutina]);
+      window.location.reload();
     } catch (error) {
       console.error('Error al registrar la rutina:', error);
       errorAlert('Error al registrar la rutina');
@@ -55,9 +56,10 @@ export const RutinasProvider = ({ children }) => {
       successUpdateAlert('Rutina actualizada correctamente');
 
       const rutinasActualizadas = rutinas.map((rutina) =>
-        rutina._id === id ? respuesta.data.updatedRputine : rutina
+        rutina._id === id ? respuesta.data.updatedRoutine : rutina
       );
       setRutinas(rutinasActualizadas);
+      window.location.reload();
 
     } catch (error) {
       console.error('Error al actualizar la rutina:', error);

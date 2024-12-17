@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import Autosuggest from 'react-autosuggest';
 import RutinasContext from '@context/RutinasProvider';
 
 const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
@@ -62,13 +63,12 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSearchChange = async (index, e) => {
+  const handleSearchChange = async (index, { value }) => {
     const newSearches = [...searches];
-    newSearches[index] = e.target.value;
+    newSearches[index] = value;
     setSearches(newSearches);
-    const searchQuery = e.target.value;
-    if (searchQuery) {
-      await obtenerEjercicios(searchQuery);
+    if (value) {
+      await obtenerEjercicios(value);
       const newSuggestions = [...suggestions];
       newSuggestions[index] = filteredExercises;
       setSuggestions(newSuggestions);
@@ -88,6 +88,10 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
     const newSuggestions = [...suggestions];
     newSuggestions[dayIndex] = [];
     setSuggestions(newSuggestions);
+
+    const newSearches = [...searches];
+    newSearches[dayIndex] = '';
+    setSearches(newSearches);
   };
 
   const handleExerciseRemove = (dayIndex, exerciseId) => {
@@ -107,6 +111,14 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
     }
     handleModal();
   };
+
+  const renderSuggestion = suggestion => (
+    <div>
+      {suggestion.name}
+    </div>
+  );
+
+  const getSuggestionValue = suggestion => suggestion.name;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -162,28 +174,31 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={`search-${index}`}>
                   Buscar Ejercicios
                 </label>
-                <input
-                  id={`search-${index}`}
-                  name="search"
-                  type="text"
-                  className="border-2 w-full p-2 rounded-md"
-                  value={searches[index]}
-                  onChange={(e) => handleSearchChange(index, e)}
-                  placeholder="Escribe para buscar..."
+                <Autosuggest className=""
+                  suggestions={suggestions[index]}
+                  onSuggestionsFetchRequested={({ value }) => handleSearchChange(index, { value })}
+                  onSuggestionsClearRequested={() => setSuggestions(suggestions.map((s, i) => i === index ? [] : s))}
+                  getSuggestionValue={getSuggestionValue}
+                  renderSuggestion={renderSuggestion}
+                  onSuggestionSelected={(event, { suggestion }) => handleExerciseSelect(index, suggestion)}
+                  inputProps={{
+                    placeholder: 'Escribe para buscar...',
+                    value: searches[index],
+                    onChange: (e, { newValue }) => {
+                      const newSearches = [...searches];
+                      newSearches[index] = newValue;
+                      setSearches(newSearches);
+                    },
+                    className: "border-2 w-full p-2 rounded-md"
+                  }}
+                  theme={{
+                    container: "relative",
+                    input: "border-2 w-full p-2 rounded-md",
+                    suggestionsContainer: "absolute z-10 bg-white border border-gray-300 rounded-md mt-1 w-full",
+                    suggestion: 'p-2 hover:bg-gray-200 cursor-pointer',
+                    suggestionHighlighted: 'bg-gray-200'
+                  }}
                 />
-                {suggestions[index].length > 0 && (
-                  <ul className="mt-2 border border-gray-300 rounded-md max-h-40 overflow-y-auto">
-                    {suggestions[index].map((exercise) => (
-                      <li
-                        key={exercise._id}
-                        className="p-2 cursor-pointer hover:bg-gray-200"
-                        onClick={() => handleExerciseSelect(index, exercise)}
-                      >
-                        {exercise.name}
-                      </li>
-                    ))}
-                  </ul>
-                )}
                 <div className="mt-2">
                   <h3 className="text-lg font-bold mb-2">Ejercicios Seleccionados</h3>
                   <ul>
