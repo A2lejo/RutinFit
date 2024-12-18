@@ -30,6 +30,7 @@ const TablaClientes = ({ search }) => {
           },
         }
       );
+      console.log('Clientes:', respuesta.data.clients || respuesta.data || []);
       setClientes(respuesta.data.clients || respuesta.data || []);
     } catch (error) {
       console.error('Error al listar clientes:', error);
@@ -55,16 +56,14 @@ const TablaClientes = ({ search }) => {
         },
       });
       successAlert('El cliente ha sido eliminado.');
-      listarClientes(); 
+      listarClientes();
     } catch (error) {
       console.error('Error al eliminar cliente:', error);
     }
   };
 
   const filteredClientes = clientes.filter((cliente) => {
-    const nombreCompleto = auth.rol === 'administrador'
-      ? `${cliente.name ?? ''} ${cliente.lastname ?? ''}`.toLowerCase()
-      : `${cliente.user_id?.name ?? ''} ${cliente.user_id?.lastname ?? ''}`.toLowerCase();
+    const nombreCompleto = `${cliente.user_id?.name ?? ''} ${cliente.user_id?.lastname ?? ''}`.toLowerCase();
     return nombreCompleto.includes(search.toLowerCase());
   });
 
@@ -92,38 +91,30 @@ const TablaClientes = ({ search }) => {
               <tr className="border-b hover:bg-gray-300 text-center" key={cliente.client_id || cliente._id}>
                 <td className="p-2">{index + 1}</td>
                 <td className="p-2">
-                  {auth.rol === 'administrador'
-                    ? `${cliente.name} ${cliente.lastname}`
-                    : `${cliente.user_id?.name} ${cliente.user_id?.lastname}`}
+                  {cliente.user_id?.name} {cliente.user_id?.lastname}
                 </td>
                 <td className="p-2 hidden md:table-cell">
-                  {auth.rol === 'administrador'
-                    ? cliente.email
-                    : cliente.user_id?.email}
+                  {cliente.user_id?.email}
                 </td>
                 <td className="p-2 hidden md:table-cell">{cliente.height} cm</td>
                 <td className="p-2 hidden md:table-cell">{cliente.weight} kg</td>
                 <td className="p-2 hidden md:table-cell">
-                  <span className={`bg-blue-100 text-xs font-medium mr-2 px-2.5 py-0.5 rounded ${auth.rol === 'administrador' ? (cliente.status ? 'text-green-500 dark:bg-blue-900 dark:text-blue-300' : 'text-red-500 dark:bg-red-900 dark:text-red-300') : (cliente.user_id?.status ? 'text-green-500 dark:bg-blue-900 dark:text-blue-300' : 'text-red-500 dark:bg-red-900 dark:text-red-300')}`}>
-                    {auth.rol === 'administrador'
-                      ? (cliente.status ? 'activo' : 'inactivo')
-                      : (cliente.user_id?.status ? 'activo' : 'inactivo')}
+                  <span className={`bg-blue-100 text-xs font-medium mr-2 px-2.5 py-0.5 rounded ${(cliente.user_id?.status ? 'text-green-500 dark:bg-blue-900 dark:text-blue-300' : 'text-red-500 dark:bg-red-900 dark:text-red-300')}`}>
+                    {cliente.user_id?.status ? 'activo' : 'inactivo'}
                   </span>
                 </td>
-                <td className="p-2 text-center">
-                  {auth.rol === 'entrenador' && (
+                {auth.rol === 'entrenador' && (
+                  <td className="p-2 text-center">
                     <MdInfo
                       className="h-7 w-7 text-slate-800 cursor-pointer inline-block mr-2"
                       onClick={() => navigate(`/dashboard/clientes/visualizar/${cliente.client_id || cliente._id}`)}
                     />
-                  )}
-                  {auth.rol === 'entrenador' && (
                     <MdDeleteForever
                       className="h-7 w-7 text-red-900 cursor-pointer inline-block"
                       onClick={() => handleDelete(cliente.client_id || cliente._id)}
                     />
-                  )}
-                </td>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

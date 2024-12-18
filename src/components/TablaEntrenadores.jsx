@@ -22,7 +22,6 @@ const TablaEntrenadores = ({ search }) => {
           },
         }
       );
-      console.log('respuesta:', respuesta.data);
       setEntrenadores(respuesta.data);
     } catch (error) {
       console.error('Error al listar entrenadores:', error);

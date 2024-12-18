@@ -36,6 +36,7 @@ const VisualizarCliente = () => {
         );
         setCliente(respuesta.data.client);
 
+        setRutinas([]); // Limpiar las rutinas antes de obtener las nuevas
         // Obtener las rutinas del cliente
         const rutinasRespuesta = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/routine/view-routines/${id}`,
@@ -47,7 +48,7 @@ const VisualizarCliente = () => {
           }
         );
         setRutinas(rutinasRespuesta.data.routines || []); // Asegurarse de que 'routines' sea un array
-      } catch (error) {
+      } catch (error) {        
         setMensajeRutina('El cliente aún no tiene rutinas asignadas');
       }
     };
