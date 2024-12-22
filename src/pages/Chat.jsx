@@ -25,7 +25,7 @@ const Chat = () => {
         }
       );
       setClientes(respuesta.data);
-    } catch (error) { 
+    } catch (error) {
       console.error('Error al listar clientes:', error);
     }
   };
@@ -33,7 +33,7 @@ const Chat = () => {
   const obtenerMensajes = async () => {
     try {
       const respuesta = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/chats/${clienteSeleccionado}/${clientes[0].coach_id}`, 
+        `${import.meta.env.VITE_BACKEND_URL}/chats/${clienteSeleccionado}/${clientes[0].coach_id}`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -41,6 +41,7 @@ const Chat = () => {
           },
         }
       );
+      socket.emit("join", clientes[0].coach_id);
       setMensajes(respuesta.data);
     } catch (error) {
       console.error('Error al obtener mensajes:', error);
@@ -64,25 +65,27 @@ const Chat = () => {
       setMensajes((state) => [...state, mensaje]);
     });
 
-    return () => socket.disconnect();
+    return () => socket.off("receive");
   }, []);
 
   const handleMensajeChat = () => {
     if (mensaje.trim() && clienteSeleccionado) {
       const newMessage = {
         client_id: clienteSeleccionado,
-        coach_id: clientes[0].coach_id, 
+        coach_id: clientes[0].coach_id,
         message: mensaje,
-        transmitter: clientes[0].coach_id, 
+        transmitter: clientes[0].coach_id,
         receiver: clienteSeleccionado,
         name: JSON.parse(localStorage.getItem('user')).name,
         rol: auth.rol,
         createdAt: Date.now()
-      };  
+      };
 
       setMensajes((prevMensajes) => [...prevMensajes, newMessage]);
       socket.emit("send", newMessage);
       setMensaje("");
+
+      console.log("Info del mensaje: ", newMessage)
     }
   };
 
@@ -101,7 +104,7 @@ const Chat = () => {
                   className={`p-2 cursor-pointer border-2 border-[#0D8894] mb-1 rounded-md ${clienteSeleccionado === cliente._id ? "bg-blue-200" : ""}`}
                   onClick={() => {
                     setClienteSeleccionado(cliente._id);
-                    setMensajes([]); 
+                    setMensajes([]);
                   }}
                 >
                   {cliente.user_id.name} {cliente.user_id.lastname}
