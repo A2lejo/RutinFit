@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import axios from "axios";
 import { io } from "socket.io-client";
 import { AuthContext } from "@context/AuthProvider";
-
 
 const socket = io(`${import.meta.env.VITE_BACKEND_URL}`.replace("/api/v1", ""));
 
@@ -12,6 +11,7 @@ const Chat = () => {
   const [clientes, setClientes] = useState([]);
   const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
   const { auth } = useContext(AuthContext);
+  const divref = useRef(null);
 
   const listarClientes = async () => {
     try {
@@ -31,20 +31,24 @@ const Chat = () => {
   };
 
   const obtenerMensajes = async () => {
-    try {
-      const respuesta = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/chats/${clienteSeleccionado}/${clientes[0].coach_id}`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
-      socket.emit("join", clientes[0].coach_id);
-      setMensajes(respuesta.data);
-    } catch (error) {
-      console.error('Error al obtener mensajes:', error);
+    if (clientes.length > 0 && clienteSeleccionado) {
+      try {
+        const respuesta = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/chats/${clienteSeleccionado}/${clientes[0].coach_id}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        );
+        socket.emit("join", clientes[0].coach_id);
+        console.log("Respuesta de obtener mensajes: ", respuesta.data.chat);
+        setMensajes(respuesta.data.chat.length > 0 ? respuesta.data.chat : []);
+      } catch (error) {
+        console.error('Error al obtener mensajes:', error);
+        setMensajes([]); // Asegúrate de que mensajes sea un array vacío en caso de error
+      }
     }
   }
 
@@ -52,15 +56,13 @@ const Chat = () => {
     if (clienteSeleccionado) {
       obtenerMensajes();
     }
-  }, [clienteSeleccionado]);
+  }, [clienteSeleccionado, clientes]);
 
   useEffect(() => {
     listarClientes();
   }, []);
 
-
   useEffect(() => {
-
     socket.on("receive", (mensaje) => {
       setMensajes((state) => [...state, mensaje]);
     });
@@ -68,8 +70,12 @@ const Chat = () => {
     return () => socket.off("receive");
   }, []);
 
+  useEffect(() => {
+    divref.current.scrollIntoView({ behavior: "smooth" });
+  }, [mensajes, divref, clienteSeleccionado]);
+
   const handleMensajeChat = () => {
-    if (mensaje.trim() && clienteSeleccionado) {
+    if (mensaje.trim() && clienteSeleccionado && clientes.length > 0) {
       const newMessage = {
         client_id: clienteSeleccionado,
         coach_id: clientes[0].coach_id,
@@ -94,10 +100,10 @@ const Chat = () => {
       <div className="md:w-1/4 bg-gray-100 p-4 border-r-2 border-[#0D8894]">
         <h2 className="text-2xl font-bold mb-4 text-[#0D8894]">Clientes</h2>
         <ul>
-          {clientes.length === 0 ? (
+          {Array.isArray(clientes) && clientes.length === 0 ? (
             <li>No hay clientes disponibles</li>
           ) : (
-            clientes.map((cliente) => {
+            Array.isArray(clientes) && clientes.map((cliente) => {
               return (
                 <li
                   key={cliente._id}
@@ -116,10 +122,10 @@ const Chat = () => {
       </div>
       <div className="flex-1 flex flex-col justify-between p-4">
         <div className="flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch">
-          <div className="chat-message overflow-y-auto h-[29rem]">
-            {mensajes.map(
+          <div className="chat-message overflow-y-auto h-[29rem]  ">
+            {mensajes.length > 0 && mensajes.map(
               ({ message, transmitter, createdAt, name, rol }, index) =>
-                transmitter === clientes[0].coach_id ? (
+                transmitter === (clientes.length > 0 ? clientes[0].coach_id : null) ? (
                   <div key={index} className="flex items-end justify-end my-2">
                     <div className="flex flex-col items-end">
                       <span className="text-xs mr-2.5">{name}</span>
@@ -164,7 +170,8 @@ const Chat = () => {
                     />
                   </div>
                 )
-            )}
+            )} 
+            <div ref={divref} />
           </div>
         </div>
         <div className="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
