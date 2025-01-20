@@ -7,8 +7,6 @@ const TablaRutinas = ({ rutinas }) => {
   const { eliminarRutina, handleModal, setDataModal } = useContext(RutinasContext);
   const navigate = useNavigate();
 
-  console.log("info de rutinas: ", rutinas);
-
   return (
     <div className="bg-white shadow-custom rounded-lg p-6">
       <table className="w-full mt-5 table-auto shadow-lg bg-white">
@@ -38,7 +36,6 @@ const TablaRutinas = ({ rutinas }) => {
                 <MdEdit
                   className="h-7 w-7 text-slate-800 cursor-pointer inline-block mr-2"
                   onClick={() => {
-                    console.log("rutina a editar: ", rutina); // Verificar el objeto rutina completo
                     setDataModal(rutina); 
                     handleModal(); 
                   }}

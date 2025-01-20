@@ -24,12 +24,10 @@ const Contactos = () => {
             return;
         }
         try {
-            console.log('Enviando correo con los siguientes datos:', formData);
             const response = await axios.post(
                 `${import.meta.env.VITE_BACKEND_URL}/send-email`,
                 formData,
             );
-            console.log('Correo enviado:', response.data);
             alert('Correo enviado correctamente');
         } catch (error) {
             console.error('Error al enviar el correo:', error.response ? error.response.data : error.message);

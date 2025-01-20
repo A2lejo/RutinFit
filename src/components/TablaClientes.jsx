@@ -30,7 +30,6 @@ const TablaClientes = ({ search }) => {
           },
         }
       );
-      console.log('Clientes:', respuesta.data.clients || respuesta.data || []);
       setClientes(respuesta.data.clients || respuesta.data || []);
     } catch (error) {
       console.error('Error al listar clientes:', error);

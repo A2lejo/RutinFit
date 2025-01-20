@@ -40,7 +40,6 @@ export const RutinasProvider = ({ children }) => {
   const actualizarRutina = async (form, id) => {
 
     try {
-      console.log("id de la rutina: ", id); 
       const respuesta = await axios.put(
         `${import.meta.env.VITE_BACKEND_URL}/routine/update-routine/${id}`,
         form,
@@ -52,7 +51,6 @@ export const RutinasProvider = ({ children }) => {
         }
       );
 
-      console.log(respuesta.data);
       successUpdateAlert('Rutina actualizada correctamente');
 
       const rutinasActualizadas = rutinas.map((rutina) =>

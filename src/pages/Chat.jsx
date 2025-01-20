@@ -43,7 +43,6 @@ const Chat = () => {
           }
         );
         socket.emit("join", clientes[0].coach_id);
-        console.log("Respuesta de obtener mensajes: ", respuesta.data.chat);
         setMensajes(respuesta.data.chat.length > 0 ? respuesta.data.chat : []);
       } catch (error) {
         console.error('Error al obtener mensajes:', error);
@@ -91,7 +90,6 @@ const Chat = () => {
       socket.emit("send", newMessage);
       setMensaje("");
 
-      console.log("Info del mensaje: ", newMessage)
     }
   };
 

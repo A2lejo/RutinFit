@@ -41,7 +41,6 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
         comments: dataModal.comments,
         _id: dataModal._id,
       });
-      console.log("Id de la rutina: ", dataModal._id);
     } else {
       setForm({
         client_id: clienteId,
@@ -55,7 +54,6 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
         _id: null,
       });
     }
-    console.log(form);  
 
   }, [dataModal, clienteId, coachId, days]);
 
@@ -103,7 +101,6 @@ const ModalAgregarRutina = ({ clienteId, coachId, days }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (dataModal) {
-      console.log("Id de la rutina actualizar: ", dataModal._id);
       await actualizarRutina(form, dataModal._id);
     } else {
       await registrarRutina(form);
