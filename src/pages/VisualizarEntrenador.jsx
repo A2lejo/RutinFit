@@ -53,6 +53,7 @@ const VisualizarEntrenador = () => {
         }
       } catch (error) {
         console.error("Error al obtener los clientes:", error);
+        console.log("Error al obtener los clientes:", error.response?.data);
       }
     };
 

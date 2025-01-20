@@ -21,19 +21,21 @@ const Home = () => {
         </section>
       </main>
       <section className='text-left mx-10 my-10'>
-        <h2 className="text-3xl sm:text-5xl py-2 font-medium md:text-6xl font-serif"> ¿Por qué elegirnos?</h2>
         <div className="flex flex-col md:flex-row items-center">
-          <div className="w-full md:w-1/3 p-4 bg-[#0D9588] rounded-lg m-2">
+          <div className="w-full md:w-1/3 p-4 bg-[#0D9588] rounded-lg m-2 transition-opacity duration-500 ease-in-out opacity-75 hover:opacity-100">
+            <h2 className="text-3xl sm:text-3xl font-medium md:text-4xl font-serif mb-4"> ¿Por qué elegirnos?</h2>
             <p className="text-sm sm:text-md py-5 leading-8 md:text-xl max-w-lg mx-auto md:mx-0 text-white text-justify">
               En Rutin Fit, te ofrecemos un entrenamiento personalizado, adaptado a tus necesidades y objetivos. Nuestros profesionales te guiarán, para que puedas alcanzar tus metas sin necesidad de tener que contar con un entrenador presencial. ¡No esperes más y comienza a entrenar con nosotros!
             </p>
           </div>
-          <div className="w-full md:w-1/3 p-4 bg-[#0D9588] rounded-lg m-2 flex justify-center">
+          <div className="w-full md:w-1/3 p-4 bg-[#0D9588] rounded-lg m-2 transition-opacity duration-500 ease-in-out opacity-75 hover:opacity-100">
+            <h2 className="text-3xl sm:text-3xl font-medium md:text-4xl font-serif mb-4"> ¿Quieres ser parte?</h2>
             <p className='text-sm sm:text-md py-5 leading-8 md:text-xl max-w-lg mx-auto md:mx-0 text-white text-justify'>
               ¡Únete a nosotros! Puedes ser parte de este equipo. Si tienes experiencia como entrenador comunicate con nosotros, de esta manera ayudarás a que personas que lo necesitan puedan mejorar su condición física, con tu ayuda ellos podrán alcanzar metas de manera más sencilla.
             </p>
           </div>
-          <div className="w-full md:w-1/3 p-4 bg-[#0D9588] rounded-lg m-2 flex justify-center">
+          <div className="w-full md:w-1/3 p-4 bg-[#0D9588] rounded-lg m-2 transition-opacity duration-500 ease-in-out opacity-75 hover:opacity-100">
+            <h2 className="text-3xl sm:text-3xl font-medium md:text-4xl font-serif mb-4"> ¿Eres nuevo?</h2>
             <p className='text-sm sm:text-md py-5 leading-8 md:text-xl max-w-lg mx-auto md:mx-0 text-white text-justify'>
               Si eres uno de nuestros nuevos clientes. ¡Bienvenido! Tienes a tu disposición varios entrenadores los cuales cuentan con experiencia para poder ayudarte a cumplir tus objetivos, así que descarga la aplicación la cual está diseñada específicamente para los clientes y empecemos con tu entrenamiento.
             </p>
@@ -57,7 +59,7 @@ const Home = () => {
               <div className="flex flex-col space-y-4 ml-5">
                 <div className="flex items-center space-x-2">
                   <FaPhoneAlt className="text-white" />
-                  <span className="text-white">+123 456 7890</span>
+                  <span className="text-white">+593 968862213</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <FaEnvelope className="text-white" />
