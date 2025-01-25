@@ -16,13 +16,18 @@ const AppClientes = () => {
                             <p className="text-sm sm:text-md py-5 leading-8 md:text-xl max-w-lg mx-auto md:mx-0">
                                 Ahora podrás tener en la palma de tu mano tu entrenamiento en cualquier momento.
                             </p>
-                            <p className="text-sm sm:text-md py-5 leading-8 md:text-xl max-w-lg mx-auto md:mx-0">      
-                            <spam className="font-bold">¡YA NO TIENES EXCUSAS! </spam>  Descarga la app y solicita a uno de nuestros entrenadores que realice tu rutina de entrenamiento. En la App podrás consultar tu rutina completa,
+                            <p className="text-sm sm:text-md py-5 leading-8 md:text-xl max-w-lg mx-auto md:mx-0">
+                                <spam className="font-bold">¡YA NO TIENES EXCUSAS! </spam>  Descarga la app y solicita a uno de nuestros entrenadores que realice tu rutina de entrenamiento. En la App podrás consultar tu rutina completa,
                             </p>
                             <div className="flex justify-center md:justify-start pb-4">
-                                <button className="bg-[#82E5B5] text-black px-4 py-2 rounded-full hover:bg-teal-600 hover:text-white">
+                                <a
+                                    href="https://apkpure.com/es/rutinfit/com.djms.rutinfitapp"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="bg-[#82E5B5] text-black px-4 py-2 rounded-full hover:bg-teal-600 hover:text-white"
+                                >
                                     Descargar
-                                </button>
+                                </a>
                             </div>
                         </div>
                         <div className="w-full md:w-1/2 flex justify-center">

@@ -92,9 +92,9 @@ const Home = () => {
               No importa si ya tienes experiencia o si recién estás comenzando a practicar actividad física, una cosa es segura: ¡al descargar gratis la aplicación Rutin Fit, obtienes el mejor aliado para tu rutina de entrenamiento!
             </p>
             <div className="flex justify-center md:justify-start pb-4">
-              <button className="bg-[#82E5B5] text-black px-4 py-2 rounded-full hover:bg-teal-600 hover:text-white">
+              <a href="https://apkpure.com/es/rutinfit/com.djms.rutinfitapp" target="_blank" rel="noopener noreferrer" className="bg-[#82E5B5] text-black px-4 py-2 rounded-full hover:bg-teal-600 hover:text-white">
                 Descargar
-              </button>
+              </a>
             </div>
           </div>
           <div className="w-full md:w-1/2 flex justify-center">

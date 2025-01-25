@@ -49,7 +49,7 @@ const Contactos = () => {
                         </p>
                         <div className="flex items-center justify-center space-x-1 py-4">
                             <FaPhoneAlt className="text-white" />
-                            <span className="text-white whitespace-nowrap">+123 456 7890</span>
+                            <span className="text-white whitespace-nowrap">+593 968862213</span>
                         </div>
                         <p>
                             o enviarnos un correo:
