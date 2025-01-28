@@ -1,6 +1,34 @@
-# RutinFit
+# RutinFit 
 
-## Manual de instalación
+## Introducción 📄
+
+Este repositorio tiene la finalidad de crear un componente frontend con el cual se realiza la gestión de entrenamientos personalizados en usuarios de gimnasios.
+
+## Sitio web 💻
+
+[RutinFit](https://rutin-fit.vercel.app/app)
+
+## Roles 👥
+
+| Rol             | Funciones                                                                |
+| ----------------- | ------------------------------------------------------------------ |
+| Administrador |  - Iniciar y cerrar sesión |
+|  | - Restablecer contraseña |
+|  | - Agregar entrenadores |
+|  | - Gestionar entrenadores |
+| Entrenadores | - Iniciar y cerrar sesión |
+|  | - Restablecer contraseña |
+|  | - Editar perfil |
+|  | - Visualizar clientes y su información |
+|  | - Dar de baja a los clientes|
+|  | - Gestionar rutinas |
+|  | - Añadir ejercicios a las rutinas |
+|  | - Eliminar ejercicios |
+|  | - Conversación con el cliente  |
+
+
+
+## Manual de instalación ⬇️
 
 Primero clona el repositorio
 
@@ -39,9 +67,9 @@ Una vez añadidas las variables de entorno, ejecuta el siguiente comando
   npm rum dev
 ```
     
-### Manual de usuario
+## Manual de usuario 📽️
 
-https://youtu.be/JDr-68eDH2Q
+[Video de Youtube](https://youtu.be/JDr-68eDH2Q)
 
 
 
