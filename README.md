@@ -4,7 +4,7 @@
 
 Primero clona el repositorio
 
-Abre una termina y ejecuta el siguiente comando:
+Abre una terminal y ejecuta el siguiente comando:
 
 ```bash
   git clone https://github.com/A2lejo/RutinFit.git
@@ -22,7 +22,7 @@ Instala las dependecias del proyecto con el siguiente comando
   npm install
 ```
 
-Ahora asegurate de tener las varaibles de entorno definidas
+Ahora asegurate de tener las variables de entorno definidas
 
 
 ### Variables de entorno
