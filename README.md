@@ -27,7 +27,7 @@ Ahora asegurate de tener las varaibles de entorno definidas
 
 ### Variables de entorno
 
-![Archivo .env](https://via.placeholder.com/468x300?text=App+Screenshot+Here))
+![image](https://github.com/user-attachments/assets/43525803-45e0-4df8-8fe9-ab27d19f4607)
 
 
 Para correr este proyecto se necesita que agregues tus variables de entorno, deberas crear un archivo .env y colocar dentro del archivo como se muestra en el ejemplo
@@ -41,7 +41,7 @@ Una vez añadidas las variables de entorno, ejecuta el siguiente comando
     
 ### Manual de usuario
 
-[Video]([https://linktodocumentation](https://youtu.be/JDr-68eDH2Q))
+https://youtu.be/JDr-68eDH2Q
 
 
 
