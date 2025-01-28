@@ -1,4 +1,4 @@
-# RutinFit 
+# RutinFit 🏋️‍♂️
 
 ## Introducción 📄
 
