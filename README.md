@@ -1,4 +1,4 @@
-# RutinFit 🏋️‍♂️
+# RutinFit 🏋️‍♂️  SISTEMA DE GESTIÓN DE ENTRENAMIENTOS PERSONALIZADOS EN GIMNASIOS
 
 ## Introducción 📄
 
